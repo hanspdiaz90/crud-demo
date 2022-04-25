@@ -13,7 +13,7 @@ public interface IBookDAO {
     boolean insert(Book book) throws DAOException;
     boolean update(Book book) throws DAOException;
     Book findById(int id) throws DAOException;
-    List<Book> findAllBooks() throws DAOException;
+    List<Book> findAll() throws DAOException;
     List<Author> findActiveAuthors(String filter) throws DAOException;
     List<Publisher> findActivePublishers(String filter) throws DAOException;
     List<Genre> findActiveGenres(String filtro) throws DAOException;

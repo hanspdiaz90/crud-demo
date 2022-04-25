@@ -11,61 +11,61 @@ import java.util.List;
 
 public class GenreServiceImpl implements IGenreService {
 
-    private final IGenreDAO generoDAO = DAOFactory.getInstance().getGenreDAO();
+    private final IGenreDAO genreDAO = DAOFactory.getInstance().getGenreDAO();
 
     @Override
     public boolean insert(Genre genre) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado =  generoDAO.insert(genre);
+            result =  genreDAO.insert(genre);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
     @Override
     public boolean update(Genre genre) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado =  generoDAO.update(genre);
+            result =  genreDAO.update(genre);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
     @Override
     public Genre findById(int id) throws ServiceException {
-        Genre genero = null;
+        Genre genre = null;
         try {
-            genero = generoDAO.findById(id);
+            genre = genreDAO.findById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return genero;
+        return genre;
     }
 
     @Override
     public List<Genre> findAll() throws ServiceException {
-        List<Genre> listaGeneros = null;
+        List<Genre> genres = null;
         try {
-            listaGeneros = generoDAO.findAll();
+            genres = genreDAO.findAll();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return listaGeneros;
+        return genres;
     }
 
     @Override
     public boolean deactivateById(int id) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado = generoDAO.deactivateById(id);
+            result = genreDAO.deactivateById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
 }

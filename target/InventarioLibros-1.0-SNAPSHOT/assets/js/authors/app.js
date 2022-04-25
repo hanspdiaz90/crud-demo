@@ -1,13 +1,13 @@
 $(function () {
 
-    fnGetAllAuthors();
+    getAuthors();
 
-    $("#addAuthorForm").submit(function (event) {
+    $("#authorAddForm").submit(function (event) {
         event.preventDefault();
     });
 
-    $("#btnAddAuthor").click(function () {
-        $("#addAuthorForm").validate({
+    $("#btnAdd").click(function () {
+        $("#authorAddForm").validate({
             rules: {
                 nombres: { required: true, minlength: 3 },
                 apellidos: { required: true, minlength: 3 },
@@ -24,12 +24,12 @@ $(function () {
                     success: function (response) {
                         if (response.ok) {
                             $(form).trigger("reset");
-                            $("#addAuthorModal").modal("hide");
+                            $("#authorAddModal").modal("hide");
                             Swal.fire({
                                 icon: "success",
                                 title: response.message
                             }).then(function () {
-                                fnGetAllAuthors();
+                                getAuthors();
                             });
                         }
                     },
@@ -41,13 +41,13 @@ $(function () {
         });
     });
 
-    $("#btnResetSave").click(function () {
-        fnResetInvalidForm(this, "#addAuthorForm");
+    $("#btnResetAdd").click(function () {
+        resetInvalidForm(this, "#authorAddForm");
     });
 
 });
 
-function fnResetInvalidForm(button, validatedForm) {
+function resetInvalidForm(button, validatedForm) {
     let form = $(button).closest(validatedForm);
     let validator = form.validate();
     validator.resetForm();
@@ -55,7 +55,7 @@ function fnResetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function fnViewDetailsAuthor(button) {
+function viewDetailsAuthor(button) {
     let url = "/biblioteca/autores?accion=buscar";
     let authorId = $(button).data("authorId");
     $.ajax({
@@ -69,7 +69,7 @@ function fnViewDetailsAuthor(button) {
                 let classNameBadge = objAuthor.activo ? "success" : "danger";
                 let classNameIcon = objAuthor.activo ? "check" : "times";
                 let statusText = objAuthor.activo ? "ACTIVO" : "INACTIVO";
-                let modalBody = $("#viewAuthorModal .modal-body");
+                let modalBody = $("#authorViewModal .modal-body");
                 modalBody.empty();
                 let elementHTML = "<dl>";
                 elementHTML += "<dt>Autor</dt>";
@@ -80,13 +80,13 @@ function fnViewDetailsAuthor(button) {
                 elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText + "</span></dd>";
                 elementHTML += "</dl>";
                 modalBody.append(elementHTML);
-                $("#viewAuthorModal").modal("show");
+                $("#authorViewModal").modal("show");
             }
         }
     });
 }
 
-function fnChangeStatusAuthor(button) {
+function changeStatusAuthor(button) {
     let active = $(button).data("authorStatus");
     Swal.fire({
         title: (active ? "¿Estás seguro que quieres dar de baja al autor?" : "¿Estás seguro que quieres dar de alta al autor?"),
@@ -119,7 +119,7 @@ function fnChangeStatusAuthor(button) {
     });
 }
 
-function fnGetAllAuthors() {
+function getAuthors() {
     let url = "/biblioteca/autores?accion=listar";
     let table = $("#authorsDataTable").DataTable({
         destroy: true,
@@ -155,9 +155,9 @@ function fnGetAllAuthors() {
                     let classNameButton = row.activo ? "danger" : "success";
                     let tooltipTitle = row.activo ? "Dar de baja" : "Dar de alta";
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='fnViewDetailsAuthor(this)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailsAuthorModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
-                    elementHTML += "<button type='button' onclick='fnEditAuthor(this)' class='btn btn-warning' data-toggle='modal' data-target='#editAuthorModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.id + "'><i class='fas fa-pen'></i></button>";
-                    elementHTML += "<button type='button' onclick='fnChangeStatusAuthor(this)' class='btn btn-" + classNameButton + "' data-tooltip='tooltip' data-placement='top' title='" + tooltipTitle + "'  data-author-id='" + row.id + "' data-author-status='" + row.activo + "'><i class='fas fa-flag'></i></button>";
+                    elementHTML += "<button type='button' onclick='viewDetailsAuthor(this)' class='btn btn-info' data-toggle='modal' data-target='#authorViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
+                    elementHTML += "<button type='button' onclick='editAuthor(this)' class='btn btn-warning' data-toggle='modal' data-target='#authorEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.id + "'><i class='fas fa-pen'></i></button>";
+                    elementHTML += "<button type='button' onclick='changeStatusAuthor(this)' class='btn btn-" + classNameButton + "' data-tooltip='tooltip' data-placement='top' title='" + tooltipTitle + "'  data-author-id='" + row.id + "' data-author-status='" + row.activo + "'><i class='fas fa-flag'></i></button>";
                     elementHTML += "</div>";
                     return elementHTML;
                 }

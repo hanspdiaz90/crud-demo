@@ -40,7 +40,7 @@
                                     <i class="fas fa-clipboard-list"></i> Listado de géneros literarios
                                 </h3>
                                 <button type="button" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#addGenreModal"
+                                        data-toggle="modal" data-target="#genreAddModal"
                                         data-tooltip="tooltip" data-placement="left" title="Añadir género literario">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -59,10 +59,10 @@
         </div>
         <!-- /.container-fluid -->
         <!-- #addGenderModal -->
-        <jsp:include page="addGenreModal.jsp"/>
+        <jsp:include page="genreAddModal.jsp"/>
         <!-- /.modal (Add New Modal)-->
         <!-- #viewDetailsGenderModal -->
-        <jsp:include page="viewGenreModal.jsp"/>
+        <jsp:include page="genreViewModal.jsp"/>
         <!-- /.modal (View Details Modal)-->
     </jsp:attribute>
     <jsp:attribute name="_scripts">

@@ -16,12 +16,12 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "libroServlet", urlPatterns = "/biblioteca/libros")
+@WebServlet(name = "bookServlet", urlPatterns = "/biblioteca/libros")
 public class BookServlet extends HttpServlet {
 
     private static final String PATH_LIBROS = "/WEB-INF/views/books/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-    private final IBookService libroService = ServiceFactory.getInstance().getBookService();
+    private final IBookService bookService = ServiceFactory.getInstance().getBookService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,12 +34,12 @@ public class BookServlet extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String accion = request.getParameter("accion");
-        if (accion == null) {
-            accion = "index";
+        String action = request.getParameter("accion");
+        if (action == null) {
+            action = "index";
         }
         try {
-            switch (accion) {
+            switch (action) {
                 case "registrar":
                     insertBookAction(request, response);
                     break;
@@ -106,8 +106,8 @@ public class BookServlet extends HttpServlet {
                 libro.getAutor().setId(Integer.parseInt(autor));
                 libro.getEditorial().setId(Integer.parseInt(editorial));
                 libro.getGenero().setId(Integer.parseInt(genero));
-                boolean exito = libroService.insert(libro);
-                if (exito) {
+                boolean success = bookService.insert(libro);
+                if (success) {
                     ok = true;
                     message = "Los datos del libro se registraron con éxito";
                 }
@@ -129,10 +129,10 @@ public class BookServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            Book libro = libroService.findById(Integer.parseInt(id));
-            if (libro != null) {
+            Book book = bookService.findById(Integer.parseInt(id));
+            if (book != null) {
                 ok = true;
-                data = gson.toJsonTree(libro);
+                data = gson.toJsonTree(book);
             }
             jsonResponse.addProperty("ok", ok);
             jsonResponse.add("data", data);
@@ -150,10 +150,10 @@ public class BookServlet extends HttpServlet {
         JsonArray result = null;
         JsonObject jsonResponse = new JsonObject();
         try {
-            List<Book> listaLibros = libroService.findAllBooks();
-            if (listaLibros != null) {
+            List<Book> books = bookService.findAll();
+            if (books != null) {
                 ok = true;
-                JsonElement items = gson.toJsonTree(listaLibros, new TypeToken<List<Book>>(){}.getType());
+                JsonElement items = gson.toJsonTree(books, new TypeToken<List<Book>>(){}.getType());
                 result = items.getAsJsonArray();
             }
             jsonResponse.addProperty("ok", ok);
@@ -173,11 +173,11 @@ public class BookServlet extends HttpServlet {
         JsonArray result = null;
         JsonObject jsonResponse = new JsonObject();
         try {
-            String filtro = request.getParameter("filtro");
-            List<Author> listaAutores = filtro != null ? libroService.findActiveAuthors(filtro) : libroService.findActiveAuthors("");
-            if (listaAutores != null) {
+            String filter = request.getParameter("filtro");
+            List<Author> activeAuthors = filter != null ? bookService.findActiveAuthors(filter) : bookService.findActiveAuthors("");
+            if (activeAuthors != null) {
                 ok = true;
-                JsonElement items = gson.toJsonTree(listaAutores, new TypeToken<List<Author>>(){}.getType());
+                JsonElement items = gson.toJsonTree(activeAuthors, new TypeToken<List<Author>>(){}.getType());
                 result = items.getAsJsonArray();
             }
             jsonResponse.addProperty("ok", ok);
@@ -196,11 +196,11 @@ public class BookServlet extends HttpServlet {
         JsonArray result = null;
         JsonObject jsonResponse = new JsonObject();
         try {
-            String filtro = request.getParameter("filtro");
-            List<Publisher> listaEditoriales = filtro != null ? libroService.findActivePublishers(filtro) : libroService.findActivePublishers("");
-            if (listaEditoriales != null) {
+            String filter = request.getParameter("filtro");
+            List<Publisher> activePublishers = filter != null ? bookService.findActivePublishers(filter) : bookService.findActivePublishers("");
+            if (activePublishers != null) {
                 ok = true;
-                JsonElement items = gson.toJsonTree(listaEditoriales, new TypeToken<List<Publisher>>(){}.getType());
+                JsonElement items = gson.toJsonTree(activePublishers, new TypeToken<List<Publisher>>(){}.getType());
                 result = items.getAsJsonArray();
             }
             jsonResponse.addProperty("ok", ok);
@@ -219,11 +219,11 @@ public class BookServlet extends HttpServlet {
         JsonArray result = null;
         JsonObject jsonResponse = new JsonObject();
         try {
-            String filtro = request.getParameter("filtro");
-            List<Genre> listaGeneros = filtro != null ? libroService.findActiveGenres(filtro) : libroService.findActiveGenres("");
-            if (listaGeneros != null) {
+            String filter = request.getParameter("filtro");
+            List<Genre> activeGenres = filter != null ? bookService.findActiveGenres(filter) : bookService.findActiveGenres("");
+            if (activeGenres != null) {
                 ok = true;
-                JsonElement items = gson.toJsonTree(listaGeneros, new TypeToken<List<Genre>>(){}.getType());
+                JsonElement items = gson.toJsonTree(activeGenres, new TypeToken<List<Genre>>(){}.getType());
                 result = items.getAsJsonArray();
             }
             jsonResponse.addProperty("ok", ok);
@@ -243,8 +243,8 @@ public class BookServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            boolean exito = libroService.deactivateById(Integer.parseInt(id));
-            if (exito) {
+            boolean success = bookService.deactivateById(Integer.parseInt(id));
+            if (success) {
                 ok = true;
                 message = "La operación se realizó con éxito";
             }

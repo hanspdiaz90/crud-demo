@@ -11,61 +11,61 @@ import java.util.List;
 
 public class AuthorServiceImpl implements IAuthorService {
 
-    private final IAuthorDAO autorDAO = DAOFactory.getInstance().getAuthorDAO();
+    private final IAuthorDAO authorDAO = DAOFactory.getInstance().getAuthorDAO();
 
     @Override
     public boolean insert(Author autor) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado =  autorDAO.insert(autor);
+            result =  authorDAO.insert(autor);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
     @Override
     public List<Author> findAll() throws ServiceException {
-        List<Author> listaAutores = null;
+        List<Author> authors = null;
         try {
-            listaAutores = autorDAO.findAll();
+            authors = authorDAO.findAll();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return listaAutores;
+        return authors;
     }
 
     @Override
     public boolean update(Author autor) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado =  autorDAO.update(autor);
+            result =  authorDAO.update(autor);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
     @Override
     public Author findById(int id) throws ServiceException {
-        Author autor = null;
+        Author optional = null;
         try {
-            autor = autorDAO.findById(id);
+            optional = authorDAO.findById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return autor;
+        return optional;
     }
 
     @Override
     public boolean changeStatusById(int id) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado = autorDAO.changeStatusById(id);
+            result = authorDAO.changeStatusById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
 }

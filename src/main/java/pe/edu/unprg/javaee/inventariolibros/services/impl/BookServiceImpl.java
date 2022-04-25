@@ -14,94 +14,94 @@ import java.util.List;
 
 public class BookServiceImpl implements IBookService {
 
-    private final IBookDAO libroDAO = DAOFactory.getInstance().getBookDAO();
+    private final IBookDAO bookDAO = DAOFactory.getInstance().getBookDAO();
 
     @Override
     public boolean insert(Book book) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado =  libroDAO.insert(book);
+            result =  bookDAO.insert(book);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
     @Override
     public boolean update(Book book) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado =  libroDAO.update(book);
+            result =  bookDAO.update(book);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
     @Override
     public Book findById(int id) throws ServiceException {
-        Book libro = null;
+        Book optional = null;
         try {
-            libro = libroDAO.findById(id);
+            optional = bookDAO.findById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return libro;
+        return optional;
     }
 
     @Override
-    public List<Book> findAllBooks() throws ServiceException {
-        List<Book> listaLibros = null;
+    public List<Book> findAll() throws ServiceException {
+        List<Book> books = null;
         try {
-            listaLibros = libroDAO.findAllBooks();
+            books = bookDAO.findAll();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return listaLibros;
+        return books;
     }
 
     @Override
     public List<Author> findActiveAuthors(String filter) throws ServiceException {
-        List<Author> listaAutores = null;
+        List<Author> activeAuthors = null;
         try {
-            listaAutores = libroDAO.findActiveAuthors(filter);
+            activeAuthors = bookDAO.findActiveAuthors(filter);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return listaAutores;
+        return activeAuthors;
     }
 
     @Override
     public List<Publisher> findActivePublishers(String filter) throws ServiceException {
-        List<Publisher> listaEditoriales = null;
+        List<Publisher> activePublishers = null;
         try {
-            listaEditoriales = libroDAO.findActivePublishers(filter);
+            activePublishers = bookDAO.findActivePublishers(filter);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return listaEditoriales;
+        return activePublishers;
     }
 
     @Override
     public List<Genre> findActiveGenres(String filter) throws ServiceException {
-        List<Genre> listaGeneros = null;
+        List<Genre> activeGenres = null;
         try {
-            listaGeneros = libroDAO.findActiveGenres(filter);
+            activeGenres = bookDAO.findActiveGenres(filter);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return listaGeneros;
+        return activeGenres;
     }
 
     @Override
     public boolean deactivateById(int id) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado = libroDAO.deactivateById(id);
+            result = bookDAO.deactivateById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
 }

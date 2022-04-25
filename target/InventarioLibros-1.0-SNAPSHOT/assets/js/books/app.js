@@ -1,6 +1,6 @@
 $(function () {
 
-    fnGetAllBooks();
+    getBooks();
 
     $("#cbxAutores").select2({
         ajax: {
@@ -47,24 +47,24 @@ $(function () {
         allowClear: true
     });
 
-    $("#addAuthorForm").submit(function (event) {
+    $("#bookAddForm").submit(function (event) {
         event.preventDefault();
     });
 
-    $("#btnAddBook").click(function () {
+    $("#btnAdd").click(function () {
 
         $.validator.addMethod("valueNotEquals", function(value, element, arg) {
             return arg != element.value;
         }, $.validator.messages.required);
 
-        $("#addBookForm").validate({
+        $("#bookAddForm").validate({
             rules: {
                 isbn: { required: true, minlength: 13, maxlength:13, digits: true },
                 titulo: { required: true },
                 resenha: { required: true },
                 autor: {required: true, valueNotEquals: "-1"},
-                editorial: {required: true, valueNotEquals: "0"},
-                genero: {required: true, valueNotEquals: "0"},
+                editorial: {required: true, valueNotEquals: "-1"},
+                genero: {required: true, valueNotEquals: "-1"},
                 existencias: { required: true },
                 precio: { required: true }
             }
@@ -98,13 +98,13 @@ $(function () {
 
     });
 
-    $("#btnResetSave").click(function () {
-        fnResetInvalidForm(this, "#addBookForm");
+    $("#btnResetAdd").click(function () {
+        resetInvalidForm(this, "#bookAddForm");
     });
 
 });
 
-function fnResetInvalidForm(button, validatedForm) {
+function resetInvalidForm(button, validatedForm) {
     let form = $(button).closest(validatedForm);;
     let validator = form.validate();
     validator.resetForm();
@@ -126,7 +126,7 @@ function viewDetailsBook(button) {
                 let classNameBadge = objBook.activo ? "success" : "danger";
                 let classNameIcon = objBook.activo ? "check" : "times";
                 let statusText = objBook.activo ? "ACTIVO" : "INACTIVO";
-                let modalBody = $("#viewBookModal .modal-body");
+                let modalBody = $("#bookViewModal .modal-body");
                 modalBody.empty();
                 let elementHTML = "<dl>";
                     elementHTML += "<dt>ISBN</dt>";
@@ -147,7 +147,7 @@ function viewDetailsBook(button) {
                     elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText+ "</span></dd>";
                     elementHTML += "</dl>";
                 modalBody.append(elementHTML);
-                $("#viewBookModal").modal("show");
+                $("#bookViewModal").modal("show");
             }
         }
     });
@@ -204,7 +204,7 @@ function viewDetailsBook(button) {
 //     });
 // }
 
-function fnGetAllBooks() {
+function getBooks() {
     let url = "/biblioteca/libros?accion=listar";
     let table = $("#booksDataTable").DataTable({
         destroy: true,
@@ -251,9 +251,9 @@ function fnGetAllBooks() {
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='viewDetailsBook(this)' class='btn btn-info' data-toggle='modal' data-target='#viewBookModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-book-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
+                    elementHTML += "<button type='button' onclick='viewDetailsBook(this)' class='btn btn-info' data-toggle='modal' data-target='#bookViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-book-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
                     if (row.activo) {
-                        elementHTML += "<button type='button' onclick='editBook(this)' class='btn btn-warning' data-toggle='modal' data-target='#editBookModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-book-id='" + row.id + "'><i class='fas fa-pen'></i></button>"
+                        elementHTML += "<button type='button' onclick='editBook(this)' class='btn btn-warning' data-toggle='modal' data-target='#bookEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-book-id='" + row.id + "'><i class='fas fa-pen'></i></button>"
                         elementHTML += "<button type='button' onclick='deactivateBook(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-book-id='" + row.id + "' data-book-title='" + row.title + "'><i class='fas fa-flag'></i></button>"
                     }
                     elementHTML += "</div>"

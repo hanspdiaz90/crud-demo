@@ -43,7 +43,7 @@
                                     <i class="fas fa-clipboard-list"></i> Listado de libros
                                 </h3>
                                 <button type="button" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#addBookModal"
+                                        data-toggle="modal" data-target="#bookAddModal"
                                         data-tooltip="tooltip" data-placement="left" title="Añadir book">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -62,10 +62,10 @@
         </div>
         <!-- /.container-fluid -->
         <!-- #addBookModal -->
-        <jsp:include page="addBookModal.jsp"/>
+        <jsp:include page="bookAddModal.jsp"/>
         <!-- /.modal (Add New Modal)-->
         <!-- #viewBookModal -->
-        <jsp:include page="viewBookModal.jsp"/>
+        <jsp:include page="bookViewModal.jsp"/>
         <!-- /.modal (View Details Modal)-->
     </jsp:attribute>
     <jsp:attribute name="_scripts">

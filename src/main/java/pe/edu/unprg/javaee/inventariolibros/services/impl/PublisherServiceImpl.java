@@ -11,61 +11,61 @@ import java.util.List;
 
 public class PublisherServiceImpl implements IPublisherService {
 
-    private final IPublisherDAO editorialDAO = DAOFactory.getInstance().getPublisherDAO();
+    private final IPublisherDAO publisherDAO = DAOFactory.getInstance().getPublisherDAO();
 
     @Override
     public boolean insert(Publisher publisher) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado =  editorialDAO.insert(publisher);
+            result =  publisherDAO.insert(publisher);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
     @Override
     public boolean update(Publisher publisher) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado =  editorialDAO.update(publisher);
+            result =  publisherDAO.update(publisher);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
     @Override
     public Publisher findById(int id) throws ServiceException {
-        Publisher editorial = null;
+        Publisher publisher = null;
         try {
-            editorial = editorialDAO.findById(id);
+            publisher = publisherDAO.findById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return editorial;
+        return publisher;
     }
 
     @Override
     public List<Publisher> findAll() throws ServiceException {
-        List<Publisher> listaEditoriales = null;
+        List<Publisher> publishers = null;
         try {
-            listaEditoriales = editorialDAO.findAll();
+            publishers = publisherDAO.findAll();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return listaEditoriales;
+        return publishers;
     }
 
     @Override
     public boolean deactivateById(int id) throws ServiceException {
-        boolean resultado = false;
+        boolean result = false;
         try {
-            resultado = editorialDAO.deactivateById(id);
+            result = publisherDAO.deactivateById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return resultado;
+        return result;
     }
 
 }

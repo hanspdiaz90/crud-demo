@@ -13,12 +13,12 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "editorialServlet", urlPatterns = "/biblioteca/editoriales")
+@WebServlet(name = "publisherServlet", urlPatterns = "/biblioteca/editoriales")
 public class PublisherServlet extends HttpServlet {
 
     private static final String PATH_EDITORIALES = "/WEB-INF/views/publishers/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-    private final IPublisherService editorialService = ServiceFactory.getInstance().getPublisherService();
+    private final IPublisherService publisherService = ServiceFactory.getInstance().getPublisherService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,12 +31,12 @@ public class PublisherServlet extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String accion = request.getParameter("accion");
-        if (accion == null) {
-            accion = "index";
+        String action = request.getParameter("accion");
+        if (action == null) {
+            action = "index";
         }
         try {
-            switch (accion) {
+            switch (action) {
                 case "registrar":
                     insertPublisherAction(request, response);
                     break;
@@ -77,9 +77,9 @@ public class PublisherServlet extends HttpServlet {
             if (nombre.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
                 message = "No se registraron los datos del editorial";
             } else {
-                Publisher editorial = new Publisher(nombre, email, telefono);
-                boolean exito = editorialService.insert(editorial);
-                if (exito) {
+                Publisher publisher = new Publisher(nombre, email, telefono);
+                boolean success = publisherService.insert(publisher);
+                if (success) {
                     ok = true;
                     message = "Los datos de la editorial se registraron con éxito";
                 }
@@ -101,10 +101,10 @@ public class PublisherServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            Publisher editorial = editorialService.findById(Integer.parseInt(id));
-            if (editorial != null) {
+            Publisher publisher = publisherService.findById(Integer.parseInt(id));
+            if (publisher != null) {
                 ok = true;
-                result = gson.toJsonTree(editorial);
+                result = gson.toJsonTree(publisher);
             }
             jsonResponse.addProperty("ok", ok);
             jsonResponse.add("result", result);
@@ -122,10 +122,10 @@ public class PublisherServlet extends HttpServlet {
         JsonArray result = null;
         JsonObject jsonResponse = new JsonObject();
         try {
-            List<Publisher> listaEditoriales = editorialService.findAll();
-            if (listaEditoriales != null) {
+            List<Publisher> publishers = publisherService.findAll();
+            if (publishers != null) {
                 ok = true;
-                JsonElement items = gson.toJsonTree(listaEditoriales, new TypeToken<List<Publisher>>(){}.getType());
+                JsonElement items = gson.toJsonTree(publishers, new TypeToken<List<Publisher>>(){}.getType());
                 result = items.getAsJsonArray();
             }
             jsonResponse.addProperty("ok", ok);
@@ -145,8 +145,8 @@ public class PublisherServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            boolean exito = editorialService.deactivateById(Integer.parseInt(id));
-            if (exito) {
+            boolean success = publisherService.deactivateById(Integer.parseInt(id));
+            if (success) {
                 ok = true;
                 message = "La operación se realizó con éxito";
             }

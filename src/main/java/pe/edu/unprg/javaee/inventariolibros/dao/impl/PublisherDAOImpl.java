@@ -19,13 +19,13 @@ public class PublisherDAOImpl implements IPublisherDAO {
     public boolean insert(Publisher publisher) throws DAOException {
         boolean insertedRow = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_INSERT)) {
+             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_INSERT_PUBLISHER)) {
             cstmt.setString(1, publisher.getNombre());
             cstmt.setString(2, publisher.getEmail());
             cstmt.setString(3, publisher.getTelefono());
             insertedRow = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_INSERT, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_INSERT_PUBLISHER, ex);
         }
         return insertedRow;
     }
@@ -34,7 +34,7 @@ public class PublisherDAOImpl implements IPublisherDAO {
     public boolean update(Publisher publisher) throws DAOException {
         boolean updatedRow = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_UPDATE)) {
+             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_UPDATE_PUBLISHER)) {
             cstmt.setString(1, publisher.getNombre());
             cstmt.setString(2, publisher.getEmail());
             cstmt.setString(3, publisher.getTelefono());
@@ -42,7 +42,7 @@ public class PublisherDAOImpl implements IPublisherDAO {
             cstmt.setInt(5, publisher.getId());
             updatedRow = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_UPDATE, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_UPDATE_PUBLISHER, ex);
         }
         return updatedRow;
     }
@@ -51,7 +51,7 @@ public class PublisherDAOImpl implements IPublisherDAO {
     public Publisher findById(int id) throws DAOException {
         Publisher optional = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_FIND_BY_ID)) {
+             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_FIND_PUBLISHER_BY_ID)) {
             cstmt.setInt(1, id);
             ResultSet rs = cstmt.executeQuery();
             if (rs.next()) {
@@ -62,7 +62,7 @@ public class PublisherDAOImpl implements IPublisherDAO {
                         rs.getBoolean("activo"));
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_FIND_BY_ID, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_FIND_PUBLISHER_BY_ID, ex);
         }
         return optional;
     }
@@ -71,7 +71,7 @@ public class PublisherDAOImpl implements IPublisherDAO {
     public List<Publisher> findAll() throws DAOException {
         List<Publisher> publishers = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_FIND_ALL);
+             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_FIND_ALL_PUBLISHER);
              ResultSet rs = cstmt.executeQuery()) {
             publishers = new ArrayList<>();
             while (rs.next()) {
@@ -83,7 +83,7 @@ public class PublisherDAOImpl implements IPublisherDAO {
                 publishers.add(optional);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_FIND_ALL, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_FIND_ALL_PUBLISHER, ex);
         }
         return publishers;
     }
@@ -92,11 +92,11 @@ public class PublisherDAOImpl implements IPublisherDAO {
     public boolean deactivateById(int id) throws DAOException {
         boolean affectedRow = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_DEACTIVATE_BY_ID)) {
+             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_DEACTIVATE_PUBLISHER_BY_ID)) {
             cstmt.setInt(1, id);
             affectedRow = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_DEACTIVATE_BY_ID, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_DEACTIVATE_PUBLISHER_BY_ID, ex);
         }
         return affectedRow;
     }

@@ -13,12 +13,12 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "generoServlet", urlPatterns = "/biblioteca/generos")
+@WebServlet(name = "genreServlet", urlPatterns = "/biblioteca/generos")
 public class GenreServlet extends HttpServlet {
 
     private static final String PATH_GENEROS = "/WEB-INF/views/genres/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-    private final IGenreService generoService = ServiceFactory.getInstance().getGenreService();
+    private final IGenreService genreService = ServiceFactory.getInstance().getGenreService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,12 +31,12 @@ public class GenreServlet extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String accion = request.getParameter("accion");
-        if (accion == null) {
-            accion = "index";
+        String action = request.getParameter("accion");
+        if (action == null) {
+            action = "index";
         }
         try {
-            switch (accion) {
+            switch (action) {
                 case "registrar":
                     insertGenreAction(request, response);
                     break;
@@ -75,9 +75,9 @@ public class GenreServlet extends HttpServlet {
             if (nombre.isEmpty()) {
                 message = "No se pudo registrar los datos del género literario";
             } else {
-                Genre genero = new Genre(nombre);
-                boolean exito = generoService.insert(genero);
-                if (exito) {
+                Genre genre = new Genre(nombre);
+                boolean success = genreService.insert(genre);
+                if (success) {
                     ok = true;
                     message = "Los datos del género literario se registraron con éxito";
                 }
@@ -99,10 +99,10 @@ public class GenreServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            Genre genero = generoService.findById(Integer.parseInt(id));
-            if (genero != null) {
+            Genre genre = genreService.findById(Integer.parseInt(id));
+            if (genre != null) {
                 ok = true;
-                result = gson.toJsonTree(genero);
+                result = gson.toJsonTree(genre);
             }
             jsonResponse.addProperty("ok", ok);
             jsonResponse.add("result", result);
@@ -120,10 +120,10 @@ public class GenreServlet extends HttpServlet {
         JsonArray result = null;
         JsonObject jsonResponse = new JsonObject();
         try {
-            List<Genre> listaGeneros = generoService.findAll();
-            if (listaGeneros != null) {
+            List<Genre> genres = genreService.findAll();
+            if (genres != null) {
                 ok = true;
-                JsonElement items = gson.toJsonTree(listaGeneros, new TypeToken<List<Genre>>(){}.getType());
+                JsonElement items = gson.toJsonTree(genres, new TypeToken<List<Genre>>(){}.getType());
                 result = items.getAsJsonArray();
             }
             jsonResponse.addProperty("ok", ok);
@@ -143,8 +143,8 @@ public class GenreServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            boolean exito = generoService.deactivateById(Integer.parseInt(id));
-            if (exito) {
+            boolean success = genreService.deactivateById(Integer.parseInt(id));
+            if (success) {
                 ok = true;
                 message = "La operación se realizó con éxito";
             }

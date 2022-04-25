@@ -13,7 +13,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "autorServlet", urlPatterns = "/biblioteca/autores")
+@WebServlet(name = "authorServlet", urlPatterns = "/biblioteca/autores")
 public class AuthorServlet extends HttpServlet {
 
     private static final String PATH_AUTORES = "/WEB-INF/views/authors/index.jsp";
@@ -101,10 +101,10 @@ public class AuthorServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            Author autor = authorService.findById(Integer.parseInt(id));
-            if (autor != null) {
+            Author author = authorService.findById(Integer.parseInt(id));
+            if (author != null) {
                 ok = true;
-                data = gson.toJsonTree(autor);
+                data = gson.toJsonTree(author);
             }
             jsonResponse.addProperty("ok", ok);
             jsonResponse.add("data", data);
@@ -122,10 +122,10 @@ public class AuthorServlet extends HttpServlet {
         JsonArray result = null;
         JsonObject jsonResponse = new JsonObject();
         try {
-            List<Author> listaAutores = authorService.findAll();
-            if (listaAutores != null) {
+            List<Author> authors = authorService.findAll();
+            if (authors != null) {
                 ok = true;
-                JsonElement items = gson.toJsonTree(listaAutores, new TypeToken<List<Author>>(){}.getType());
+                JsonElement items = gson.toJsonTree(authors, new TypeToken<List<Author>>(){}.getType());
                 result = items.getAsJsonArray();
             }
             jsonResponse.addProperty("ok", ok);
@@ -145,8 +145,8 @@ public class AuthorServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            boolean exito = authorService.changeStatusById(Integer.parseInt(id));
-            if (exito) {
+            boolean success = authorService.changeStatusById(Integer.parseInt(id));
+            if (success) {
                 ok = true;
                 message = "La operación se realizó con éxito";
             }

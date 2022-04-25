@@ -1,13 +1,13 @@
 $(function () {
 
-    fnGetAllPublishers();
+    getPublishers();
 
-    $("#addPublisherForm").submit(function (event) {
+    $("#publisherAddForm").submit(function (event) {
         event.preventDefault();
     });
 
-    $("#btnAddPublisher").click(function () {
-        $("#addPublisherForm").validate({
+    $("#btnAdd").click(function () {
+        $("#publisherAddForm").validate({
             rules: {
                 nombre: { required: true, minlength: 5 },
                 email: { required: true, email: true  },
@@ -24,12 +24,12 @@ $(function () {
                     success: function (response) {
                         if (response.ok) {
                             $(form).trigger("reset");
-                            $("#addPublisherModal").modal("hide");
+                            $("#publisherAddModal").modal("hide");
                             Swal.fire({
                                 icon: "success",
                                 title: response.message
                             }).then(function () {
-                                fnGetAllPublishers();
+                                getPublishers();
                             });
                         }
                     },
@@ -41,13 +41,13 @@ $(function () {
 
     });
 
-    $("#btnResetSave").click(function () {
-        fnResetInvalidForm(this, "#addPublisherForm");
+    $("#btnResetAdd").click(function () {
+        resetInvalidForm(this, "#publisherAddForm");
     });
 
 });
 
-function fnResetInvalidForm(button, validatedForm) {
+function resetInvalidForm(button, validatedForm) {
     let form = $(button).closest(validatedForm);
     let validator = form.validate();
     validator.resetForm();
@@ -55,7 +55,7 @@ function fnResetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function fnViewDetailsPublisher(button) {
+function viewDetailsPublisher(button) {
     let publisherId = $(button).data("publisherId");
     let url = "/biblioteca/editoriales?accion=buscar";
     $.ajax({
@@ -69,7 +69,7 @@ function fnViewDetailsPublisher(button) {
                 let classNameBadge = objPublisher.activo ? "success" : "danger";
                 let classNameIcon = objPublisher.activo ? "check" : "times";
                 let statusText = objPublisher.activo ? "ACTIVO" : "INACTIVO";
-                let modalBody = $("#viewPublisherModal .modal-body");
+                let modalBody = $("#publisherViewModal .modal-body");
                 modalBody.empty();
                 let elementHTML = "<dl>";
                     elementHTML += "<dt>Editorial</dt>";
@@ -82,13 +82,13 @@ function fnViewDetailsPublisher(button) {
                     elementHTML += "<dd><span class='badge badge-"+ classNameBadge + "'><i class='fas fa-"+ classNameIcon + "'></i> " + statusText+ "</span></dd>";
                     elementHTML += "</dl>";
                 modalBody.append(elementHTML);
-                $("#viewPublisherModal").modal("show");
+                $("#publisherViewModal").modal("show");
             }
         }
     });
 }
 
-function fnDeactivatePublisher(button) {
+function deactivatePublisher(button) {
     let publisher = $(button).data("publisherName");
     Swal.fire({
         title: "¿Estás seguro que quieres desactivar la editorial: " + publisher + " ?",
@@ -122,7 +122,7 @@ function fnDeactivatePublisher(button) {
     });
 }
 
-function fnGetAllPublishers() {
+function getPublishers() {
     let url = "/biblioteca/editoriales?accion=listar";
     let table = $("#publishersDataTable").DataTable({
         destroy: true,
@@ -157,10 +157,10 @@ function fnGetAllPublishers() {
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='fnViewDetailsPublisher(this)' class='btn btn-info' data-toggle='modal' data-target='#viewPublisherModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-publisher-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
+                    elementHTML += "<button type='button' onclick='viewDetailsPublisher(this)' class='btn btn-info' data-toggle='modal' data-target='#publisherViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-publisher-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
                     if (row.activo) {
-                        elementHTML += "<button type='button' onclick='fnEditPublisher(this)' class='btn btn-warning' data-toggle='modal' data-target='#editPublisherModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-publisher-id='" + row.id + "'><i class='fas fa-pen'></i></button>"
-                        elementHTML += "<button type='button' onclick='fnDeactivatePublisher(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-publisher-id='" + row.id + "' data-publisher-name='" + row.nombre + "'><i class='fas fa-flag'></i></button>"
+                        elementHTML += "<button type='button' onclick='editPublisher(this)' class='btn btn-warning' data-toggle='modal' data-target='#publisherEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-publisher-id='" + row.id + "'><i class='fas fa-pen'></i></button>"
+                        elementHTML += "<button type='button' onclick='deactivatePublisher(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-publisher-id='" + row.id + "' data-publisher-name='" + row.nombre + "'><i class='fas fa-flag'></i></button>"
                     }
                     elementHTML += "</div>"
                     return elementHTML;

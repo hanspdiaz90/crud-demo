@@ -90,7 +90,7 @@ public class BookDAOImpl implements IBookDAO {
     }
 
     @Override
-    public List<Book> findAllBooks() throws DAOException {
+    public List<Book> findAll() throws DAOException {
         List<Book> books = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ALL_BOOKS);

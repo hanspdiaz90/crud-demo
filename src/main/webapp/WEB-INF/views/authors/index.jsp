@@ -40,7 +40,7 @@
                                     <i class="fas fa-clipboard-list"></i> Listado de autores
                                 </h3>
                                 <button type="button" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#addAuthorModal"
+                                        data-toggle="modal" data-target="#authorAddModal"
                                         data-tooltip="tooltip" data-placement="left" title="Añadir author">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -59,10 +59,10 @@
         </div>
         <!-- /.container-fluid -->
         <!-- #addAuthorModal -->
-        <jsp:include page="addAuthorModal.jsp"/>
+        <jsp:include page="authorAddModal.jsp"/>
         <!-- /.modal (Add Modal)-->
         <!-- #viewAuthorModal -->
-        <jsp:include page="viewAuthorModal.jsp"/>
+        <jsp:include page="authorViewModal.jsp"/>
         <!-- /.modal (View Details Modal)-->
     </jsp:attribute>
     <jsp:attribute name="_scripts">
