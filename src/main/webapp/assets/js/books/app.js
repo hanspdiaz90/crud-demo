@@ -31,6 +31,26 @@ $(function () {
         allowClear: true
     });
     $("#cbxEditoriales").select2({
+        ajax: {
+            url: "/biblioteca/libros?accion=listarEditorialesActivos",
+            dataType: "JSON",
+            delay: 250,
+            data: function (params) {
+                return { filtro: params.term };
+            },
+            processResults: function (response) {
+                let results = $.map(response.result, function (item) {
+                    return {
+                        id: item.id,
+                        text: item.nombre
+                    };
+                });
+                return {
+                    results: results
+                };
+            },
+            cache: true
+        },
         placeholder: {
             id: "-1",
             text: "[ Seleccionar editorial ]"
@@ -39,9 +59,29 @@ $(function () {
         allowClear: true
     });
     $("#cbxGeneros").select2({
+        ajax: {
+            url: "/biblioteca/libros?accion=listarGenerosActivos",
+            dataType: "JSON",
+            delay: 250,
+            data: function (params) {
+                return { filtro: params.term };
+            },
+            processResults: function (response) {
+                let results = $.map(response.result, function (item) {
+                    return {
+                        id: item.id,
+                        text: item.nombre
+                    };
+                });
+                return {
+                    results: results
+                };
+            },
+            cache: true
+        },
         placeholder: {
             id: "-1",
-            text: "[ Seleccionar género]"
+            text: "[ Seleccionar género ]"
         },
         theme: "bootstrap4",
         allowClear: true
