@@ -223,7 +223,7 @@ function viewDetailsBook(button) {
 //     });
 // }
 
-// function loadAndFillAuthors() {
+// function loadActiveAuthors() {
 //     let url = "/biblioteca/libros";
 //     $.ajax({
 //         url: url,

@@ -2,7 +2,7 @@ package pe.edu.unprg.javaee.inventariolibros.services.impl;
 
 import pe.edu.unprg.javaee.inventariolibros.dao.IAuthorDAO;
 import pe.edu.unprg.javaee.inventariolibros.dao.factory.DAOFactory;
-import pe.edu.unprg.javaee.inventariolibros.entities.Author;
+import pe.edu.unprg.javaee.inventariolibros.models.Author;
 import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 import pe.edu.unprg.javaee.inventariolibros.exception.ServiceException;
 import pe.edu.unprg.javaee.inventariolibros.services.IAuthorService;

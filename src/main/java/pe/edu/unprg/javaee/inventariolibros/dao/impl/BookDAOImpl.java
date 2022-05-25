@@ -2,10 +2,10 @@ package pe.edu.unprg.javaee.inventariolibros.dao.impl;
 
 import pe.edu.unprg.javaee.inventariolibros.dao.IBookDAO;
 import pe.edu.unprg.javaee.inventariolibros.dao.query.BookQuery;
-import pe.edu.unprg.javaee.inventariolibros.entities.Author;
-import pe.edu.unprg.javaee.inventariolibros.entities.Book;
-import pe.edu.unprg.javaee.inventariolibros.entities.Genre;
-import pe.edu.unprg.javaee.inventariolibros.entities.Publisher;
+import pe.edu.unprg.javaee.inventariolibros.models.Author;
+import pe.edu.unprg.javaee.inventariolibros.models.Book;
+import pe.edu.unprg.javaee.inventariolibros.models.Genre;
+import pe.edu.unprg.javaee.inventariolibros.models.Publisher;
 import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 import pe.edu.unprg.javaee.inventariolibros.utils.DatabaseHandler;
 
@@ -161,11 +161,11 @@ public class BookDAOImpl implements IBookDAO {
     }
 
     @Override
-    public List<Genre> findActiveGenres(String filtro) throws DAOException {
+    public List<Genre> findActiveGenres(String filter) throws DAOException {
         List<Genre> genres = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_GENRES)) {
-            cstmt.setString(1, filtro);
+            cstmt.setString(1, filter);
             ResultSet rs = cstmt.executeQuery();
             genres = new ArrayList<>();
             while (rs.next()) {

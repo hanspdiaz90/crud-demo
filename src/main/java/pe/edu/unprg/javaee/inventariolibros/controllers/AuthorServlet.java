@@ -2,7 +2,7 @@ package pe.edu.unprg.javaee.inventariolibros.controllers;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import pe.edu.unprg.javaee.inventariolibros.entities.Author;
+import pe.edu.unprg.javaee.inventariolibros.models.Author;
 import pe.edu.unprg.javaee.inventariolibros.exception.ServiceException;
 import pe.edu.unprg.javaee.inventariolibros.services.IAuthorService;
 import pe.edu.unprg.javaee.inventariolibros.services.factory.ServiceFactory;

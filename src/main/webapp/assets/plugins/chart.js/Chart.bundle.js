@@ -1062,12 +1062,12 @@ var conversions_14 = conversions.apple;
 var conversions_15 = conversions.gray;
 
 /*
-	this function routes a model to all other entities.
+	this function routes a model to all other models.
 
 	all functions that are routed have a property `.conversion` attached
 	to the returned synthetic function. This property is an array
 	of strings, each with the steps in between the 'from' and 'to'
-	color entities (inclusive).
+	color models (inclusive).
 
 	conversions that are not possible simply are not included.
 */

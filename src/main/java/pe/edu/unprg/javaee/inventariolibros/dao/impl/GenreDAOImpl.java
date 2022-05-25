@@ -2,7 +2,7 @@ package pe.edu.unprg.javaee.inventariolibros.dao.impl;
 
 import pe.edu.unprg.javaee.inventariolibros.dao.IGenreDAO;
 import pe.edu.unprg.javaee.inventariolibros.dao.query.GenreQuery;
-import pe.edu.unprg.javaee.inventariolibros.entities.Genre;
+import pe.edu.unprg.javaee.inventariolibros.models.Genre;
 import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 import pe.edu.unprg.javaee.inventariolibros.utils.DatabaseHandler;
 

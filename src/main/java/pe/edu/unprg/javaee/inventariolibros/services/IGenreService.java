@@ -1,6 +1,6 @@
 package pe.edu.unprg.javaee.inventariolibros.services;
 
-import pe.edu.unprg.javaee.inventariolibros.entities.Genre;
+import pe.edu.unprg.javaee.inventariolibros.models.Genre;
 import pe.edu.unprg.javaee.inventariolibros.exception.ServiceException;
 
 import java.util.List;

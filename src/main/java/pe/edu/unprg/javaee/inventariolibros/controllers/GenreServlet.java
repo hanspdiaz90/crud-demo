@@ -2,7 +2,7 @@ package pe.edu.unprg.javaee.inventariolibros.controllers;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import pe.edu.unprg.javaee.inventariolibros.entities.Genre;
+import pe.edu.unprg.javaee.inventariolibros.models.Genre;
 import pe.edu.unprg.javaee.inventariolibros.exception.ServiceException;
 import pe.edu.unprg.javaee.inventariolibros.services.IGenreService;
 import pe.edu.unprg.javaee.inventariolibros.services.factory.ServiceFactory;

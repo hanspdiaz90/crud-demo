@@ -1,6 +1,6 @@
 package pe.edu.unprg.javaee.inventariolibros.dao;
 
-import pe.edu.unprg.javaee.inventariolibros.entities.Genre;
+import pe.edu.unprg.javaee.inventariolibros.models.Genre;
 import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 
 import java.util.List;
