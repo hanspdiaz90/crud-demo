@@ -42,7 +42,7 @@ public class AuthorServlet extends HttpServlet {
                 case "crear":
                     insertAuthorAction(request, response);
                     break;
-                case "actualizar":
+                case "editar":
                     System.out.println("Próximo a implementarse =)");
                     break;
                 case "verDetalles":
@@ -64,6 +64,7 @@ public class AuthorServlet extends HttpServlet {
     }
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.setAttribute("cardTitle", "Listado de autores");
         RequestDispatcher dispatcher = request.getRequestDispatcher(PATH_AUTORES);
         dispatcher.forward(request, response);
     }
@@ -82,13 +83,14 @@ public class AuthorServlet extends HttpServlet {
             author.setActivo(true);
             boolean inserted = authorService.insert(author);
             JsonObject json = new JsonObject();
+            String message = null;
             if (inserted) {
                 json.addProperty("status", "success");
-                json.addProperty("message", "El autor ha sido registrado con éxito");
+                message = "El autor ha sido registrado con éxito";
             } else {
                 json.addProperty("status", "error");
-                json.addProperty("message", "Ocurrió un error al intentar registrar los datos del autor");
             }
+            json.addProperty("message", message);
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -134,7 +136,7 @@ public class AuthorServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        out.print(json);
+        out.print(json.toString());
         out.flush();
     }
 
@@ -143,13 +145,14 @@ public class AuthorServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             boolean disabled = authorService.disableById(id);
             JsonObject json = new JsonObject();
+            String message = null;
             if (disabled) {
                 json.addProperty("status", "success");
-                json.addProperty("message", "El autor ha sido deshabilitado con éxito");
+                message = "El autor ha sido deshabilitado con éxito";
             } else {
                 json.addProperty("status", "error");
-                json.addProperty("message", "Ocurrió un error al intentar deshabilitar los datos del autor");
             }
+            json.addProperty("message", message);
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

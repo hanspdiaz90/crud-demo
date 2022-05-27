@@ -45,7 +45,7 @@ public class BookServlet extends HttpServlet {
                 case "crear":
                     insertBookAction(request, response);
                     break;
-                case "actualizar":
+                case "editar":
                     System.out.println("Próximo a implementarse...");
                     break;
                 case "verDetalles":
@@ -76,6 +76,7 @@ public class BookServlet extends HttpServlet {
     }
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("cardTitle", "Listado de libros");
         RequestDispatcher dispatcher = request.getRequestDispatcher(PATH_LIBROS);
         dispatcher.forward(request, response);
     }
@@ -109,15 +110,17 @@ public class BookServlet extends HttpServlet {
             libro.getEditorial().setId(editorial);
             libro.setGenero(new Genre());
             libro.getGenero().setId(genero);
+            libro.setActivo(true);
             boolean inserted = bookService.insert(libro);
             JsonObject json = new JsonObject();
+            String message = null;
             if (inserted) {
                 json.addProperty("status", "success");
-                json.addProperty("message", "El libro ha sido registrado con éxito");
+                message = "El libro ha sido registrado con éxito";
             } else {
                 json.addProperty("status", "error");
-                json.addProperty("message", "Ocurrió un error al intentar registrar los datos del libro");
             }
+            json.addProperty("message", message);
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -241,13 +244,14 @@ public class BookServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             boolean disabled = bookService.disableById(id);
             JsonObject json = new JsonObject();
+            String message = null;
             if (disabled) {
                 json.addProperty("status", "success");
-                json.addProperty("message", "El libro ha sido deshabilitado con éxito");
+                message = "El libro ha sido deshabilitado con éxito";
             } else {
                 json.addProperty("status", "error");
-                json.addProperty("message", "Ocurrió un error al intentar deshabilitar los datos del libro");
             }
+            json.addProperty("message", message);
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

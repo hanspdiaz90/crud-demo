@@ -13,7 +13,7 @@ public class DatabaseHandler {
 
     private static DatabaseHandler instance = null;
     private static DataSource dataSource = null;
-    private static final String RESOURCE = "/database/settingss.properties";
+    private static final String RESOURCE = "/database/settings.properties";
 
     private DatabaseHandler() {
         try {

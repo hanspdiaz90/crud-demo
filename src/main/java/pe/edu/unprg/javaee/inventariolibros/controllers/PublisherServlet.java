@@ -11,6 +11,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.List;
 
 @WebServlet(name = "publisherServlet", urlPatterns = "/biblioteca/editoriales")
@@ -21,33 +23,33 @@ public class PublisherServlet extends HttpServlet {
     private final IPublisherService publisherService = ServiceFactory.getInstance().getPublisherService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         processRequest(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         processRequest(request, response);
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String action = request.getParameter("accion");
         if (action == null) {
             action = "index";
         }
         try {
             switch (action) {
-                case "registrar":
+                case "crear":
                     insertPublisherAction(request, response);
                     break;
-                case "actualizar":
+                case "editar":
                     System.out.println("Próximo a implementarse...");
                     break;
-                case "buscar":
-                    searchPublisherByIdAction(request, response);
+                case "verDetalles":
+                    moreDetailsPublisherAction(request, response);
                     break;
-                case "desactivar":
-                    deactivatePublisherAction(request, response);
+                case "deshabilitar":
+                    disablePublisherAction(request, response);
                     break;
                 case "listar":
                     publishersListAction(response);
@@ -56,108 +58,105 @@ public class PublisherServlet extends HttpServlet {
                     indexAction(request, response);
                     break;
             }
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new ServletException(ex);
         }
     }
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("cardTitle", "Listado de editoriales");
         RequestDispatcher dispatcher = request.getRequestDispatcher(PATH_EDITORIALES);
         dispatcher.forward(request, response);
     }
 
-    private void insertPublisherAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        boolean ok = false;
-        String message = null;
-        JsonObject jsonResponse = new JsonObject();
-        try {
+    private void insertPublisherAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
+        if (request.getParameter("nombre") != null &&
+                request.getParameter("email") != null &&
+                request.getParameter("telefono") != null) {
             String nombre = request.getParameter("nombre");
             String email = request.getParameter("email");
             String telefono = request.getParameter("telefono");
-            if (nombre.isEmpty() || email.isEmpty() || telefono.isEmpty()) {
-                message = "No se registraron los datos del editorial";
+            Publisher publisher = new Publisher();
+            publisher.setNombre(nombre);
+            publisher.setEmail(email);
+            publisher.setTelefono(telefono);
+            boolean inserted = publisherService.insert(publisher);
+            JsonObject json = new JsonObject();
+            String message = null;
+            if (inserted) {
+                json.addProperty("status", "success");
+                message = "La editorial ha sido registrado con éxito";
             } else {
-                Publisher publisher = new Publisher(nombre, email, telefono);
-                boolean success = publisherService.insert(publisher);
-                if (success) {
-                    ok = true;
-                    message = "Los datos de la editorial se registraron con éxito";
-                }
+                json.addProperty("status", "error");
             }
-            jsonResponse.addProperty("ok", ok);
-            jsonResponse.addProperty("message", message);
+            json.addProperty("message", message);
+            PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(jsonResponse.toString());
-        } catch (ServiceException ex) {
-            response.setContentType("text/html");
-            response.getWriter().print(ex.getMessage());
+            out.print(json);
+            out.flush();
         }
     }
 
-    private void searchPublisherByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        boolean ok = false;
-        JsonElement result = null;
-        JsonObject jsonResponse = new JsonObject();
-        try {
-            String id = request.getParameter("id");
-            Publisher publisher = publisherService.findById(Integer.parseInt(id));
-            if (publisher != null) {
-                ok = true;
-                result = gson.toJsonTree(publisher);
+    private void moreDetailsPublisherAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
+        if (request.getParameter("id") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Publisher found = publisherService.findById(id);
+            JsonObject json = new JsonObject();
+            JsonElement result = null;
+            if (found != null) {
+                result = gson.toJsonTree(found);
+                json.addProperty("status", "success");
+            } else {
+                json.addProperty("status", "error");
             }
-            jsonResponse.addProperty("ok", ok);
-            jsonResponse.add("result", result);
+            json.add("result", result);
+            PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(jsonResponse.toString());
-        } catch (Exception ex) {
-            response.setContentType("text/html");
-            response.getWriter().print(ex.getMessage());
+            out.print(json);
+            out.flush();
         }
     }
 
-    private void publishersListAction(HttpServletResponse response) throws IOException {
-        boolean ok = false;
-        JsonArray result = null;
-        JsonObject jsonResponse = new JsonObject();
-        try {
-            List<Publisher> publishers = publisherService.findAll();
-            if (publishers != null) {
-                ok = true;
-                JsonElement items = gson.toJsonTree(publishers, new TypeToken<List<Publisher>>(){}.getType());
-                result = items.getAsJsonArray();
-            }
-            jsonResponse.addProperty("ok", ok);
-            jsonResponse.add("result", result);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(jsonResponse.toString());
-        } catch (ServiceException ex) {
-            response.setContentType("text/html");
-            response.getWriter().print(ex.getMessage());
+    private void publishersListAction(HttpServletResponse response) throws ServiceException, IOException {
+        JsonObject json = new JsonObject();
+        JsonArray data = null;
+        List<Publisher> publisherList = publisherService.findAll();
+        if (publisherList != null) {
+            json.addProperty("status", "success");
+            Type typePublisher = new TypeToken<List<Publisher>>(){}.getType();
+            JsonElement result = gson.toJsonTree(publisherList, typePublisher);
+            data = result.getAsJsonArray();
+        } else {
+            json.addProperty("status", "error");
         }
+        json.add("result", data);
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(json);
+        out.flush();
     }
 
-    private void deactivatePublisherAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        boolean ok = false;
-        String message = null;
-        JsonObject jsonResponse = new JsonObject();
-        try {
-            String id = request.getParameter("id");
-            boolean success = publisherService.disableById(Integer.parseInt(id));
-            if (success) {
-                ok = true;
-                message = "La operación se realizó con éxito";
+    private void disablePublisherAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
+        if (request.getParameter("id") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            boolean disable = publisherService.disableById(id);
+            JsonObject json = new JsonObject();
+            String message = null;
+            if (disable) {
+                json.addProperty("status", "success");
+                message = "La editorial ha sido deshabilitado con éxito";
+            } else {
+                json.addProperty("status", "error");
             }
-            jsonResponse.addProperty("ok", ok);
-            jsonResponse.addProperty("message", message);
+            json.addProperty("message", message);
+            PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(jsonResponse.toString());
-        } catch (ServiceException ex) {
-            response.setContentType("text/html");
-            response.getWriter().print(ex.getMessage());
+            out.print(json);
+            out.flush();
         }
     }
 
