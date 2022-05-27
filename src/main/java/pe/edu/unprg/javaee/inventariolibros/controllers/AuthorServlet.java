@@ -11,6 +11,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.List;
 
 @WebServlet(name = "authorServlet", urlPatterns = "/biblioteca/autores")
@@ -21,33 +23,33 @@ public class AuthorServlet extends HttpServlet {
     private final IAuthorService authorService = ServiceFactory.getInstance().getAuthorService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         processRequest(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         processRequest(request, response);
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         String action = request.getParameter("accion");
         if (action == null) {
             action = "index";
         }
         try {
             switch (action) {
-                case "registrar":
+                case "crear":
                     insertAuthorAction(request, response);
                     break;
                 case "actualizar":
-                    System.out.println("Próximo a implementarse...");
+                    System.out.println("Próximo a implementarse =)");
                     break;
-                case "buscar":
-                    searchAuthonByIdAction(request, response);
+                case "verDetalles":
+                    moreDetailsAuthonAction(request, response);
                     break;
-                case "cambiarEstado":
-                    changeAuthorStatusAction(request, response);
+                case "deshabilitar":
+                    disableAuthorAction(request, response);
                     break;
                 case "listar":
                     authorsListAction(response);
@@ -61,104 +63,123 @@ public class AuthorServlet extends HttpServlet {
         }
     }
 
-    private void indexAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void indexAction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         RequestDispatcher dispatcher = request.getRequestDispatcher(PATH_AUTORES);
         dispatcher.forward(request, response);
     }
 
-    private void insertAuthorAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        boolean ok = false;
-        String message = null;
-        JsonObject jsonResponse = new JsonObject();
-        try {
+    private void insertAuthorAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
+        if (request.getParameter("nombres") != null &&
+                request.getParameter("apellidos") != null &&
+                request.getParameter("ciudad") != null) {
             String nombres = request.getParameter("nombres");
             String apellidos = request.getParameter("apellidos");
             String ciudad = request.getParameter("ciudad");
-            if (nombres.isEmpty() || apellidos.isEmpty() || ciudad.isEmpty()) {
-                message = "No se registraron los datos del autor";
+            Author author = new Author();
+            author.setNombres(nombres);
+            author.setApellidos(apellidos);
+            author.setCiudad(ciudad);
+            author.setActivo(true);
+            boolean inserted = authorService.insert(author);
+            JsonObject json = new JsonObject();
+            if (inserted) {
+                json.addProperty("status", "success");
+                json.addProperty("message", "El autor ha sido registrado con éxito");
             } else {
-                Author author = new Author(nombres, apellidos, ciudad);
-                boolean success = authorService.insert(author);
-                if (success) {
-                    ok = true;
-                    message = "Los datos del autor se registraron con éxito";
-                }
+                json.addProperty("status", "error");
+                json.addProperty("message", "Ocurrió un error al intentar registrar los datos del autor");
             }
-            jsonResponse.addProperty("ok", ok);
-            jsonResponse.addProperty("message", message);
+            PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(jsonResponse.toString());
-        } catch (ServiceException ex) {
-            response.setContentType("text/html");
-            response.getWriter().print(ex.getMessage());
+            out.print(json);
+            out.flush();
         }
     }
 
-    private void searchAuthonByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        boolean ok = false;
-        JsonElement data = null;
-        JsonObject jsonResponse = new JsonObject();
-        try {
-            String id = request.getParameter("id");
-            Author author = authorService.findById(Integer.parseInt(id));
-            if (author != null) {
-                ok = true;
-                data = gson.toJsonTree(author);
+    private void moreDetailsAuthonAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
+        if (request.getParameter("id") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Author found = authorService.findById(id);
+            JsonObject json = new JsonObject();
+            JsonElement result = null;
+            if (found != null) {
+                result = gson.toJsonTree(found);
+                json.addProperty("status", "success");
+            } else {
+                json.addProperty("status", "error");
             }
-            jsonResponse.addProperty("ok", ok);
-            jsonResponse.add("data", data);
+            json.add("result", result);
+            PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(jsonResponse.toString());
-        } catch (ServiceException ex) {
-            response.setContentType("text/html");
-            response.getWriter().print(ex.getMessage());
+            out.print(json);
+            out.flush();
         }
     }
 
-    private void authorsListAction(HttpServletResponse response) throws IOException {
-        boolean ok = false;
-        JsonArray result = null;
-        JsonObject jsonResponse = new JsonObject();
-        try {
-            List<Author> authors = authorService.findAll();
-            if (authors != null) {
-                ok = true;
-                JsonElement items = gson.toJsonTree(authors, new TypeToken<List<Author>>(){}.getType());
-                result = items.getAsJsonArray();
+    private void authorsListAction(HttpServletResponse response) throws ServiceException, IOException {
+        JsonObject json = new JsonObject();
+        JsonArray data = null;
+        List<Author> authorList = authorService.findAll();
+        if (authorList != null) {
+            json.addProperty("status", "success");
+            Type typeAuthor = new TypeToken<List<Author>>(){}.getType();
+            JsonElement result = gson.toJsonTree(authorList, typeAuthor);
+            data = result.getAsJsonArray();
+        } else {
+            json.addProperty("status", "error");
+        }
+        json.add("result", data);
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(json);
+        out.flush();
+    }
+
+    private void disableAuthorAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
+        if (request.getParameter("id") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            boolean disabled = authorService.disableById(id);
+            JsonObject json = new JsonObject();
+            if (disabled) {
+                json.addProperty("status", "success");
+                json.addProperty("message", "El autor ha sido deshabilitado con éxito");
+            } else {
+                json.addProperty("status", "error");
+                json.addProperty("message", "Ocurrió un error al intentar deshabilitar los datos del autor");
             }
-            jsonResponse.addProperty("ok", ok);
-            jsonResponse.add("result", result);
+            PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(jsonResponse.toString());
-        } catch (ServiceException ex) {
-            response.setContentType("text/html");
-            response.getWriter().print(ex.getMessage());
+            out.print(json);
+            out.flush();
         }
     }
 
-    private void changeAuthorStatusAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        boolean ok = false;
-        String message = null;
-        JsonObject jsonResponse = new JsonObject();
-        try {
-            String id = request.getParameter("id");
-            boolean success = authorService.changeStatusById(Integer.parseInt(id));
-            if (success) {
-                ok = true;
-                message = "La operación se realizó con éxito";
-            }
-            jsonResponse.addProperty("ok", ok);
-            jsonResponse.addProperty("message", message);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(jsonResponse.toString());
-        } catch (ServiceException ex) {
-            response.setContentType("text/html");
-            response.getWriter().print(ex.getMessage());
-        }
-    }
+//    private void changeAuthorStatusAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        boolean ok = false;
+//        String message = null;
+//        JsonObject jsonResponse = new JsonObject();
+//        try {
+//            if (request.getParameter("id") != null) {
+//                int id = Integer.parseInt(request.getParameter("id"));
+//                boolean success = authorService.changeStatusById(id);
+//                if (success) {
+//                    ok = true;
+//                    message = "La operación se realizó con éxito";
+//                }
+//            }
+//            jsonResponse.addProperty("status", ok ? "success" : "error");
+//            jsonResponse.addProperty("message", message);
+//            response.setContentType("application/json");
+//            response.setCharacterEncoding("UTF-8");
+//            response.getWriter().print(jsonResponse.toString());
+//        } catch (ServiceException ex) {
+//            response.setContentType("text/html");
+//            response.getWriter().print(ex.getMessage());
+//        }
+//    }
 
 }

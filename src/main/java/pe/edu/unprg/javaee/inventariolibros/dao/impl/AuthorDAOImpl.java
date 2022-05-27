@@ -14,22 +14,22 @@ public class AuthorDAOImpl implements IAuthorDAO {
 
     @Override
     public boolean insert(Author author) throws DAOException {
-        boolean insertedRow = false;
+        boolean rowsInserted = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_INSERT_AUTHOR)) {
             cstmt.setString(1, author.getNombres());
             cstmt.setString(2, author.getApellidos());
             cstmt.setString(3, author.getCiudad());
-            insertedRow = cstmt.executeUpdate() > 0;
+            rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_INSERT_AUTHOR, ex);
         }
-        return insertedRow;
+        return rowsInserted;
     }
 
     @Override
     public boolean update(Author author) throws DAOException {
-        boolean updatedRow = false;
+        boolean rowsUpdated = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_UPDATE_AUTHOR)) {
             cstmt.setString(1, author.getNombres());
@@ -37,80 +37,80 @@ public class AuthorDAOImpl implements IAuthorDAO {
             cstmt.setString(3, author.getCiudad());
             cstmt.setBoolean(4, author.isActivo());
             cstmt.setInt(5, author.getId());
-            updatedRow = cstmt.executeUpdate() > 0;
+            rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_UPDATE_AUTHOR, ex);
         }
-        return updatedRow;
+        return rowsUpdated;
     }
 
     @Override
     public Author findById(int id) throws DAOException {
-        Author optional = null;
+        Author author = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_FIND_AUTHOR_BY_ID)) {
             cstmt.setInt(1, id);
             ResultSet rs = cstmt.executeQuery();
             if (rs.next()) {
-                optional = new Author(rs.getInt("id"),
-                        rs.getString("nombres"),
-                        rs.getString("apellidos"),
-                        rs.getString("ciudad"),
-                        rs.getBoolean("activo"));
+                author = new Author();
+                author.setId(rs.getInt("id"));
+                author.setNombres(rs.getString("nombres"));
+                author.setApellidos(rs.getString("apellidos"));
+                author.setCiudad(rs.getString("ciudad"));
+                author.setActivo(rs.getBoolean("activo"));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_FIND_AUTHOR_BY_ID, ex);
         }
-        return optional;
+        return author;
     }
 
     @Override
     public List<Author> findAll() throws DAOException {
-        List<Author> authors = null;
+        List<Author> result = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_FIND_ALL_AUTHORS);
              ResultSet rs = cstmt.executeQuery()) {
-            authors = new ArrayList<>();
+            result = new ArrayList<>();
             while (rs.next()) {
-                Author optional = new Author(rs.getInt("id"),
-                        rs.getString("nombres"),
-                        rs.getString("apellidos"),
-                        rs.getString("ciudad"),
-                        rs.getBoolean("activo"));
-                authors.add(optional);
+                Author author = new Author();
+                author.setId(rs.getInt("id"));
+                author.setNombres(rs.getString("nombres"));
+                author.setApellidos(rs.getString("apellidos"));
+                author.setCiudad(rs.getString("ciudad"));
+                author.setActivo(rs.getBoolean("activo"));
+                result.add(author);
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_FIND_ALL_AUTHORS, ex);
         }
-        return authors;
-    }
-
-    @Override
-    public int contarTodosAutores() throws DAOException {
-        int count = 0;
-        try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_CONTAR_TODOS_AUTORES)) {
-            cstmt.registerOutParameter(1, Types.INTEGER);
-            if (cstmt.executeUpdate() > 0) {
-                count = cstmt.getInt(1);
-            }
-        } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_CONTAR_TODOS_AUTORES, ex);
-        }
-        return count;
+        return result;
     }
 
     @Override
     public boolean changeStatusById(int id) throws DAOException {
-        boolean affectedRow = false;
+        boolean rowsAffected = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_CHANGE_AUTHOR_STATUS_BY_ID)) {
             cstmt.setInt(1, id);
-            affectedRow = cstmt.executeUpdate() > 0;
+            rowsAffected = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_CHANGE_AUTHOR_STATUS_BY_ID, ex);
         }
-        return affectedRow;
+        return rowsAffected;
+    }
+
+    @Override
+    public boolean disableById(int id) throws DAOException {
+        boolean rowsAffected = false;
+        try (Connection conn = DatabaseHandler.getInstance().getConnection();
+             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_DEACTIVATE_AUTHOR_BY_ID)) {
+            cstmt.setInt(1, id);
+            rowsAffected = cstmt.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_DEACTIVATE_AUTHOR_BY_ID, ex);
+        }
+        return rowsAffected;
     }
 
 }

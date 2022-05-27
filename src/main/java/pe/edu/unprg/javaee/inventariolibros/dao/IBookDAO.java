@@ -17,6 +17,6 @@ public interface IBookDAO {
     List<Author> findActiveAuthors(String filter) throws DAOException;
     List<Publisher> findActivePublishers(String filter) throws DAOException;
     List<Genre> findActiveGenres(String filter) throws DAOException;
-    boolean deactivateById(int id) throws DAOException;
+    boolean disableById(int id) throws DAOException;
 
 }

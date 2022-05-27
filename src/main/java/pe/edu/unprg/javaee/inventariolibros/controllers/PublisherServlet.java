@@ -145,7 +145,7 @@ public class PublisherServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            boolean success = publisherService.deactivateById(Integer.parseInt(id));
+            boolean success = publisherService.disableById(Integer.parseInt(id));
             if (success) {
                 ok = true;
                 message = "La operación se realizó con éxito";

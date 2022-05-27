@@ -143,7 +143,7 @@ public class GenreServlet extends HttpServlet {
         JsonObject jsonResponse = new JsonObject();
         try {
             String id = request.getParameter("id");
-            boolean success = genreService.deactivateById(Integer.parseInt(id));
+            boolean success = genreService.disableById(Integer.parseInt(id));
             if (success) {
                 ok = true;
                 message = "La operación se realizó con éxito";

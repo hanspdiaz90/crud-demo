@@ -1,7 +1,7 @@
 package pe.edu.unprg.javaee.inventariolibros.services.impl;
 
 import pe.edu.unprg.javaee.inventariolibros.dao.IGenreDAO;
-import pe.edu.unprg.javaee.inventariolibros.dao.factory.DAOFactory;
+import pe.edu.unprg.javaee.inventariolibros.dao.factory.LibraryDAOFactory;
 import pe.edu.unprg.javaee.inventariolibros.models.Genre;
 import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 import pe.edu.unprg.javaee.inventariolibros.exception.ServiceException;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class GenreServiceImpl implements IGenreService {
 
-    private final IGenreDAO genreDAO = DAOFactory.getInstance().getGenreDAO();
+    private final IGenreDAO genreDAO = LibraryDAOFactory.getInstance().getGenreDAO();
 
     @Override
     public boolean insert(Genre genre) throws ServiceException {
@@ -37,31 +37,31 @@ public class GenreServiceImpl implements IGenreService {
 
     @Override
     public Genre findById(int id) throws ServiceException {
-        Genre genre = null;
+        Genre result = null;
         try {
-            genre = genreDAO.findById(id);
+            result = genreDAO.findById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return genre;
+        return result;
     }
 
     @Override
     public List<Genre> findAll() throws ServiceException {
-        List<Genre> genres = null;
+        List<Genre> result = null;
         try {
-            genres = genreDAO.findAll();
+            result = genreDAO.findAll();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return genres;
+        return result;
     }
 
     @Override
-    public boolean deactivateById(int id) throws ServiceException {
+    public boolean disableById(int id) throws ServiceException {
         boolean result = false;
         try {
-            result = genreDAO.deactivateById(id);
+            result = genreDAO.disableById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

@@ -1,7 +1,7 @@
 package pe.edu.unprg.javaee.inventariolibros.services.impl;
 
 import pe.edu.unprg.javaee.inventariolibros.dao.IAuthorDAO;
-import pe.edu.unprg.javaee.inventariolibros.dao.factory.DAOFactory;
+import pe.edu.unprg.javaee.inventariolibros.dao.factory.LibraryDAOFactory;
 import pe.edu.unprg.javaee.inventariolibros.models.Author;
 import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 import pe.edu.unprg.javaee.inventariolibros.exception.ServiceException;
@@ -11,13 +11,13 @@ import java.util.List;
 
 public class AuthorServiceImpl implements IAuthorService {
 
-    private final IAuthorDAO authorDAO = DAOFactory.getInstance().getAuthorDAO();
+    private final IAuthorDAO authorDAO = LibraryDAOFactory.getInstance().getAuthorDAO();
 
     @Override
-    public boolean insert(Author autor) throws ServiceException {
+    public boolean insert(Author author) throws ServiceException {
         boolean result = false;
         try {
-            result =  authorDAO.insert(autor);
+            result =  authorDAO.insert(author);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -25,21 +25,10 @@ public class AuthorServiceImpl implements IAuthorService {
     }
 
     @Override
-    public List<Author> findAll() throws ServiceException {
-        List<Author> authors = null;
-        try {
-            authors = authorDAO.findAll();
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return authors;
-    }
-
-    @Override
-    public boolean update(Author autor) throws ServiceException {
+    public boolean update(Author author) throws ServiceException {
         boolean result = false;
         try {
-            result =  authorDAO.update(autor);
+            result =  authorDAO.update(author);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -48,13 +37,24 @@ public class AuthorServiceImpl implements IAuthorService {
 
     @Override
     public Author findById(int id) throws ServiceException {
-        Author optional = null;
+        Author result = null;
         try {
-            optional = authorDAO.findById(id);
+            result = authorDAO.findById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return optional;
+        return result;
+    }
+
+    @Override
+    public List<Author> findAll() throws ServiceException {
+        List<Author> result = null;
+        try {
+            result = authorDAO.findAll();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return result;
     }
 
     @Override
@@ -62,6 +62,17 @@ public class AuthorServiceImpl implements IAuthorService {
         boolean result = false;
         try {
             result = authorDAO.changeStatusById(id);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean disableById(int id) throws ServiceException {
+        boolean result = false;
+        try {
+            result = authorDAO.disableById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

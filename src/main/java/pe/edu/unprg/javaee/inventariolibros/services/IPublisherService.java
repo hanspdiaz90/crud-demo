@@ -11,6 +11,6 @@ public interface IPublisherService {
     boolean update(Publisher publisher) throws ServiceException;
     Publisher findById(int id) throws ServiceException;
     List<Publisher> findAll() throws ServiceException;
-    boolean deactivateById(int id) throws ServiceException;
+    boolean disableById(int id) throws ServiceException;
 
 }

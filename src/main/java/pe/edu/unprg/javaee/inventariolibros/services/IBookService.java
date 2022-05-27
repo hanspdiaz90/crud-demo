@@ -17,6 +17,6 @@ public interface IBookService {
     List<Author> findActiveAuthors(String filter) throws ServiceException;
     List<Publisher> findActivePublishers(String filter) throws ServiceException;
     List<Genre> findActiveGenres(String filter) throws ServiceException;
-    boolean deactivateById(int id) throws ServiceException;
+    boolean disableById(int id) throws ServiceException;
 
 }

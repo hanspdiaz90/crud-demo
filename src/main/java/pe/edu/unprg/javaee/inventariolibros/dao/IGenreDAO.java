@@ -11,6 +11,6 @@ public interface IGenreDAO {
     boolean update(Genre genre) throws DAOException;
     Genre findById(int id) throws DAOException;
     List<Genre> findAll() throws DAOException;
-    boolean deactivateById(int id) throws DAOException;
+    boolean disableById(int id) throws DAOException;
 
 }

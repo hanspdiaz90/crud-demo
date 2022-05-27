@@ -14,7 +14,7 @@ $(function () {
                 ciudad: { required: true, minlength: 3 }
             },
             submitHandler: function (form) {
-                let url = "/biblioteca/autores?accion=registrar";
+                let url = "/biblioteca/autores?accion=crear";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -22,7 +22,7 @@ $(function () {
                     data: formData,
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.ok) {
+                        if (response.status == "success") {
                             $(form).trigger("reset");
                             $("#authorAddModal").modal("hide");
                             Swal.fire({
@@ -64,8 +64,8 @@ function viewDetailsAuthor(button) {
         data: { id: authorId },
         dataType: "JSON",
         success: function (response) {
-            if (response.ok) {
-                let objAuthor = response.data;
+            if (response.status == "success") {
+                let objAuthor = response.result;
                 let classNameBadge = objAuthor.activo ? "success" : "danger";
                 let classNameIcon = objAuthor.activo ? "check" : "times";
                 let statusText = objAuthor.activo ? "ACTIVO" : "INACTIVO";

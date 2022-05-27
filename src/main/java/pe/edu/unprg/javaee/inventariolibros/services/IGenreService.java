@@ -11,6 +11,6 @@ public interface IGenreService {
     boolean update(Genre genre) throws ServiceException;
     Genre findById(int id) throws ServiceException;
     List<Genre> findAll() throws ServiceException;
-    boolean deactivateById(int id) throws ServiceException;
+    boolean disableById(int id) throws ServiceException;
 
 }

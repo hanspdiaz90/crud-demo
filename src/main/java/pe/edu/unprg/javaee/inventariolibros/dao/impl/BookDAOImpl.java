@@ -20,32 +20,32 @@ public class BookDAOImpl implements IBookDAO {
 
     @Override
     public boolean insert(Book book) throws DAOException {
-        boolean insertedRow = false;
+        boolean rowsInserted = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_INSERT_BOOK)) {
-            cstmt.setString(1, book.getISBN());
+            cstmt.setString(1, book.getIsbn());
             cstmt.setString(2, book.getTitulo());
-            cstmt.setString(3, book.getDescripcion());
+            cstmt.setString(3, book.getResenia());
             cstmt.setInt(4, book.getExistencias());
             cstmt.setDouble(5, book.getPrecio());
             cstmt.setInt(6, book.getAutor().getId());
             cstmt.setInt(7, book.getEditorial().getId());
             cstmt.setInt(8, book.getGenero().getId());
-            insertedRow = cstmt.executeUpdate() > 0;
+            rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_INSERT_BOOK, ex);
         }
-        return insertedRow;
+        return rowsInserted;
     }
 
     @Override
     public boolean update(Book book) throws DAOException {
-        boolean updatedRow = false;
+        boolean rowsUpdated = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_UPDATE_BOOK)) {
-            cstmt.setString(1, book.getISBN());
+            cstmt.setString(1, book.getIsbn());
             cstmt.setString(2, book.getTitulo());
-            cstmt.setString(3, book.getDescripcion());
+            cstmt.setString(3, book.getResenia());
             cstmt.setInt(4, book.getExistencias());
             cstmt.setDouble(5, book.getPrecio());
             cstmt.setInt(6, book.getAutor().getId());
@@ -53,144 +53,149 @@ public class BookDAOImpl implements IBookDAO {
             cstmt.setInt(8, book.getGenero().getId());
             cstmt.setBoolean(9, book.isActivo());
             cstmt.setInt(10, book.getId());
-            updatedRow = cstmt.executeUpdate() > 0;
+            rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_UPDATE_BOOK, ex);
         }
-        return updatedRow;
+        return rowsUpdated;
     }
 
     @Override
     public Book findById(int id) throws DAOException {
-        Book optional = null;
+        Book book = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_BOOK_BY_ID)) {
             cstmt.setInt(1, id);
             ResultSet rs = cstmt.executeQuery();
             if (rs.next()) {
-                optional = new Book(rs.getInt("id"),
-                        rs.getString("isbn"),
-                        rs.getString("titulo"),
-                        rs.getString("descripcion"),
-                        rs.getInt("existencias"),
-                        rs.getDouble("precio"),
-                        new Author(),
-                        new Publisher(),
-                        new Genre(),
-                        rs.getBoolean("activo"));
-                optional.getAutor().setNombres(rs.getString("nombres"));
-                optional.getAutor().setApellidos(rs.getString("apellidos"));
-                optional.getEditorial().setNombre(rs.getString("editorial"));
-                optional.getGenero().setNombre(rs.getString("genero"));
+                book = new Book();
+                book.setId(rs.getInt("id"));
+                book.setIsbn(rs.getString("isbn"));
+                book.setTitulo(rs.getString("titulo"));
+                book.setResenia(rs.getString("descripcion"));
+                book.setExistencias(rs.getInt("existencias"));
+                book.setPrecio(rs.getDouble("precio"));
+                book.setAutor(new Author());
+                book.getAutor().setNombres(rs.getString("nombres"));
+                book.getAutor().setApellidos(rs.getString("apellidos"));
+                book.setEditorial(new Publisher());
+                book.getEditorial().setNombre(rs.getString("editorial"));
+                book.setGenero(new Genre());
+                book.getGenero().setNombre(rs.getString("genero"));
+                book.setActivo(rs.getBoolean("activo"));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_BOOK_BY_ID, ex);
         }
-        return optional;
+        return book;
     }
 
     @Override
     public List<Book> findAll() throws DAOException {
-        List<Book> books = null;
+        List<Book> result = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ALL_BOOKS);
              ResultSet rs = cstmt.executeQuery()) {
-            books = new ArrayList<>();
+            result = new ArrayList<>();
             while (rs.next()) {
-                Book optional = new Book(rs.getInt("id"),
-                        rs.getString("isbn"),
-                        rs.getString("titulo"),
-                        rs.getString("descripcion"),
-                        rs.getInt("existencias"),
-                        rs.getDouble("precio"),
-                        new Author(),
-                        new Publisher(),
-                        new Genre(),
-                        rs.getBoolean("activo"));
-                optional.getAutor().setNombres(rs.getString("nombres"));
-                optional.getAutor().setApellidos(rs.getString("apellidos"));
-                optional.getEditorial().setNombre(rs.getString("editorial"));
-                optional.getGenero().setNombre(rs.getString("genero"));
-                books.add(optional);
+                Book book = new Book();
+                book.setId(rs.getInt("id"));
+                book.setIsbn(rs.getString("isbn"));
+                book.setTitulo(rs.getString("titulo"));
+                book.setResenia(rs.getString("descripcion"));
+                book.setExistencias(rs.getInt("existencias"));
+                book.setPrecio(rs.getDouble("precio"));
+                book.setAutor(new Author());
+                book.getAutor().setNombres(rs.getString("nombres"));
+                book.getAutor().setApellidos(rs.getString("apellidos"));
+                book.setEditorial(new Publisher());
+                book.getEditorial().setNombre(rs.getString("editorial"));
+                book.setGenero(new Genre());
+                book.getGenero().setNombre(rs.getString("genero"));
+                book.setActivo(rs.getBoolean("activo"));
+                result.add(book);
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ALL_BOOKS, ex);
         }
-        return books;
+        return result;
     }
 
     @Override
     public List<Author> findActiveAuthors(String filter) throws DAOException {
-        List<Author> authors = null;
+        List<Author> result = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_AUTHORS)) {
             cstmt.setString(1, filter);
             ResultSet rs = cstmt.executeQuery();
-            authors = new ArrayList<>();
+            result = new ArrayList<>();
             while (rs.next()) {
-                Author optional = new Author();
-                optional.setId(rs.getInt("id"));
-                optional.setNombres(rs.getString("nombres"));
-                optional.setApellidos(rs.getString("apellidos"));
-                authors.add(optional);
+                Author author = new Author();
+                author.setId(rs.getInt("id"));
+                author.setNombres(rs.getString("nombres"));
+                author.setApellidos(rs.getString("apellidos"));
+                author.setActivo(rs.getBoolean("activo"));
+                result.add(author);
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_AUTHORS, ex);
         }
-        return authors;
+        return result;
     }
 
     @Override
     public List<Publisher> findActivePublishers(String filter) throws DAOException {
-        List<Publisher> publishers = null;
+        List<Publisher> result = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_PUBLISHERS)) {
             cstmt.setString(1, filter);
             ResultSet rs = cstmt.executeQuery();
-            publishers = new ArrayList<>();
+            result = new ArrayList<>();
             while (rs.next()) {
-                Publisher optional = new Publisher();
-                optional.setId(rs.getInt("id"));
-                optional.setNombre(rs.getString("nombre"));
-                publishers.add(optional);
+                Publisher publisher = new Publisher();
+                publisher.setId(rs.getInt("id"));
+                publisher.setNombre(rs.getString("nombre"));
+                publisher.setActivo(rs.getBoolean("activo"));
+                result.add(publisher);
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_PUBLISHERS, ex);
         }
-        return publishers;
+        return result;
     }
 
     @Override
     public List<Genre> findActiveGenres(String filter) throws DAOException {
-        List<Genre> genres = null;
+        List<Genre> result = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_GENRES)) {
             cstmt.setString(1, filter);
             ResultSet rs = cstmt.executeQuery();
-            genres = new ArrayList<>();
+            result = new ArrayList<>();
             while (rs.next()) {
-                Genre optional = new Genre();
-                optional.setId(rs.getInt("id"));
-                optional.setNombre(rs.getString("nombre"));
-                genres.add(optional);
+                Genre genre = new Genre();
+                genre.setId(rs.getInt("id"));
+                genre.setNombre(rs.getString("nombre"));
+                genre.setActivo(rs.getBoolean("activo"));
+                result.add(genre);
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_GENRES, ex);
         }
-        return genres;
+        return result;
     }
 
     @Override
-    public boolean deactivateById(int id) throws DAOException {
-        boolean affectedRow = false;
+    public boolean disableById(int id) throws DAOException {
+        boolean rowsAffected = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_DEACTIVATE_BOOK_BY_ID)) {
             cstmt.setInt(1, id);
-            affectedRow = cstmt.executeUpdate() > 0;
+            rowsAffected = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_DEACTIVATE_BOOK_BY_ID, ex);
         }
-        return affectedRow;
+        return rowsAffected;
     }
 
 }

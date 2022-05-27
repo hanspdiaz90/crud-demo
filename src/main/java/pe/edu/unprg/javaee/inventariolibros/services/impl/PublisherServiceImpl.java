@@ -1,7 +1,7 @@
 package pe.edu.unprg.javaee.inventariolibros.services.impl;
 
 import pe.edu.unprg.javaee.inventariolibros.dao.IPublisherDAO;
-import pe.edu.unprg.javaee.inventariolibros.dao.factory.DAOFactory;
+import pe.edu.unprg.javaee.inventariolibros.dao.factory.LibraryDAOFactory;
 import pe.edu.unprg.javaee.inventariolibros.models.Publisher;
 import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 import pe.edu.unprg.javaee.inventariolibros.exception.ServiceException;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PublisherServiceImpl implements IPublisherService {
 
-    private final IPublisherDAO publisherDAO = DAOFactory.getInstance().getPublisherDAO();
+    private final IPublisherDAO publisherDAO = LibraryDAOFactory.getInstance().getPublisherDAO();
 
     @Override
     public boolean insert(Publisher publisher) throws ServiceException {
@@ -58,10 +58,10 @@ public class PublisherServiceImpl implements IPublisherService {
     }
 
     @Override
-    public boolean deactivateById(int id) throws ServiceException {
+    public boolean disableById(int id) throws ServiceException {
         boolean result = false;
         try {
-            result = publisherDAO.deactivateById(id);
+            result = publisherDAO.disableById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

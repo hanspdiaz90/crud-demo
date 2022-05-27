@@ -11,6 +11,6 @@ public interface IPublisherDAO {
     boolean update(Publisher publisher) throws DAOException;
     Publisher findById(int id) throws DAOException;
     List<Publisher> findAll() throws DAOException;
-    boolean deactivateById(int id) throws DAOException;
+    boolean disableById(int id) throws DAOException;
 
 }
