@@ -82,39 +82,6 @@ function viewDetailsAuthor(button) {
     });
 }
 
-// function changeStatusAuthor(button) {
-//     let active = $(button).data("authorStatus");
-//     Swal.fire({
-//         title: (active ? "¿Estás seguro que quieres dar de baja al autor?" : "¿Estás seguro que quieres dar de alta al autor?"),
-//         icon: "warning",
-//         showCancelButton: true,
-//         confirmButtonColor: "#3085d6",
-//         cancelButtonColor: "#d33",
-//         confirmButtonText: "Si, realizar operación"
-//     }).then((result) => {
-//         if (result.isConfirmed) {
-//             let url = "/biblioteca/autores?accion=cambiarEstado";
-//             let authorId = $(button).data("authorId");
-//             $.ajax({
-//                 url: url,
-//                 method: "GET",
-//                 data: { id: authorId },
-//                 dataType: "JSON",
-//                 success: function (response) {
-//                     if (response.ok) {
-//                         $("#authorsDataTable").DataTable().ajax.reload(null, false);
-//                         Swal.fire(
-//                             (active ? "Baja" : "Alta"),
-//                             (active ? "El autor fue dado de baja" : "El autor fue dado de alta"),
-//                             "success"
-//                         );
-//                     }
-//                 }
-//             });
-//         }
-//     });
-// }
-
 function disableAuthor(button) {
     let author = $(button).data("authorFullname");
     Swal.fire({
@@ -193,4 +160,38 @@ function getAuthors() {
     table.on("draw", function () {
         $("[data-tooltip='tooltip']").tooltip();
     });
+
+    // function changeStatusAuthor(button) {
+//     let active = $(button).data("authorStatus");
+//     Swal.fire({
+//         title: (active ? "¿Estás seguro que quieres dar de baja al autor?" : "¿Estás seguro que quieres dar de alta al autor?"),
+//         icon: "warning",
+//         showCancelButton: true,
+//         confirmButtonColor: "#3085d6",
+//         cancelButtonColor: "#d33",
+//         confirmButtonText: "Si, realizar operación"
+//     }).then((result) => {
+//         if (result.isConfirmed) {
+//             let url = "/biblioteca/autores?accion=cambiarEstado";
+//             let authorId = $(button).data("authorId");
+//             $.ajax({
+//                 url: url,
+//                 method: "GET",
+//                 data: { id: authorId },
+//                 dataType: "JSON",
+//                 success: function (response) {
+//                     if (response.ok) {
+//                         $("#authorsDataTable").DataTable().ajax.reload(null, false);
+//                         Swal.fire(
+//                             (active ? "Baja" : "Alta"),
+//                             (active ? "El autor fue dado de baja" : "El autor fue dado de alta"),
+//                             "success"
+//                         );
+//                     }
+//                 }
+//             });
+//         }
+//     });
+// }
+
 }

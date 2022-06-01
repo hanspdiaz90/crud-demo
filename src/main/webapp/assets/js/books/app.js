@@ -39,6 +39,7 @@ $(function () {
                 return { filtro: params.term };
             },
             processResults: function (response) {
+                console.log(response.result);
                 let results = $.map(response.result, function (item) {
                     return {
                         id: item.id,
@@ -174,7 +175,7 @@ function viewDetailsBook(button) {
                     elementHTML += "<dt>Título</dt>";
                     elementHTML += "<dd>" + objBook.titulo + "</dd>";
                     elementHTML += "<dt>Reseña</dt>";
-                    elementHTML += "<dd>" + objBook.descripcion + "</dd>";
+                    elementHTML += "<dd>" + objBook.resenia + "</dd>";
                     elementHTML += "<dt>Autor</dt>";
                     elementHTML += "<dd>" + objBook.autor.nombres + " " + objBook.autor.apellidos + "</dd>";
                     elementHTML += "<dt>Editorial</dt>";
@@ -305,4 +306,5 @@ function getBooks() {
     table.on("draw", function () {
         $("[data-tooltip='tooltip']").tooltip();
     });
+
 }

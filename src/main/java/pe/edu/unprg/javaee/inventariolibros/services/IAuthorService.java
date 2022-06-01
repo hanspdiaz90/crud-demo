@@ -11,7 +11,7 @@ public interface IAuthorService {
     boolean update(Author author) throws ServiceException;
     Author findById(int id) throws ServiceException;
     List<Author> findAll() throws ServiceException;
-    boolean changeStatusById(int id) throws ServiceException;
     boolean disableById(int id) throws ServiceException;
+//    boolean changeStatusById(int id) throws ServiceException;
 
 }

@@ -189,11 +189,11 @@ public class BookDAOImpl implements IBookDAO {
     public boolean disableById(int id) throws DAOException {
         boolean rowsAffected = false;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_DEACTIVATE_BOOK_BY_ID)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_DISABLE_BOOK_BY_ID)) {
             cstmt.setInt(1, id);
             rowsAffected = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_DEACTIVATE_BOOK_BY_ID, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_DISABLE_BOOK_BY_ID, ex);
         }
         return rowsAffected;
     }

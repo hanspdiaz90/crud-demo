@@ -37,24 +37,24 @@ public class PublisherServiceImpl implements IPublisherService {
 
     @Override
     public Publisher findById(int id) throws ServiceException {
-        Publisher publisher = null;
+        Publisher result = null;
         try {
-            publisher = publisherDAO.findById(id);
+            result = publisherDAO.findById(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return publisher;
+        return result;
     }
 
     @Override
     public List<Publisher> findAll() throws ServiceException {
-        List<Publisher> publishers = null;
+        List<Publisher> result = null;
         try {
-            publishers = publisherDAO.findAll();
+            result = publisherDAO.findAll();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return publishers;
+        return result;
     }
 
     @Override

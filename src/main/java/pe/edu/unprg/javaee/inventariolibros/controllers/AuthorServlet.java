@@ -136,7 +136,7 @@ public class AuthorServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        out.print(json.toString());
+        out.print(json);
         out.flush();
     }
 

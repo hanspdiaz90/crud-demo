@@ -163,4 +163,5 @@ function getPublishers() {
     table.on("draw", function () {
         $("[data-tooltip='tooltip']").tooltip();
     });
+
 }

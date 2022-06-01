@@ -11,7 +11,7 @@ public interface IAuthorDAO {
     boolean update(Author author) throws DAOException;
     Author findById(int id) throws DAOException;
     List<Author> findAll() throws DAOException;
-    boolean changeStatusById(int id) throws DAOException;
     boolean disableById(int id) throws DAOException;
+//    boolean changeStatusById(int id) throws DAOException;
 
 }

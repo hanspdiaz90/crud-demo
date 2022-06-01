@@ -58,17 +58,6 @@ public class AuthorServiceImpl implements IAuthorService {
     }
 
     @Override
-    public boolean changeStatusById(int id) throws ServiceException {
-        boolean result = false;
-        try {
-            result = authorDAO.changeStatusById(id);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return result;
-    }
-
-    @Override
     public boolean disableById(int id) throws ServiceException {
         boolean result = false;
         try {
@@ -78,5 +67,16 @@ public class AuthorServiceImpl implements IAuthorService {
         }
         return result;
     }
+
+//    @Override
+//    public boolean changeStatusById(int id) throws ServiceException {
+//        boolean result = false;
+//        try {
+//            result = authorDAO.changeStatusById(id);
+//        } catch (DAOException e) {
+//            throw new ServiceException(e);
+//        }
+//        return result;
+//    }
 
 }

@@ -171,72 +171,66 @@ public class BookServlet extends HttpServlet {
     }
 
     private void listActiveAuthorsAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
-        if (request.getParameter("filtro") != null) {
-            JsonObject json = new JsonObject();
-            JsonArray data = null;
-            String filter = request.getParameter("filtro");
-            List<Author> activeAuthors = !filter.isEmpty() ? bookService.findActiveAuthors(filter) : bookService.findActiveAuthors("");
-            if (activeAuthors != null) {
-                json.addProperty("status", "success");
-                Type typeAuthor = new TypeToken<List<Author>>(){}.getType();
-                JsonElement result = gson.toJsonTree(activeAuthors, typeAuthor);
-                data = result.getAsJsonArray();
-            } else {
-                json.addProperty("status", "error");
-            }
-            json.add("result", data);
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(json);
-            out.flush();
+        JsonObject json = new JsonObject();
+        JsonArray data = null;
+        String filter = request.getParameter("filtro");
+        List<Author> activeAuthors = filter != null ? bookService.findActiveAuthors(filter) : bookService.findActiveAuthors("");
+        if (activeAuthors != null) {
+            json.addProperty("status", "success");
+            Type typeAuthor = new TypeToken<List<Author>>(){}.getType();
+            JsonElement result = gson.toJsonTree(activeAuthors, typeAuthor);
+            data = result.getAsJsonArray();
+        } else {
+            json.addProperty("status", "error");
         }
+        json.add("result", data);
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(json);
+        out.flush();
     }
 
     private void listActivePublisherAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
-        if (request.getParameter("filtro") != null) {
-            JsonObject json = new JsonObject();
-            JsonArray data = null;
-            String filter = request.getParameter("filtro");
-            List<Publisher> activePublishers = !filter.isEmpty() ? bookService.findActivePublishers(filter) : bookService.findActivePublishers("");
-            if (activePublishers != null) {
-                json.addProperty("status", "success");
-                Type typePublisher = new TypeToken<List<Publisher>>(){}.getType();
-                JsonElement result = gson.toJsonTree(activePublishers, typePublisher);
-                data = result.getAsJsonArray();
-            } else {
-                json.addProperty("status", "error");
-            }
-            json.add("result", data);
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(json);
-            out.flush();
+        JsonObject json = new JsonObject();
+        JsonArray data = null;
+        String filter = request.getParameter("filtro");
+        List<Publisher> activePublishers = filter != null ? bookService.findActivePublishers(filter) : bookService.findActivePublishers("");
+        if (activePublishers != null) {
+            json.addProperty("status", "success");
+            Type typePublisher = new TypeToken<List<Publisher>>(){}.getType();
+            JsonElement result = gson.toJsonTree(activePublishers, typePublisher);
+            data = result.getAsJsonArray();
+        } else {
+            json.addProperty("status", "error");
         }
+        json.add("result", data);
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(json);
+        out.flush();
     }
 
     private void listActiveGenresAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
-        if (request.getParameter("filtro") != null) {
-            JsonObject json = new JsonObject();
-            JsonArray data = null;
-            String filter = request.getParameter("filtro");
-            List<Genre> activeGenres = !filter.isEmpty() ? bookService.findActiveGenres(filter) : bookService.findActiveGenres("");
-            if (activeGenres != null) {
-                json.addProperty("status", "success");
-                Type typeGenre = new TypeToken<List<Genre>>(){}.getType();
-                JsonElement result = gson.toJsonTree(activeGenres, typeGenre);
-                data = result.getAsJsonArray();
-            } else {
-                json.addProperty("status", "error");
-            }
-            json.add("result", data);
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(json);
-            out.flush();
+        JsonObject json = new JsonObject();
+        JsonArray data = null;
+        String filter = request.getParameter("filtro");
+        List<Genre> activeGenres = filter != null ? bookService.findActiveGenres(filter) : bookService.findActiveGenres("");
+        if (activeGenres != null) {
+            json.addProperty("status", "success");
+            Type typeGenre = new TypeToken<List<Genre>>(){}.getType();
+            JsonElement result = gson.toJsonTree(activeGenres, typeGenre);
+            data = result.getAsJsonArray();
+        } else {
+            json.addProperty("status", "error");
         }
+        json.add("result", data);
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(json);
+        out.flush();
     }
 
     private void disableBookAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
