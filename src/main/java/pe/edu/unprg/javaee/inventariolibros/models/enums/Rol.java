@@ -1,13 +1,14 @@
 package pe.edu.unprg.javaee.inventariolibros.models.enums;
 
-public enum Status {
+public enum Rol {
 
-    ACTIVE(0),
-    DEACTIVE(1);
+    ADMIN(0),
+    EDITOR(1),
+    GUEST(2);
 
     private final int statusId;
 
-    Status(int statusId) {
+    Rol(int statusId) {
         this.statusId = statusId;
     }
 

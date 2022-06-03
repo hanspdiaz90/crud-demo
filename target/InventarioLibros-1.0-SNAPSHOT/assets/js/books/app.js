@@ -146,7 +146,7 @@ $(function () {
 });
 
 function resetInvalidForm(button, validatedForm) {
-    let form = $(button).closest(validatedForm);;
+    let form = $(button).closest(validatedForm);
     let validator = form.validate();
     validator.resetForm();
     form.find(".form-control").removeClass("is-invalid");
@@ -254,7 +254,13 @@ function getBooks() {
             dataSrc: "result"
         },
         columns: [
-            { data: "isbn" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    let regex = /(\d{3})?(\d{3})?(\d{5})?(\d)?(\d)/;
+                    return row.isbn.replace(regex, "$1-$2-$3-$4-$5");
+                }
+            },
             { data: "titulo" },
             {
                 data: null,

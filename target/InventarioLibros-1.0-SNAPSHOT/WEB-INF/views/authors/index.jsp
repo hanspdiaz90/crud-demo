@@ -7,6 +7,8 @@
         <jsp:include page="../../partials/_head.jsp"/>
         <!-- SweetAlert2 -->
         <link rel="stylesheet" href="${path}/assets/plugins/sweetalert2/sweetalert2.min.css">
+        <!-- Tempusdominus Bootstrap 4 -->
+        <link rel="stylesheet" href="${path}/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
         <!-- DataTables -->
         <link rel="stylesheet" href="${path}/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="${path}/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -70,6 +72,9 @@
         <!-- jQuery Validation -->
         <script src="${path}/assets/plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="${path}/assets/plugins/jquery-validation/localization/messages_es_PE.min.js"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="${path}/assets/plugins/moment/moment.min.js"></script>
+        <script src="${path}/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
         <!-- SweetAlert2 -->
         <script src="${path}/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
         <!-- DataTables  & Plugins -->
@@ -80,6 +85,13 @@
         <!-- CustomJS -->
         <script src="${path}/assets/js/defaultDataTable.js"></script>
         <script src="${path}/assets/js/defaultValidation-bs4.js"></script>
+        <script>
+            $(function () {
+                $("#dtpFechaNacimiento").datetimepicker({
+                    format: 'DD/MM/YYYY'
+                });
+            });
+        </script>
         <script src="${path}/assets/js/authors/app.js"></script>
     </jsp:attribute>
 </mt:template>

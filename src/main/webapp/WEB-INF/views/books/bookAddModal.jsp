@@ -30,19 +30,16 @@
                         <div class="form-group col-md-4">
                             <label for="cbxAutores">Autor (*)</label>
                             <select class="form-control" id="cbxAutores" name="author">
-<%--                                <option selected value="-1">[ Seleccione un author ]</option>--%>
                             </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="cbxEditoriales">Editorial (*)</label>
                             <select class="form-control" id="cbxEditoriales" name="publisher">
-                                <option selected value="-1">[ Seleccione una publisher ]</option>
                             </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="cbxGeneros">Género Literario (*)</label>
                             <select class="form-control" id="cbxGeneros" name="genre">
-                                <option selected value="-1">[ Seleccione un género ]</option>
                             </select>
                         </div>
                     </div>

@@ -18,7 +18,7 @@ import java.util.List;
 @WebServlet(name = "genreServlet", urlPatterns = "/biblioteca/generos")
 public class GenreServlet extends HttpServlet {
 
-    private static final String PATH_GENEROS = "/WEB-INF/views/genres/index.jsp";
+    private static final String PATH = "/WEB-INF/views/genres/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
     private final IGenreService genreService = ServiceFactory.getInstance().getGenreService();
 
@@ -65,7 +65,7 @@ public class GenreServlet extends HttpServlet {
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("cardTitle", "Listado de géneros literarios");
-        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH_GENEROS);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH);
         dispatcher.forward(request, response);
     }
 
@@ -74,7 +74,6 @@ public class GenreServlet extends HttpServlet {
             String nombre = request.getParameter("nombre");
             Genre genre = new Genre();
             genre.setNombre(nombre);
-            genre.setActivo(true);
             boolean inserted = genreService.insert(genre);
             JsonObject json = new JsonObject();
             String message = null;

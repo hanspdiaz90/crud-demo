@@ -11,7 +11,8 @@ $(function () {
             rules: {
                 nombres: { required: true, minlength: 3 },
                 apellidos: { required: true, minlength: 3 },
-                ciudad: { required: true, minlength: 3 }
+                ciudad: { required: true, minlength: 3 },
+                fechaNacimiento: {required: true}
             },
             submitHandler: function (form) {
                 let url = "/biblioteca/autores?accion=crear";
@@ -127,7 +128,12 @@ function getAuthors() {
                     return row.nombres + " " + row.apellidos;
                 }
             },
-            {data: "ciudad"},
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return row.ciudad + ", " + row.fechaNacimiento.year;
+                }
+            },
             {
                 data: null,
                 className: "text-center",

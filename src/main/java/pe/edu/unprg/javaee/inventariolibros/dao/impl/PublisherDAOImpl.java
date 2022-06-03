@@ -21,8 +21,10 @@ public class PublisherDAOImpl implements IPublisherDAO {
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_INSERT_PUBLISHER)) {
             cstmt.setString(1, publisher.getNombre());
-            cstmt.setString(2, publisher.getEmail());
-            cstmt.setString(3, publisher.getTelefono());
+            cstmt.setString(2, publisher.getDireccion());
+            cstmt.setString(3, publisher.getEmail());
+            cstmt.setString(4, publisher.getPaginaWeb());
+            cstmt.setString(5, publisher.getNroTelefono());
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_INSERT_PUBLISHER, ex);
@@ -36,10 +38,12 @@ public class PublisherDAOImpl implements IPublisherDAO {
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_UPDATE_PUBLISHER)) {
             cstmt.setString(1, publisher.getNombre());
-            cstmt.setString(2, publisher.getEmail());
-            cstmt.setString(3, publisher.getTelefono());
-            cstmt.setBoolean(4, publisher.isActivo());
-            cstmt.setInt(5, publisher.getId());
+            cstmt.setString(2, publisher.getDireccion());
+            cstmt.setString(3, publisher.getEmail());
+            cstmt.setString(4, publisher.getPaginaWeb());
+            cstmt.setString(5, publisher.getNroTelefono());
+            cstmt.setBoolean(6, publisher.isActivo());
+            cstmt.setInt(7, publisher.getId());
             rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_UPDATE_PUBLISHER, ex);
@@ -58,8 +62,10 @@ public class PublisherDAOImpl implements IPublisherDAO {
                 publisher = new Publisher();
                 publisher.setId(rs.getInt("id"));
                 publisher.setNombre(rs.getString("nombre"));
+                publisher.setDireccion(rs.getString("direccion"));
                 publisher.setEmail(rs.getString("email"));
-                publisher.setTelefono(rs.getString("telefono"));
+                publisher.setPaginaWeb(rs.getString("pagina_web"));
+                publisher.setNroTelefono(rs.getString("nro_telefono"));
                 publisher.setActivo(rs.getBoolean("activo"));
             }
         } catch (SQLException ex) {
@@ -79,8 +85,10 @@ public class PublisherDAOImpl implements IPublisherDAO {
                 Publisher publisher = new Publisher();
                 publisher.setId(rs.getInt("id"));
                 publisher.setNombre(rs.getString("nombre"));
+                publisher.setDireccion(rs.getString("direccion"));
                 publisher.setEmail(rs.getString("email"));
-                publisher.setTelefono(rs.getString("telefono"));
+                publisher.setPaginaWeb(rs.getString("pagina_web"));
+                publisher.setNroTelefono(rs.getString("nro_telefono"));
                 publisher.setActivo(rs.getBoolean("activo"));
                 result.add(publisher);
             }

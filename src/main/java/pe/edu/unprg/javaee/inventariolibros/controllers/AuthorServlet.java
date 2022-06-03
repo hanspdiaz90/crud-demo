@@ -13,12 +13,14 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @WebServlet(name = "authorServlet", urlPatterns = "/biblioteca/autores")
 public class AuthorServlet extends HttpServlet {
 
-    private static final String PATH_AUTORES = "/WEB-INF/views/authors/index.jsp";
+    private static final String PATH = "/WEB-INF/views/authors/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
     private final IAuthorService authorService = ServiceFactory.getInstance().getAuthorService();
 
@@ -65,22 +67,24 @@ public class AuthorServlet extends HttpServlet {
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("cardTitle", "Listado de autores");
-        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH_AUTORES);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH);
         dispatcher.forward(request, response);
     }
 
     private void insertAuthorAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
         if (request.getParameter("nombres") != null &&
                 request.getParameter("apellidos") != null &&
-                request.getParameter("ciudad") != null) {
+                request.getParameter("ciudad") != null &&
+                request.getParameter("fechaNacimiento") != null) {
             String nombres = request.getParameter("nombres");
             String apellidos = request.getParameter("apellidos");
             String ciudad = request.getParameter("ciudad");
+            String fechaNacimiento = request.getParameter("fechaNacimiento");
             Author author = new Author();
             author.setNombres(nombres);
             author.setApellidos(apellidos);
             author.setCiudad(ciudad);
-            author.setActivo(true);
+            author.setFechaNacimiento(LocalDate.parse(fechaNacimiento, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             boolean inserted = authorService.insert(author);
             JsonObject json = new JsonObject();
             String message = null;

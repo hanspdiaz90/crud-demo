@@ -8,8 +8,11 @@ public class Book {
     private int id;
     private String isbn;
     private String titulo;
+    private String portada;
     private String resenia;
-    private int existencias;
+    private int anioEdicion;
+    private int nroPaginas;
+    private int ejemplares;
     private double precio;
     private Author autor;
     private Publisher editorial;

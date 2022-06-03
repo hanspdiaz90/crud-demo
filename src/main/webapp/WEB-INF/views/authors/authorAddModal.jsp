@@ -20,9 +20,20 @@
                         <label for="txtApellidos">Apellidos (*)</label>
                         <input type="text" class="form-control" id="txtApellidos" placeholder="Apellidos" name="apellidos">
                     </div>
-                    <div class="form-group">
-                        <label for="txtCiudad">Ciudad (*)</label>
-                        <input type="text" class="form-control" id="txtCiudad" placeholder="Ciudad" name="ciudad">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtCiudad">Ciudad (*)</label>
+                            <input type="text" class="form-control" id="txtCiudad" placeholder="Ciudad" name="ciudad">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Fecha de Nacimiento (*)</label>
+                            <div class="input-group date" id="dtpFechaNacimiento" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" name="fechaNacimiento" data-target="#dtpFechaNacimiento"/>
+                                <div class="input-group-append" data-target="#dtpFechaNacimiento" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">

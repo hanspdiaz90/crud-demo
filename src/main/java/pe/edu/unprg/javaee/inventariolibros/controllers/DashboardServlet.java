@@ -9,11 +9,11 @@ import java.io.IOException;
 //@WebServlet(name = "dashboardServlet", urlPatterns = {"", "/biblioteca/dashboard"})
 public class DashboardServlet extends HttpServlet {
 
-    private static final String PATH_DASHBOARD = "/WEB-INF/views/dashboard/index.jsp";
+    private static final String PATH = "/WEB-INF/views/dashboard/index.jsp";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH_DASHBOARD);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH);
         dispatcher.forward(request, response);
     }
 

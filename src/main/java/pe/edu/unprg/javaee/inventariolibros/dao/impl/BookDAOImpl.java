@@ -25,12 +25,15 @@ public class BookDAOImpl implements IBookDAO {
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_INSERT_BOOK)) {
             cstmt.setString(1, book.getIsbn());
             cstmt.setString(2, book.getTitulo());
-            cstmt.setString(3, book.getResenia());
-            cstmt.setInt(4, book.getExistencias());
-            cstmt.setDouble(5, book.getPrecio());
-            cstmt.setInt(6, book.getAutor().getId());
-            cstmt.setInt(7, book.getEditorial().getId());
-            cstmt.setInt(8, book.getGenero().getId());
+            cstmt.setString(3, book.getPortada());
+            cstmt.setString(4, book.getResenia());
+            cstmt.setInt(5, book.getAnioEdicion());
+            cstmt.setInt(6, book.getNroPaginas());
+            cstmt.setInt(7, book.getEjemplares());
+            cstmt.setDouble(8, book.getPrecio());
+            cstmt.setInt(9, book.getAutor().getId());
+            cstmt.setInt(10, book.getEditorial().getId());
+            cstmt.setInt(11, book.getGenero().getId());
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_INSERT_BOOK, ex);
@@ -45,14 +48,17 @@ public class BookDAOImpl implements IBookDAO {
              CallableStatement cstmt = conn.prepareCall(BookQuery.SP_UPDATE_BOOK)) {
             cstmt.setString(1, book.getIsbn());
             cstmt.setString(2, book.getTitulo());
-            cstmt.setString(3, book.getResenia());
-            cstmt.setInt(4, book.getExistencias());
-            cstmt.setDouble(5, book.getPrecio());
-            cstmt.setInt(6, book.getAutor().getId());
-            cstmt.setInt(7, book.getEditorial().getId());
-            cstmt.setInt(8, book.getGenero().getId());
-            cstmt.setBoolean(9, book.isActivo());
-            cstmt.setInt(10, book.getId());
+            cstmt.setString(3, book.getPortada());
+            cstmt.setString(4, book.getResenia());
+            cstmt.setInt(5, book.getAnioEdicion());
+            cstmt.setInt(6, book.getNroPaginas());
+            cstmt.setInt(7, book.getEjemplares());
+            cstmt.setDouble(8, book.getPrecio());
+            cstmt.setInt(9, book.getAutor().getId());
+            cstmt.setInt(10, book.getEditorial().getId());
+            cstmt.setInt(11, book.getGenero().getId());
+            cstmt.setBoolean(12, book.isActivo());
+            cstmt.setInt(13, book.getId());
             rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_UPDATE_BOOK, ex);
@@ -72,8 +78,11 @@ public class BookDAOImpl implements IBookDAO {
                 book.setId(rs.getInt("id"));
                 book.setIsbn(rs.getString("isbn"));
                 book.setTitulo(rs.getString("titulo"));
-                book.setResenia(rs.getString("descripcion"));
-                book.setExistencias(rs.getInt("existencias"));
+                book.setTitulo(rs.getString("portada"));
+                book.setResenia(rs.getString("sinopsis"));
+                book.setEjemplares(rs.getInt("anio_publicacion"));
+                book.setEjemplares(rs.getInt("nro_paginas"));
+                book.setEjemplares(rs.getInt("ejemplares"));
                 book.setPrecio(rs.getDouble("precio"));
                 book.setAutor(new Author());
                 book.getAutor().setNombres(rs.getString("nombres"));
@@ -102,8 +111,9 @@ public class BookDAOImpl implements IBookDAO {
                 book.setId(rs.getInt("id"));
                 book.setIsbn(rs.getString("isbn"));
                 book.setTitulo(rs.getString("titulo"));
-                book.setResenia(rs.getString("descripcion"));
-                book.setExistencias(rs.getInt("existencias"));
+                book.setAnioEdicion(rs.getInt("anio_publicacion"));
+                book.setNroPaginas(rs.getInt("nro_paginas"));
+                book.setEjemplares(rs.getInt("ejemplares"));
                 book.setPrecio(rs.getDouble("precio"));
                 book.setAutor(new Author());
                 book.getAutor().setNombres(rs.getString("nombres"));
@@ -125,7 +135,7 @@ public class BookDAOImpl implements IBookDAO {
     public List<Author> findActiveAuthors(String filter) throws DAOException {
         List<Author> result = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_AUTHORS)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_SEARCH_ACTIVE_AUTHORS)) {
             cstmt.setString(1, filter);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
@@ -138,7 +148,7 @@ public class BookDAOImpl implements IBookDAO {
                 result.add(author);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_AUTHORS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_SEARCH_ACTIVE_AUTHORS, ex);
         }
         return result;
     }
@@ -147,7 +157,7 @@ public class BookDAOImpl implements IBookDAO {
     public List<Publisher> findActivePublishers(String filter) throws DAOException {
         List<Publisher> result = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_PUBLISHERS)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_SEARCH_ACTIVE_PUBLISHERS)) {
             cstmt.setString(1, filter);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
@@ -159,7 +169,7 @@ public class BookDAOImpl implements IBookDAO {
                 result.add(publisher);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_PUBLISHERS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_SEARCH_ACTIVE_PUBLISHERS, ex);
         }
         return result;
     }
@@ -168,7 +178,7 @@ public class BookDAOImpl implements IBookDAO {
     public List<Genre> findActiveGenres(String filter) throws DAOException {
         List<Genre> result = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_GENRES)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_SEARCH_ACTIVE_GENRES)) {
             cstmt.setString(1, filter);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
@@ -180,7 +190,7 @@ public class BookDAOImpl implements IBookDAO {
                 result.add(genre);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_GENRES, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_SEARCH_ACTIVE_GENRES, ex);
         }
         return result;
     }

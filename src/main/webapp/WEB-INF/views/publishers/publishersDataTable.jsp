@@ -4,7 +4,7 @@
         <tr>
             <th class="text-uppercase" scope="col">Editorial</th>
             <th class="text-uppercase" scope="col">E-mail</th>
-            <th class="text-uppercase" scope="col">Teléfono</th>
+            <th class="text-uppercase" scope="col">N°Teléfono</th>
             <th class="text-uppercase" scope="col">Activado?</th>
             <th class="text-uppercase" scope="col">Acciones</th>
         </tr>
@@ -14,7 +14,7 @@
         <tr>
             <th scope="col">Editorial</th>
             <th scope="col">E-mail</th>
-            <th scope="col">Telefono</th>
+            <th scope="col">N°Telefono</th>
             <th scope="col">Activado?</th>
             <th scope="col">Acciones</th>
         </tr>

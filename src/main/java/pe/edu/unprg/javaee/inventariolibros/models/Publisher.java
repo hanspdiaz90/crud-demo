@@ -7,8 +7,10 @@ public class Publisher {
 
     private int id;
     private String nombre;
+    private String direccion;
     private String email;
-    private String telefono;
+    private String paginaWeb;
+    private String nroTelefono;
     private boolean activo;
 
 }

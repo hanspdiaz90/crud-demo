@@ -128,7 +128,9 @@ function getPublishers() {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.telefono;
+                    let regex = row.nroTelefono.length == 7 ? /(\d{3})?(\d{4})/ : /(\d{3})?(\d{3})?(\d{3})/;
+                    let format = row.nroTelefono.length == 7 ? "$1-$2" : "$1-$2-$3";
+                    return row.nroTelefono.replace(regex, format);
                 }
             },
             {

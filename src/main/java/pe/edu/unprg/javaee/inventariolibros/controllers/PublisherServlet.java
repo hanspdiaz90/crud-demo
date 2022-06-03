@@ -18,7 +18,7 @@ import java.util.List;
 @WebServlet(name = "publisherServlet", urlPatterns = "/biblioteca/editoriales")
 public class PublisherServlet extends HttpServlet {
 
-    private static final String PATH_EDITORIALES = "/WEB-INF/views/publishers/index.jsp";
+    private static final String PATH = "/WEB-INF/views/publishers/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
     private final IPublisherService publisherService = ServiceFactory.getInstance().getPublisherService();
 
@@ -65,21 +65,27 @@ public class PublisherServlet extends HttpServlet {
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("cardTitle", "Listado de editoriales");
-        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH_EDITORIALES);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH);
         dispatcher.forward(request, response);
     }
 
     private void insertPublisherAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
         if (request.getParameter("nombre") != null &&
+                request.getParameter("direccion") != null &&
                 request.getParameter("email") != null &&
-                request.getParameter("telefono") != null) {
+                request.getParameter("paginaWeb") != null &&
+                request.getParameter("nroTelefono") != null) {
             String nombre = request.getParameter("nombre");
+            String direccion = request.getParameter("direccion");
             String email = request.getParameter("email");
-            String telefono = request.getParameter("telefono");
+            String paginaWeb = request.getParameter("paginaWeb");
+            String nroTelefono = request.getParameter("nroTelefono");
             Publisher publisher = new Publisher();
             publisher.setNombre(nombre);
+            publisher.setDireccion(direccion);
             publisher.setEmail(email);
-            publisher.setTelefono(telefono);
+            publisher.setPaginaWeb(paginaWeb);
+            publisher.setNroTelefono(nroTelefono);
             boolean inserted = publisherService.insert(publisher);
             JsonObject json = new JsonObject();
             String message = null;

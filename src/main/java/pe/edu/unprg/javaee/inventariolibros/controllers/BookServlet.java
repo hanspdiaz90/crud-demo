@@ -21,7 +21,7 @@ import java.util.List;
 @WebServlet(name = "bookServlet", urlPatterns = "/biblioteca/libros")
 public class BookServlet extends HttpServlet {
 
-    private static final String PATH_LIBROS = "/WEB-INF/views/books/index.jsp";
+    private static final String PATH = "/WEB-INF/views/books/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
     private final IBookService bookService = ServiceFactory.getInstance().getBookService();
 
@@ -77,23 +77,29 @@ public class BookServlet extends HttpServlet {
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("cardTitle", "Listado de libros");
-        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH_LIBROS);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH);
         dispatcher.forward(request, response);
     }
 
     private void insertBookAction(HttpServletRequest request, HttpServletResponse response) throws ServiceException, IOException {
         if (request.getParameter("isbn") != null &&
                 request.getParameter("titulo") != null &&
+                request.getParameter("portada") != null &&
                 request.getParameter("resenia") != null &&
-                request.getParameter("existencias") != null &&
+                request.getParameter("anioEdicion") != null &&
+                request.getParameter("nroPaginas") != null &&
+                request.getParameter("ejemplares") != null &&
                 request.getParameter("precio") != null &&
                 request.getParameter("autor") != null &&
                 request.getParameter("editorial") != null &&
                 request.getParameter("genero") != null) {
             String isbn = request.getParameter("isbn");
             String titulo = request.getParameter("titulo");
-            String descripcion = request.getParameter("descripcion");
-            int existencias = Integer.parseInt(request.getParameter("existencias"));
+            String portada = request.getParameter("portada");
+            String resenia = request.getParameter("resenia");
+            int anioEdicion = Integer.parseInt(request.getParameter("anioEdicion"));
+            int nroPaginas = Integer.parseInt(request.getParameter("nroPaginas"));
+            int ejemplares = Integer.parseInt(request.getParameter("ejemplares"));
             double precio = Double.parseDouble(request.getParameter("precio"));
             int autor = Integer.parseInt(request.getParameter("autor"));
             int editorial = Integer.parseInt(request.getParameter("editorial"));
@@ -101,8 +107,11 @@ public class BookServlet extends HttpServlet {
             Book libro = new Book();
             libro.setIsbn(isbn);
             libro.setTitulo(titulo);
-            libro.setResenia(descripcion);
-            libro.setExistencias(existencias);
+            libro.setPortada(portada);
+            libro.setResenia(resenia);
+            libro.setAnioEdicion(anioEdicion);
+            libro.setNroPaginas(nroPaginas);
+            libro.setEjemplares(ejemplares);
             libro.setPrecio(precio);
             libro.setAutor(new Author());
             libro.getAutor().setId(autor);
@@ -110,7 +119,6 @@ public class BookServlet extends HttpServlet {
             libro.getEditorial().setId(editorial);
             libro.setGenero(new Genre());
             libro.getGenero().setId(genero);
-            libro.setActivo(true);
             boolean inserted = bookService.insert(libro);
             JsonObject json = new JsonObject();
             String message = null;

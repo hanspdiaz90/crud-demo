@@ -1,4 +1,5 @@
 <%@ tag language="java" %>
+<%@ tag description="Default page template" pageEncoding="UTF-8"%>
 <%@ attribute name="_tittle" required="true" rtexprvalue="true" %>
 <%@ attribute name="_head" fragment="true" %>
 <%@ attribute name="_breadcrumb" fragment="true" %>
