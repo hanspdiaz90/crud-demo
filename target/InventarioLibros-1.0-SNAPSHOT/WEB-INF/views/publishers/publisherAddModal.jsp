@@ -17,12 +17,22 @@
                         <input type="text" class="form-control" id="txtEditorial" placeholder="Editorial" name="nombre">
                     </div>
                     <div class="form-group">
-                        <label for="txtEmail">E-mail (*)</label>
-                        <input type="email" class="form-control" id="txtEmail" placeholder="E-mail" name="email">
+                        <label for="txtDireccion">Dirección (*)</label>
+                        <input type="text" class="form-control" id="txtDireccion" placeholder="Dirección" name="direccion">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtEmail">E-mail (*)</label>
+                            <input type="email" class="form-control" id="txtEmail" placeholder="E-mail" name="email">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtNroTelefono">Telf./Celular (*)</label>
+                            <input type="text" class="form-control" id="txtNroTelefono" placeholder="Nro Teléfono" name="nroTelefono">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="txtTelefono">Telefono (*)</label>
-                        <input type="text" class="form-control" id="txtTelefono" placeholder="Ciudad" name="telefono">
+                        <label for="txtPaginaWeb">Página Web (*)</label>
+                        <input type="text" class="form-control" id="txtPaginaWeb" placeholder="Página Web" name="paginaWeb">
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">

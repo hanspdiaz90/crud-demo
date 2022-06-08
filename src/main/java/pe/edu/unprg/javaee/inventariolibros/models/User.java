@@ -10,6 +10,7 @@ public class User {
     private String email;
     private String contrasenia;
     private Rol rol;
+    private boolean admin;
     private boolean activo;
 
 }

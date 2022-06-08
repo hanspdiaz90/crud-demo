@@ -93,50 +93,41 @@ $(function () {
     });
 
     $("#btnAdd").click(function () {
-
-        $.validator.addMethod("valueNotEquals", function(value, element, arg) {
-            return arg != element.value;
-        }, $.validator.messages.required);
-
         $("#bookAddForm").validate({
             rules: {
-                isbn: { required: true, minlength: 13, maxlength:13, digits: true },
                 titulo: { required: true },
-                resenha: { required: true },
-                autor: {required: true, valueNotEquals: "-1"},
-                editorial: {required: true, valueNotEquals: "-1"},
-                genero: {required: true, valueNotEquals: "-1"},
-                existencias: { required: true },
-                precio: { required: true }
+                isbn: { required: true, minlength: 13, maxlength:13, digits: true },
+                anioEdicion: { required: true },
+                portada: { required: true },
+                autor: {required: true },
+                editorial: {required: true },
+                genero: {required: true },
+                nroPaginas: { required: true },
+                ejemplares: { required: true },
+                precio: { required: true },
+                resenha: { required: true }
+            },
+            submitHandler: function (form) {
+                let url = "/biblioteca/libros?accion=crear";
+                let formData = $(form).serialize();
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response.status == "success") {
+                            $(form).trigger("reset");
+                            $("#authorAddModal").modal("hide");
+                            $("#authorsDataTable").DataTable().ajax.reload(null, false);
+                            Swal.fire("Registrado!", response.message, "success");
+                        }
+                    },
+                    processData: false,
+                    cache: false,
+                });
             }
-            // submitHandler: function (form) {
-            //     let formData = $(form).serialize();
-            //     let url = "/biblioteca/libros?accion=crear";
-            //     console.log(formData);
-            //     $.ajax({
-            //         url: url,
-            //         type: "POST",
-            //         data: formData,
-            //         dataType: "JSON",
-            //         processData: false,
-            //         cache: false,
-            //         success: function (response) {
-            //             console.log(response);
-            //             if (response.ok) {
-            //                 $(form).trigger("reset");
-            //                 $("#addGenderModal").modal("hide");
-            //                 Swal.fire({
-            //                     icon: "success",
-            //                     title: response.message
-            //                 }).then(function () {
-            //                     fnListBooks();
-            //                 });
-            //             }
-            //         }
-            //     });
-            // }
         });
-
     });
 
     $("#btnResetAdd").click(function () {
@@ -169,9 +160,10 @@ function viewDetailsBook(button) {
                 let statusText = objBook.activo ? "ACTIVO" : "INACTIVO";
                 let modalBody = $("#bookViewModal .modal-body");
                 modalBody.empty();
+                let regex = /(\d{3})?(\d{3})?(\d{5})?(\d)?(\d)/;
                 let elementHTML = "<dl>";
                     elementHTML += "<dt>ISBN</dt>";
-                    elementHTML += "<dd>" + objBook.isbn + "</dd>";
+                    elementHTML += "<dd>" + objBook.isbn.replace(regex, "$1-$2-$3-$4-$5") + "</dd>";
                     elementHTML += "<dt>Título</dt>";
                     elementHTML += "<dd>" + objBook.titulo + "</dd>";
                     elementHTML += "<dt>Reseña</dt>";
@@ -301,7 +293,7 @@ function getBooks() {
                     elementHTML += "<button type='button' onclick='viewDetailsBook(this)' class='btn btn-info' data-toggle='modal' data-target='#bookViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-book-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
                     if (row.activo) {
                         elementHTML += "<button type='button' onclick='editBook(this)' class='btn btn-warning' data-toggle='modal' data-target='#bookEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-book-id='" + row.id + "'><i class='fas fa-pen'></i></button>"
-                        elementHTML += "<button type='button' onclick='disableBook(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-book-id='" + row.id + "' data-book-title='" + row.title + "'><i class='fas fa-flag'></i></button>"
+                        elementHTML += "<button type='button' onclick='disableBook(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-book-id='" + row.id + "' data-book-title='" + row.titulo + "'><i class='fas fa-flag'></i></button>"
                     }
                     elementHTML += "</div>"
                     return elementHTML;

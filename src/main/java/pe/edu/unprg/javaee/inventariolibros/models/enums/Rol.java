@@ -2,9 +2,9 @@ package pe.edu.unprg.javaee.inventariolibros.models.enums;
 
 public enum Rol {
 
-    ADMIN(0),
-    EDITOR(1),
-    GUEST(2);
+    ADMIN(1),
+    EDITOR(2),
+    GUEST(3);
 
     private final int statusId;
 
@@ -15,4 +15,5 @@ public enum Rol {
     public int getStatusId() {
         return statusId;
     }
+
 }

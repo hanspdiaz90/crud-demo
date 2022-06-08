@@ -10,8 +10,10 @@ $(function () {
         $("#publisherAddForm").validate({
             rules: {
                 nombre: { required: true, minlength: 5 },
+                direccion: { required: true },
                 email: { required: true, email: true  },
-                telefono: { required: true, digits: true }
+                nroTelefono: { required: true, digits: true },
+                paginaWeb: { required: true }
             },
             submitHandler: function (form) {
                 let url = "/biblioteca/editoriales?accion=crear";
@@ -70,10 +72,14 @@ function viewDetailsPublisher(button) {
                 let elementHTML = "<dl>";
                     elementHTML += "<dt>Editorial</dt>";
                     elementHTML += "<dd>" + objPublisher.nombre + "</dd>";
+                    elementHTML += "<dt>Dirección</dt>";
+                    elementHTML += "<dd>" + objPublisher.direccion + "</dd>";
+                    elementHTML += "<dt>Página Web</dt>";
+                    elementHTML += "<dd><a href='https://" + objPublisher.paginaWeb + "' target='_blank'>" + objPublisher.paginaWeb + "</a></dd>";
                     elementHTML += "<dt>E-mail</dt>";
                     elementHTML += "<dd>" + objPublisher.email + "</dd>";
                     elementHTML += "<dt>Teléfono</dt>";
-                    elementHTML += "<dd>" + objPublisher.telefono + "</dd>";
+                    elementHTML += "<dd>" + objPublisher.nroTelefono + "</dd>";
                     elementHTML += "<dt>Activo?</dt>";
                     elementHTML += "<dd><span class='badge badge-"+ classNameBadge + "'><i class='fas fa-"+ classNameIcon + "'></i> " + statusText+ "</span></dd>";
                     elementHTML += "</dl>";
@@ -85,9 +91,9 @@ function viewDetailsPublisher(button) {
 }
 
 function disablePublisher(button) {
-    let publisher = $(button).data("publisherName");
+    let publisherName = $(button).data("publisherName");
     Swal.fire({
-        title: "¿Estás seguro que quieres deshabilitar la editorial: " + publisher + " ?",
+        title: "¿Estás seguro que quieres deshabilitar la editorial: " + publisherName + " ?",
         text: "No podrás revertir esta operación!",
         icon: "warning",
         showCancelButton: true,

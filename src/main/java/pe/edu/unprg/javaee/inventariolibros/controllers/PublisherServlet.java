@@ -43,7 +43,7 @@ public class PublisherServlet extends HttpServlet {
                     insertPublisherAction(request, response);
                     break;
                 case "editar":
-                    System.out.println("Próximo a implementarse...");
+                    System.out.println("Próximo a implementarse =)");
                     break;
                 case "verDetalles":
                     moreDetailsPublisherAction(request, response);
@@ -131,8 +131,8 @@ public class PublisherServlet extends HttpServlet {
         List<Publisher> publisherList = publisherService.findAll();
         if (publisherList != null) {
             json.addProperty("status", "success");
-            Type typePublisher = new TypeToken<List<Publisher>>(){}.getType();
-            JsonElement result = gson.toJsonTree(publisherList, typePublisher);
+            Type publisherListType = new TypeToken<List<Publisher>>(){}.getType();
+            JsonElement result = gson.toJsonTree(publisherList, publisherListType);
             data = result.getAsJsonArray();
         } else {
             json.addProperty("status", "error");

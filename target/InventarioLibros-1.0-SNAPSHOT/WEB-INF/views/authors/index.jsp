@@ -74,6 +74,8 @@
         <script src="${path}/assets/plugins/jquery-validation/localization/messages_es_PE.min.js"></script>
         <!-- Tempusdominus Bootstrap 4 -->
         <script src="${path}/assets/plugins/moment/moment.min.js"></script>
+        <script src="${path}/assets/plugins/moment/locale/es.js"></script>
+<%--        <script src="${path}/assets/plugins/moment/moment-with-locales.min.js"></script>--%>
         <script src="${path}/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
         <!-- SweetAlert2 -->
         <script src="${path}/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
@@ -88,7 +90,8 @@
         <script>
             $(function () {
                 $("#dtpFechaNacimiento").datetimepicker({
-                    format: 'DD/MM/YYYY'
+                    locale: "es",
+                    format: "DD/MM/YYYY"
                 });
             });
         </script>

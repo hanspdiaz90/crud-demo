@@ -6,6 +6,8 @@ import pe.edu.unprg.javaee.inventariolibros.dao.impl.*;
 public class LibraryDAOFactory {
 
     private static LibraryDAOFactory instance = null;
+
+    private final IUserDAO userDAO = new UserDAOImpl();
     private final IAuthorDAO authorDAO = new AuthorDAOImpl();
     private final IBookDAO bookDAO = new BookDAOImpl();
     private final IGenreDAO genreDAO = new GenreDAOImpl();
@@ -20,6 +22,8 @@ public class LibraryDAOFactory {
         }
         return instance;
     }
+
+    public IUserDAO getUserDAO() { return userDAO; }
 
     public IAuthorDAO getAuthorDAO() {
         return authorDAO;

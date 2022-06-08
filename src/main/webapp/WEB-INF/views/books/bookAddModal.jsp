@@ -12,46 +12,58 @@
             </div>
             <form id="bookAddForm" role="form">
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="txtTitulo">Título (*)</label>
+                        <input type="text" class="form-control" id="txtTitulo" placeholder="Título" name="titulo">
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="txtISBN">ISBN (*)</label>
                             <input type="text" class="form-control" id="txtISBN" placeholder="ISBN" name="isbn">
                         </div>
-                        <div class="form-group col-md-8">
-                            <label for="txtTitulo">Título (*)</label>
-                            <input type="text" class="form-control" id="txtTitulo" placeholder="Título" name="titulo">
+                        <div class="form-group col-md-4">
+                            <label for="txtAnioEdicion">Año de Edición (*)</label>
+                            <input type="text" class="form-control" id="txtAnioEdicion" placeholder="Año de edición" name="anioEdicion">
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="txtResenha">Reseña</label>
-                        <textarea class="form-control" id="txtResenha" rows="4" placeholder="Descripción" name="resenha"></textarea>
+                        <div class="form-group col-md-4">
+                            <label for="txtPortada">Foto de portada (*)</label>
+                            <input type="text" class="form-control" id="txtPortada" placeholder="Foto de portada" name="portada">
+                        </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="cbxAutores">Autor (*)</label>
-                            <select class="form-control" id="cbxAutores" name="author">
+                            <select class="form-control" id="cbxAutores" name="autor">
                             </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="cbxEditoriales">Editorial (*)</label>
-                            <select class="form-control" id="cbxEditoriales" name="publisher">
+                            <select class="form-control" id="cbxEditoriales" name="editorial">
                             </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="cbxGeneros">Género Literario (*)</label>
-                            <select class="form-control" id="cbxGeneros" name="genre">
+                            <select class="form-control" id="cbxGeneros" name="genero">
                             </select>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="txtExistencias">Ejemplares (*)</label>
-                            <input type="number" class="form-control" id="txtExistencias" name="existencias">
+                            <label for="txtNroPaginas">N° Páginas (*)</label>
+                            <input type="number" class="form-control" id="txtNroPaginas" name="nroPaginas">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtEjemplares">Ejemplares (*)</label>
+                            <input type="number" class="form-control" id="txtEjemplares" name="ejemplares">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="txtPrecio">Precio (*)</label>
                             <input type="number" class="form-control" id="txtPrecio" name="precio">
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtResenha">Reseña</label>
+                        <textarea class="form-control" id="txtResenha" rows="4" placeholder="Descripción" name="resenha"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">

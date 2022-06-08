@@ -79,8 +79,8 @@ public class BookDAOImpl implements IBookDAO {
                 book.setIsbn(rs.getString("isbn"));
                 book.setTitulo(rs.getString("titulo"));
                 book.setTitulo(rs.getString("portada"));
-                book.setResenia(rs.getString("sinopsis"));
-                book.setEjemplares(rs.getInt("anio_publicacion"));
+                book.setResenia(rs.getString("resenia"));
+                book.setEjemplares(rs.getInt("anio_edicion"));
                 book.setEjemplares(rs.getInt("nro_paginas"));
                 book.setEjemplares(rs.getInt("ejemplares"));
                 book.setPrecio(rs.getDouble("precio"));
@@ -111,7 +111,7 @@ public class BookDAOImpl implements IBookDAO {
                 book.setId(rs.getInt("id"));
                 book.setIsbn(rs.getString("isbn"));
                 book.setTitulo(rs.getString("titulo"));
-                book.setAnioEdicion(rs.getInt("anio_publicacion"));
+                book.setAnioEdicion(rs.getInt("anio_edicion"));
                 book.setNroPaginas(rs.getInt("nro_paginas"));
                 book.setEjemplares(rs.getInt("ejemplares"));
                 book.setPrecio(rs.getDouble("precio"));

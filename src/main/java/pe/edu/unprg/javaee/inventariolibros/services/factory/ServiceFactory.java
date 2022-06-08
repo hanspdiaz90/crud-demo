@@ -1,18 +1,13 @@
 package pe.edu.unprg.javaee.inventariolibros.services.factory;
 
-import pe.edu.unprg.javaee.inventariolibros.services.IAuthorService;
-import pe.edu.unprg.javaee.inventariolibros.services.IBookService;
-import pe.edu.unprg.javaee.inventariolibros.services.IGenreService;
-import pe.edu.unprg.javaee.inventariolibros.services.IPublisherService;
-import pe.edu.unprg.javaee.inventariolibros.services.impl.AuthorServiceImpl;
-import pe.edu.unprg.javaee.inventariolibros.services.impl.BookServiceImpl;
-import pe.edu.unprg.javaee.inventariolibros.services.impl.GenreServiceImpl;
-import pe.edu.unprg.javaee.inventariolibros.services.impl.PublisherServiceImpl;
+import pe.edu.unprg.javaee.inventariolibros.services.*;
+import pe.edu.unprg.javaee.inventariolibros.services.impl.*;
 
 public class ServiceFactory {
 
     private static ServiceFactory instance = null;
 
+    private final IUserService userService = new UserServiceImpl();
     private final IAuthorService authorService = new AuthorServiceImpl();
     private final IBookService bookService = new BookServiceImpl();
     private final IGenreService genreService = new GenreServiceImpl();
@@ -26,6 +21,8 @@ public class ServiceFactory {
         }
         return instance;
     }
+
+    public IUserService getUserService() { return userService; }
 
     public IAuthorService getAuthorService() {
         return authorService;
