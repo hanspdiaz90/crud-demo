@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <div class="modal fade" id="bookAddModal">
     <!-- Modal Dialog -->
     <div class="modal-dialog modal-lg">
@@ -11,7 +11,9 @@
                 </button>
             </div>
             <form id="bookAddForm" role="form">
-                <div class="modal-body">
+
+                <div class="modal-body" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+
                     <div class="form-group">
                         <label for="txtTitulo">Título (*)</label>
                         <input type="text" class="form-control" id="txtTitulo" placeholder="Título" name="titulo">
@@ -63,9 +65,11 @@
                     </div>
                     <div class="form-group">
                         <label for="txtResenha">Reseña</label>
-                        <textarea class="form-control" id="txtResenha" rows="4" placeholder="Descripción" name="resenha"></textarea>
+                        <textarea class="form-control" id="txtResenha" rows="5" placeholder="Descripción" name="resenha"></textarea>
                     </div>
+
                 </div>
+
                 <div class="modal-footer d-flex justify-content-end">
                     <button type="reset" id="btnResetAdd" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     <button type="submit" id="btnAdd" class="btn btn-primary">Guardar</button>

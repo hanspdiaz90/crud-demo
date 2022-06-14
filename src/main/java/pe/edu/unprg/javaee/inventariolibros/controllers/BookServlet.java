@@ -21,7 +21,7 @@ import java.util.List;
 @WebServlet(name = "bookServlet", urlPatterns = "/biblioteca/libros")
 public class BookServlet extends HttpServlet {
 
-    private static final String PATH = "/WEB-INF/views/books/index.jsp";
+    private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/books/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
     private final IBookService bookService = ServiceFactory.getInstance().getBookService();
 
@@ -77,7 +77,7 @@ public class BookServlet extends HttpServlet {
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("cardTitle", "Listado de libros");
-        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_TEMPLATE_PATH);
         dispatcher.forward(request, response);
     }
 
@@ -164,8 +164,8 @@ public class BookServlet extends HttpServlet {
         List<Book> bookList = bookService.findAll();
         if (bookList != null) {
             json.addProperty("status", "success");
-            Type typeBook = new TypeToken<List<Book>>(){}.getType();
-            JsonElement result = gson.toJsonTree(bookList, typeBook);
+            Type bookListType = new TypeToken<List<Book>>(){}.getType();
+            JsonElement result = gson.toJsonTree(bookList, bookListType);
             data = result.getAsJsonArray();
         } else {
             json.addProperty("status", "error");

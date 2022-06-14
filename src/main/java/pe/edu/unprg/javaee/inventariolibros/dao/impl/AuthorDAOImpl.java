@@ -7,7 +7,6 @@ import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 import pe.edu.unprg.javaee.inventariolibros.utils.DatabaseHandler;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class AuthorDAOImpl implements IAuthorDAO {
             cstmt.setString(1, author.getNombres());
             cstmt.setString(2, author.getApellidos());
             cstmt.setString(3, author.getCiudad());
-            cstmt.setDate(4, Date.valueOf(author.getFechaNacimiento()));
+            cstmt.setDate(4, java.sql.Date.valueOf(author.getFechaNacimiento()));
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_INSERT_AUTHOR, ex);
@@ -37,7 +36,7 @@ public class AuthorDAOImpl implements IAuthorDAO {
             cstmt.setString(1, author.getNombres());
             cstmt.setString(2, author.getApellidos());
             cstmt.setString(3, author.getCiudad());
-            cstmt.setDate(4, Date.valueOf(author.getFechaNacimiento()));
+            cstmt.setDate(4, java.sql.Date.valueOf(author.getFechaNacimiento()));
             cstmt.setBoolean(5, author.isActivo());
             cstmt.setInt(6, author.getId());
             rowsUpdated = cstmt.executeUpdate() > 0;

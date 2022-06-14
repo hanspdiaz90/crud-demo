@@ -18,7 +18,7 @@ import java.util.List;
 @WebServlet(name = "publisherServlet", urlPatterns = "/biblioteca/editoriales")
 public class PublisherServlet extends HttpServlet {
 
-    private static final String PATH = "/WEB-INF/views/publishers/index.jsp";
+    private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/publishers/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
     private final IPublisherService publisherService = ServiceFactory.getInstance().getPublisherService();
 
@@ -65,7 +65,7 @@ public class PublisherServlet extends HttpServlet {
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("cardTitle", "Listado de editoriales");
-        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_TEMPLATE_PATH);
         dispatcher.forward(request, response);
     }
 

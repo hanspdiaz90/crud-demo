@@ -18,7 +18,8 @@ public class DatabaseHandler {
     private DatabaseHandler() {
         try {
             if (dataSource == null) {
-                InputStream fis = DatabaseHandler.class.getClassLoader().getResourceAsStream(RESOURCE);
+//                InputStream fis = DatabaseHandler.class.getClassLoader().getResourceAsStream(RESOURCE);
+                InputStream fis = Thread.currentThread().getContextClassLoader().getResourceAsStream(RESOURCE);
                 Properties props = new Properties();
                 props.load(fis);
                 BasicDataSource bds = new BasicDataSource();

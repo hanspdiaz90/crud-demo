@@ -1,8 +1,8 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="tm" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
-<mt:template _tittle="AdminCRUD | Autores">
+<tm:template _tittle="AdminCRUD | Autores">
     <jsp:attribute name="_head">
         <jsp:include page="../../partials/_head.jsp"/>
         <!-- SweetAlert2 -->
@@ -97,4 +97,4 @@
         </script>
         <script src="${path}/assets/js/authors/app.js"></script>
     </jsp:attribute>
-</mt:template>
+</tm:template>

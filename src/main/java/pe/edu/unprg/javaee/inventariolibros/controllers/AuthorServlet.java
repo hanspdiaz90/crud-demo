@@ -20,7 +20,7 @@ import java.util.List;
 @WebServlet(name = "authorServlet", urlPatterns = "/biblioteca/autores")
 public class AuthorServlet extends HttpServlet {
 
-    private static final String PATH = "/WEB-INF/views/authors/index.jsp";
+    private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/authors/index.jsp";
     private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
     private final IAuthorService authorService = ServiceFactory.getInstance().getAuthorService();
 
@@ -67,7 +67,7 @@ public class AuthorServlet extends HttpServlet {
 
     private void indexAction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("cardTitle", "Listado de autores");
-        RequestDispatcher dispatcher = request.getRequestDispatcher(PATH);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_TEMPLATE_PATH);
         dispatcher.forward(request, response);
     }
 
@@ -130,8 +130,8 @@ public class AuthorServlet extends HttpServlet {
         List<Author> authorList = authorService.findAll();
         if (authorList != null) {
             json.addProperty("status", "success");
-            Type typeAuthor = new TypeToken<List<Author>>(){}.getType();
-            JsonElement result = gson.toJsonTree(authorList, typeAuthor);
+            Type authorListType = new TypeToken<List<Author>>(){}.getType();
+            JsonElement result = gson.toJsonTree(authorList, authorListType);
             data = result.getAsJsonArray();
         } else {
             json.addProperty("status", "error");

@@ -31,24 +31,22 @@ public class UserDAOImpl implements IUserDAO {
     }
 
     @Override
-    public User validate(String email, String password) throws DAOException {
+    public User authenticate(String email, String password) throws DAOException {
         User user = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(UserQuery.SP_VALIDATE_USER)) {
+             CallableStatement cstmt = conn.prepareCall(UserQuery.SP_LOGIN_USER)) {
             cstmt.setString(1, email);
             cstmt.setString(2, password);
             ResultSet rs = cstmt.executeQuery();
             if (rs.next()) {
                 user = new User();
-                user.setId(rs.getInt("id"));
                 user.setEmail(rs.getString("email"));
-                user.setContrasenia(rs.getString("contrasenia"));
                 user.setRol(Rol.valueOf(rs.getString("rol")));
-                user.setAdmin(rs.getBoolean("admin"));
+                user.setAdmin(rs.getBoolean("es_admin"));
                 user.setActivo(rs.getBoolean("activo"));
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + UserQuery.SP_VALIDATE_USER, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + UserQuery.SP_LOGIN_USER, ex);
         }
         return user;
     }

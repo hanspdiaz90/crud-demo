@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
@@ -27,9 +27,13 @@
 
                     <p class="login-box-msg">Sign in to start your session</p>
 
-                    <form>
+<%--                    <c:if test="${!empty requestScope.message}">--%>
+<%--                        <p class="alert-danger"><c:out value="${requestScope.message}"/></p>--%>
+<%--                    </c:if>--%>
+
+                    <form id="loginForm" >
                         <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Email">
+                            <input type="email" id="txtEmail" class="form-control" name="email" placeholder="E-mail">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-envelope"></span>
@@ -37,7 +41,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" id="txtPassword" class="form-control" name="password" placeholder="Contraseña">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>
@@ -48,14 +52,12 @@
                             <div class="col-8">
                                 <div class="icheck-primary">
                                     <input type="checkbox" id="remember">
-                                    <label for="remember">
-                                        Remember Me
-                                    </label>
+                                    <label for="remember">Remember Me</label>
                                 </div>
                             </div>
                             <!-- /.col -->
                             <div class="col-4">
-                                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                                <button type="submit" id="btnLogin" class="btn btn-primary btn-block">Sign In</button>
                             </div>
                             <!-- /.col -->
                         </div>
@@ -72,11 +74,15 @@
             </div>
         </div>
         <!-- /.login-box -->
-    <!-- jQuery -->
-    <script src="${path}/assets/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="${path}/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="${path}/assets/dist/js/adminlte.min.js"></script>
+        <!-- jQuery -->
+        <script src="${path}/assets/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="${path}/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- jQuery Validation -->
+        <script src="${path}/assets/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="${path}/assets/plugins/jquery-validation/localization/messages_es_PE.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="${path}/assets/dist/js/adminlte.min.js"></script>
+        <script src="${path}/assets/js/user/app.js"></script>
     </body>
 </html>

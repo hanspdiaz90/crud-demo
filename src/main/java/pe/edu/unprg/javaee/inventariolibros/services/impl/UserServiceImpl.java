@@ -23,10 +23,10 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User validate(String email, String password) throws ServiceException {
+    public User authenticate(String email, String password) throws ServiceException {
         User result = null;
         try {
-            result =  userDAO.validate(email, password);
+            result =  userDAO.authenticate(email, password);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

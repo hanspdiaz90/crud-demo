@@ -6,6 +6,6 @@ import pe.edu.unprg.javaee.inventariolibros.models.User;
 public interface IUserService {
 
     boolean insert(User user) throws ServiceException;
-    User validate(String email, String password) throws ServiceException;
+    User authenticate(String email, String password) throws ServiceException;
 
 }
