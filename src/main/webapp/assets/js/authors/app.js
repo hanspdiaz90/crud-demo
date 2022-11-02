@@ -9,10 +9,10 @@ $(function () {
     $("#btnAdd").click(function () {
         $("#authorAddForm").validate({
             rules: {
-                nombres: { required: true, minlength: 3 },
-                apellidos: { required: true, minlength: 3 },
-                ciudad: { required: true, minlength: 3 },
-                fechaNacimiento: {required: true}
+                firstname: { required: true, minlength: 3 },
+                lastname: { required: true, minlength: 3 },
+                city: { required: true, minlength: 3 },
+                birthDate: {required: true}
             },
             submitHandler: function (form) {
                 let url = "/biblioteca/autores?accion=crear";
@@ -57,21 +57,21 @@ function viewDetailsAuthor(button) {
     $.ajax({
         url: url,
         method: "GET",
-        data: { id: authorId },
+        data: { authorId: authorId },
         dataType: "JSON",
         success: function (response) {
             if (response.status == "success") {
-                let objAuthor = response.result;
-                let classNameBadge = objAuthor.activo ? "success" : "danger";
-                let classNameIcon = objAuthor.activo ? "check" : "times";
-                let statusText = objAuthor.activo ? "ACTIVO" : "INACTIVO";
+                let authorObj = response.result;
+                let classNameBadge = authorObj.active ? "success" : "danger";
+                let classNameIcon = authorObj.active ? "check" : "times";
+                let statusText = authorObj.active ? "ACTIVO" : "INACTIVO";
                 let modalBody = $("#authorViewModal .modal-body");
                 modalBody.empty();
                 let elementHTML = "<dl>";
                 elementHTML += "<dt>Autor</dt>";
-                elementHTML += "<dd>" + objAuthor.nombres + " " + objAuthor.apellidos + "</dd>";
+                elementHTML += "<dd>" + authorObj.firstname + " " + authorObj.lastname + "</dd>";
                 elementHTML += "<dt>Ciudad</dt>";
-                elementHTML += "<dd>" + objAuthor.ciudad + "</dd>";
+                elementHTML += "<dd>" + authorObj.city + "</dd>";
                 elementHTML += "<dt>Activo?</dt>";
                 elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText + "</span></dd>";
                 elementHTML += "</dl>";
@@ -83,10 +83,10 @@ function viewDetailsAuthor(button) {
 }
 
 function disableAuthor(button) {
-    let author = $(button).data("authorFullname");
+    let authorFullname = $(button).data("authorFullname");
     Swal.fire({
-        title: "¿Estás seguro que quieres deshabilitar el author: " + author + " ?",
-        text: "No podrás revertir esta operación!",
+        title: "¿Estás seguro que quieres deshabilitar el autor: " + authorFullname + " ?",
+        text: "¡No podrás revertir esta operación!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -99,7 +99,7 @@ function disableAuthor(button) {
             $.ajax({
                 url: url,
                 method: "GET",
-                data: { id: authorId },
+                data: { authorId: authorId },
                 dataType: "JSON",
                 success: function (response) {
                     if (response.status == "success") {
@@ -124,22 +124,22 @@ function getAuthors() {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.nombres + " " + row.apellidos;
+                    return row.firstname + " " + row.lastname;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.ciudad + ", " + row.fechaNacimiento.year;
+                    return row.city + ", " + row.dateBirth.year;
                 }
             },
             {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
-                    let classNameBadge = row.activo ? "success" : "danger";
-                    let classNameIcon = row.activo ? "check" : "times";
-                    let statusText = row.activo ? "ACTIVO" : "INACTIVO";
+                    let classNameBadge = row.active ? "success" : "danger";
+                    let classNameIcon = row.active ? "check" : "times";
+                    let statusText = row.active ? "ACTIVO" : "INACTIVO";
                     let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
                     elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
                     elementHTML += "</span>";
@@ -151,10 +151,10 @@ function getAuthors() {
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='viewDetailsAuthor(this)' class='btn btn-info' data-toggle='modal' data-target='#authorViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
-                    if (row.activo) {
-                        elementHTML += "<button type='button' onclick='editAuthor(this)' class='btn btn-warning' data-toggle='modal' data-target='#authorEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.id + "'><i class='fas fa-pen'></i></button>"
-                        elementHTML += "<button type='button' onclick='disableAuthor(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-author-id='" + row.id + "' data-author-fullname='" + row.nombres + " " + row.apellidos + "'><i class='fas fa-flag'></i></button>"
+                    elementHTML += "<button type='button' onclick='viewDetailsAuthor(this)' class='btn btn-info' data-toggle='modal' data-target='#authorViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + row.authorId + "'><i class='fas fa-eye'></i></button>";
+                    if (row.active) {
+                        elementHTML += "<button type='button' onclick='editAuthor(this)' class='btn btn-warning' data-toggle='modal' data-target='#authorEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.authorId + "'><i class='fas fa-pen'></i></button>"
+                        elementHTML += "<button type='button' onclick='disableAuthor(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-author-id='" + row.authorId + "' data-author-fullname='" + row.firstname + " " + row.lastname + "'><i class='fas fa-flag'></i></button>"
                     }
                     elementHTML += "</div>"
                     return elementHTML;

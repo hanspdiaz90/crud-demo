@@ -31,7 +31,7 @@
 <%--                        <p class="alert-danger"><c:out value="${requestScope.message}"/></p>--%>
 <%--                    </c:if>--%>
 
-                    <form id="loginForm" >
+                    <form id="loginForm">
                         <div class="input-group mb-3">
                             <input type="email" id="txtEmail" class="form-control" name="email" placeholder="E-mail">
                             <div class="input-group-append">

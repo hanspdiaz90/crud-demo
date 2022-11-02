@@ -83,8 +83,8 @@
         <script src="${path}/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
         <script src="${path}/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
         <!-- CustomJS -->
-        <script src="${path}/assets/js/defaultDataTable.js"></script>
-        <script src="${path}/assets/js/defaultValidation-bs4.js"></script>
+        <script src="${path}/assets/js/default-datatable.js"></script>
+        <script src="${path}/assets/js/default-validation-bs4.js"></script>
         <script src="${path}/assets/js/books/app.js"></script>
     </jsp:attribute>
 </mt:template>

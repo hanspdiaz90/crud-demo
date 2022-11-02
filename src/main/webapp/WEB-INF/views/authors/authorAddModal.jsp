@@ -5,7 +5,7 @@
         <!-- Modal Content -->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Añadir nuevo author</h4>
+                <h4 class="modal-title">Añadir nuevo autor</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -13,23 +13,23 @@
             <form id="authorAddForm" role="form">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="txtNombres">Nombres (*)</label>
-                        <input type="text" class="form-control" id="txtNombres" placeholder="Nombres" name="nombres">
+                        <label for="txtFirstname">Nombres (*)</label>
+                        <input type="text" class="form-control" id="txtFirstname" placeholder="Nombres" name="firstname">
                     </div>
                     <div class="form-group">
-                        <label for="txtApellidos">Apellidos (*)</label>
-                        <input type="text" class="form-control" id="txtApellidos" placeholder="Apellidos" name="apellidos">
+                        <label for="txtLastname">Apellidos (*)</label>
+                        <input type="text" class="form-control" id="txtLastname" placeholder="Apellidos" name="lastname">
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="txtCiudad">Ciudad (*)</label>
-                            <input type="text" class="form-control" id="txtCiudad" placeholder="Ciudad" name="ciudad">
+                            <label for="txtCity">Ciudad (*)</label>
+                            <input type="text" class="form-control" id="txtCity" placeholder="Ciudad" name="city">
                         </div>
                         <div class="form-group col-md-6">
                             <label>Fecha de Nacimiento (*)</label>
-                            <div class="input-group date" id="dtpFechaNacimiento" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" name="fechaNacimiento" data-target="#dtpFechaNacimiento"/>
-                                <div class="input-group-append" data-target="#dtpFechaNacimiento" data-toggle="datetimepicker">
+                            <div class="input-group date" id="dtBirthDate" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" name="birthDate" data-target="#dtBirthDate"/>
+                                <div class="input-group-append" data-target="#dtBirthDate" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>

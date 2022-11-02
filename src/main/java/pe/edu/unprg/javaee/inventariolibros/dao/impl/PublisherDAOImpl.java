@@ -1,8 +1,8 @@
 package pe.edu.unprg.javaee.inventariolibros.dao.impl;
 
-import pe.edu.unprg.javaee.inventariolibros.dao.IPublisherDAO;
+import pe.edu.unprg.javaee.inventariolibros.dao.PublisherDAO;
 import pe.edu.unprg.javaee.inventariolibros.dao.query.PublisherQuery;
-import pe.edu.unprg.javaee.inventariolibros.models.Publisher;
+import pe.edu.unprg.javaee.inventariolibros.model.Publisher;
 import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 import pe.edu.unprg.javaee.inventariolibros.utils.DatabaseHandler;
 
@@ -13,60 +13,63 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PublisherDAOImpl implements IPublisherDAO {
+public class PublisherDAOImpl implements PublisherDAO {
 
     @Override
-    public boolean insert(Publisher publisher) throws DAOException {
-        boolean rowsInserted = false;
+    public boolean createPublisher(Publisher publisher) throws DAOException {
+        boolean rowsInserted;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_INSERT_PUBLISHER)) {
-            cstmt.setString(1, publisher.getNombre());
-            cstmt.setString(2, publisher.getDireccion());
+             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_CREATE_PUBLISHER)) {
+            cstmt.setString(1, publisher.getPublisher());
+            cstmt.setString(2, publisher.getAddress());
             cstmt.setString(3, publisher.getEmail());
-            cstmt.setString(4, publisher.getPaginaWeb());
-            cstmt.setString(5, publisher.getNroTelefono());
+            cstmt.setString(4, publisher.getWebSite());
+            cstmt.setString(5, publisher.getPhone());
+            cstmt.setString(6, publisher.getCellphone());
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_INSERT_PUBLISHER, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_CREATE_PUBLISHER, ex);
         }
         return rowsInserted;
     }
 
     @Override
-    public boolean update(Publisher publisher) throws DAOException {
-        boolean rowsUpdated = false;
+    public boolean editPublisher(Publisher publisher) throws DAOException {
+        boolean rowsUpdated;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_UPDATE_PUBLISHER)) {
-            cstmt.setString(1, publisher.getNombre());
-            cstmt.setString(2, publisher.getDireccion());
+             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_EDIT_PUBLISHER)) {
+            cstmt.setString(1, publisher.getPublisher());
+            cstmt.setString(2, publisher.getAddress());
             cstmt.setString(3, publisher.getEmail());
-            cstmt.setString(4, publisher.getPaginaWeb());
-            cstmt.setString(5, publisher.getNroTelefono());
-            cstmt.setBoolean(6, publisher.isActivo());
-            cstmt.setInt(7, publisher.getId());
+            cstmt.setString(4, publisher.getWebSite());
+            cstmt.setString(5, publisher.getPhone());
+            cstmt.setString(6, publisher.getCellphone());
+            cstmt.setBoolean(7, publisher.isActive());
+            cstmt.setInt(8, publisher.getPublisherId());
             rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_UPDATE_PUBLISHER, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_EDIT_PUBLISHER, ex);
         }
         return rowsUpdated;
     }
 
     @Override
-    public Publisher findById(int id) throws DAOException {
+    public Publisher findByPublisherId(int publisherId) throws DAOException {
         Publisher publisher = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_FIND_PUBLISHER_BY_ID)) {
-            cstmt.setInt(1, id);
+            cstmt.setInt(1, publisherId);
             ResultSet rs = cstmt.executeQuery();
             if (rs.next()) {
                 publisher = new Publisher();
-                publisher.setId(rs.getInt("id"));
-                publisher.setNombre(rs.getString("nombre"));
-                publisher.setDireccion(rs.getString("direccion"));
+                publisher.setPublisherId(rs.getInt("publisher_id"));
+                publisher.setPublisher(rs.getString("publisher"));
+                publisher.setAddress(rs.getString("address"));
                 publisher.setEmail(rs.getString("email"));
-                publisher.setPaginaWeb(rs.getString("pagina_web"));
-                publisher.setNroTelefono(rs.getString("nro_telefono"));
-                publisher.setActivo(rs.getBoolean("activo"));
+                publisher.setWebSite(rs.getString("web_site"));
+                publisher.setPhone(rs.getString("phone"));
+                publisher.setCellphone(rs.getString("cellphone"));
+                publisher.setActive(rs.getBoolean("active"));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_FIND_PUBLISHER_BY_ID, ex);
@@ -76,20 +79,21 @@ public class PublisherDAOImpl implements IPublisherDAO {
 
     @Override
     public List<Publisher> findAll() throws DAOException {
-        List<Publisher> result = null;
+        List<Publisher> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_FIND_ALL_PUBLISHERS);
              ResultSet rs = cstmt.executeQuery()) {
             result = new ArrayList<>();
             while (rs.next()) {
                 Publisher publisher = new Publisher();
-                publisher.setId(rs.getInt("id"));
-                publisher.setNombre(rs.getString("nombre"));
-                publisher.setDireccion(rs.getString("direccion"));
+                publisher.setPublisherId(rs.getInt("publisher_id"));
+                publisher.setPublisher(rs.getString("publisher"));
+                publisher.setAddress(rs.getString("address"));
                 publisher.setEmail(rs.getString("email"));
-                publisher.setPaginaWeb(rs.getString("pagina_web"));
-                publisher.setNroTelefono(rs.getString("nro_telefono"));
-                publisher.setActivo(rs.getBoolean("activo"));
+                publisher.setWebSite(rs.getString("web_site"));
+                publisher.setPhone(rs.getString("phone"));
+                publisher.setCellphone(rs.getString("cellphone"));
+                publisher.setActive(rs.getBoolean("active"));
                 result.add(publisher);
             }
         } catch (SQLException ex) {
@@ -99,11 +103,11 @@ public class PublisherDAOImpl implements IPublisherDAO {
     }
 
     @Override
-    public boolean disableById(int id) throws DAOException {
-        boolean rowsAffected = false;
+    public boolean disableByPublisherId(int publisherId) throws DAOException {
+        boolean rowsAffected;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_DISABLE_PUBLISHER_BY_ID)) {
-            cstmt.setInt(1, id);
+            cstmt.setInt(1, publisherId);
             rowsAffected = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_DISABLE_PUBLISHER_BY_ID, ex);

@@ -13,15 +13,15 @@ public class DatabaseHandler {
 
     private static DatabaseHandler instance = null;
     private static DataSource dataSource = null;
-    private static final String RESOURCE = "/database/settings.properties";
+    private static final String DATABASE_RESOURCE = "database/settings.properties";
 
     private DatabaseHandler() {
         try {
             if (dataSource == null) {
-//                InputStream fis = DatabaseHandler.class.getClassLoader().getResourceAsStream(RESOURCE);
-                InputStream fis = Thread.currentThread().getContextClassLoader().getResourceAsStream(RESOURCE);
+                //InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream(DATABASE_RESOURCE);
+                InputStream resource = this.getClass().getClassLoader().getResourceAsStream(DATABASE_RESOURCE);
                 Properties props = new Properties();
-                props.load(fis);
+                props.load(resource);
                 BasicDataSource bds = new BasicDataSource();
                 bds.setDriverClassName(props.getProperty("datasource.driverClassName"));
                 bds.setUsername(props.getProperty("datasource.username"));

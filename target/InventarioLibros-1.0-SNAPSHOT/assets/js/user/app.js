@@ -22,7 +22,7 @@ $(function () {
                         console.log(response);
                         if (response == "success") {
                             console.log(response);
-                            window.location = "/views/dashboard/index.jsp";
+                            // window.location = "/biblioteca/dashboard/index.jsp";
                         }
                     }
                     // processData: false,

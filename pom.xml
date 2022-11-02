@@ -31,11 +31,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-            <version>2.11.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
             <version>2.9.0</version>
         </dependency>
@@ -49,11 +44,6 @@
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.google.crypto.tink</groupId>-->
-<!--            <artifactId>tink</artifactId>-->
-<!--            <version>1.6.1</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

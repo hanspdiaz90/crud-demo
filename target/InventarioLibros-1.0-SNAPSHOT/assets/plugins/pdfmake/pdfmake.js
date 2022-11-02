@@ -72511,7 +72511,7 @@ function extend(destination, source) {
       destination[prop] = source[prop];
 }
 
-// escapes XML models like "<", "&", etc.
+// escapes XML model like "<", "&", etc.
 function escapeXML(value){
   return value.toString().replace(/&/g, '&amp;').replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, '&apos;').replace(/"/g, '&quot;');
 }

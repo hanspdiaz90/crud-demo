@@ -1,6 +1,6 @@
 package pe.edu.unprg.javaee.inventariolibros.dao.impl;
 
-import pe.edu.unprg.javaee.inventariolibros.dao.IDashboardDAO;
+import pe.edu.unprg.javaee.inventariolibros.dao.DashboardDAO;
 import pe.edu.unprg.javaee.inventariolibros.dao.query.DashboardQuery;
 import pe.edu.unprg.javaee.inventariolibros.exception.DAOException;
 import pe.edu.unprg.javaee.inventariolibros.utils.DatabaseHandler;
@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 
-public class DashboardDAOImpl implements IDashboardDAO {
+public class DashboardDAOImpl implements DashboardDAO {
 
     @Override
     public int countAllAuthors() throws DAOException {

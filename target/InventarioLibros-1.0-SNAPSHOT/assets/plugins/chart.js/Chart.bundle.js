@@ -1062,12 +1062,12 @@ var conversions_14 = conversions.apple;
 var conversions_15 = conversions.gray;
 
 /*
-	this function routes a model to all other models.
+	this function routes a model to all other model.
 
 	all functions that are routed have a property `.conversion` attached
 	to the returned synthetic function. This property is an array
 	of strings, each with the steps in between the 'from' and 'to'
-	color models (inclusive).
+	color model (inclusive).
 
 	conversions that are not possible simply are not included.
 */
@@ -3632,7 +3632,7 @@ function unlistenArrayEvents(array, listener) {
 	delete array._chartjs;
 }
 
-// Base class for all dataset controllers (line, bar, etc)
+// Base class for all dataset controller (line, bar, etc)
 var DatasetController = function(chart, datasetIndex) {
 	this.initialize(chart, datasetIndex);
 };
@@ -6687,12 +6687,12 @@ core_defaults._set('global', {
 	}
 });
 
-// Scatter charts use line controllers
+// Scatter charts use line controller
 var controller_scatter = controller_line;
 
 // NOTE export a map in which the key represents the controller type, not
 // the class, and so must be CamelCase in order to be correctly retrieved
-// by the controller in core.controller.js (`controllers[meta.type]`).
+// by the controller in core.controller.js (`controller[meta.type]`).
 
 var controllers = {
 	bar: controller_bar,
@@ -9643,17 +9643,17 @@ helpers$1.extend(Chart.prototype, /** @lends Chart */ {
 		// In case the entire data object changed
 		me.tooltip._data = me.data;
 
-		// Make sure dataset controllers are updated and new controllers are reset
+		// Make sure dataset controller are updated and new controller are reset
 		var newControllers = me.buildOrUpdateControllers();
 
-		// Make sure all dataset controllers have correct meta data counts
+		// Make sure all dataset controller have correct meta data counts
 		for (i = 0, ilen = me.data.datasets.length; i < ilen; i++) {
 			me.getDatasetMeta(i).controller.buildOrUpdateElements();
 		}
 
 		me.updateLayout();
 
-		// Can only reset the new controllers after the scales have been updated
+		// Can only reset the new controller after the scales have been updated
 		if (me.options.animation && me.options.animation.duration) {
 			helpers$1.each(newControllers, function(controller) {
 				controller.reset();
@@ -10062,7 +10062,7 @@ helpers$1.extend(Chart.prototype, /** @lends Chart */ {
 
 		me.stop();
 
-		// dataset controllers need to cleanup associated data
+		// dataset controller need to cleanup associated data
 		for (i = 0, ilen = me.data.datasets.length; i < ilen; ++i) {
 			me.destroyDatasetMeta(i);
 		}
@@ -19481,7 +19481,7 @@ function computeLinearBoundary(source) {
 
 	// Backward compatibility: until v3, we still need to support boundary values set on
 	// the model (scaleTop, scaleBottom and scaleZero) because some external plugins and
-	// controllers might still use it (e.g. the Smith chart).
+	// controller might still use it (e.g. the Smith chart).
 
 	if (fill === 'start') {
 		target = model.scaleBottom === undefined ? scale.bottom : model.scaleBottom;
