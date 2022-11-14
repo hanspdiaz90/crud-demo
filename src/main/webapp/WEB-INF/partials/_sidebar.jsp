@@ -1,8 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath}" />
-
-
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="${path}/biblioteca/dashboard" class="brand-link">
@@ -17,7 +15,8 @@
                 <img src="${path}/assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block"><%=request.getAttribute("username") %></a>
+<%--                <a href="#" class="d-block"><%= request.getAttribute("username") %></a>--%>
+                <a href="#" class="d-block">${username}</a>
             </div>
         </div>
         <!-- Sidebar Menu -->
@@ -58,7 +57,7 @@
                         <li class="nav-item">
                             <a href="${path}/biblioteca/generos" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Generos Literarios</p>
+                                <p>Géneros Literarios</p>
                             </a>
                         </li>
                         <li class="nav-item">

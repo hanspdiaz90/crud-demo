@@ -1,6 +1,6 @@
 $(function () {
 
-    getGenres();
+    getAllGenres();
 
     $("#genreAddForm").submit(function (event) {
         event.preventDefault();
@@ -9,10 +9,10 @@ $(function () {
     $("#btnAdd").click(function () {
         $("#genreAddForm").validate({
             rules: {
-                nombre: { required: true, minlength: 5 }
+                name: { required: true, minlength: 5 }
             },
             submitHandler: function (form) {
-                let url = "/biblioteca/generos?accion=crear";
+                let url = "/cruddemo/biblioteca/generos?accion=crear";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -50,24 +50,24 @@ function resetInvalidForm(button, validatedForm) {
 }
 
 function viewDetailsGenre(button) {
-    let url = "/biblioteca/generos?accion=verDetalles";
+    let url = "/cruddemo/biblioteca/generos?accion=verDetalles";
     let genreId = $(button).data("genreId");
     $.ajax({
         url: url,
         method: "GET",
-        data: { id: genreId },
+        data: { genreId: genreId },
         dataType: "JSON",
         success: function (response) {
             if (response.status == "success") {
-                let objGenre = response.result;
-                let classNameBadge = objGenre.activo ? "success" : "danger";
-                let classNameIcon = objGenre.activo ? "check" : "times";
-                let statusText = objGenre.activo ? "ACTIVO" : "INACTIVO";
+                let genreObj = response.result;
+                let classNameBadge = genreObj.active ? "success" : "danger";
+                let classNameIcon = genreObj.active ? "check" : "times";
+                let statusText = genreObj.active ? "ACTIVO" : "INACTIVO";
                 let modalBody = $("#genreViewModal .modal-body");
                 modalBody.empty();
                 let elementHTML = "<dl>";
                     elementHTML += "<dt>Género Literario</dt>";
-                    elementHTML += "<dd>" + objGenre.nombre + "</dd>";
+                    elementHTML += "<dd>" + genreObj.name + "</dd>";
                     elementHTML += "<dt>Activo?</dt>";
                     elementHTML += "<dd><span class='badge badge-"+ classNameBadge + "'><i class='fas fa-"+ classNameIcon + "'></i> " + statusText+ "</span></dd>";
                     elementHTML += "</dl>";
@@ -79,9 +79,9 @@ function viewDetailsGenre(button) {
 }
 
 function disableGenre(button) {
-    let genre = $(button).data("genreName");
+    let genreName = $(button).data("genreName");
     Swal.fire({
-        title: "¿Estás seguro que quieres deshabilitar el género literario: " + genre + " ?",
+        title: "¿Estás seguro que quieres deshabilitar el género literario: " + genreName + " ?",
         text: "No podrás revertir esta operación!",
         icon: "warning",
         showCancelButton: true,
@@ -90,12 +90,12 @@ function disableGenre(button) {
         confirmButtonText: "Si, realizar operación"
     }).then((result) => {
         if (result.isConfirmed) {
-            let url = "/biblioteca/generos?accion=deshabilitar";
+            let url = "/cruddemo/biblioteca/generos?accion=deshabilitar";
             let genreId = $(button).data("genreId");
             $.ajax({
                 url: url,
                 method: "GET",
-                data: { id: genreId },
+                data: { genreId: genreId },
                 dataType: "JSON",
                 success: function (response) {
                     if (response.status == "success") {
@@ -108,8 +108,8 @@ function disableGenre(button) {
     });
 }
 
-function getGenres() {
-    let url = "/biblioteca/generos?accion=listar";
+function getAllGenres() {
+    let url = "/cruddemo/biblioteca/generos?accion=listar";
     let table = $("#genresDataTable").DataTable({
         destroy: true,
         ajax: {
@@ -117,14 +117,14 @@ function getGenres() {
             dataSrc: "result"
         },
         columns: [
-            { data: "nombre" },
+            { data: "name" },
             {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
-                    let classNameBadge = row.activo ? "success" : "danger";
-                    let classNameIcon = row.activo ? "check" : "times";
-                    let statusText = row.activo ? "ACTIVO" : "INACTIVO";
+                    let classNameBadge = row.active ? "success" : "danger";
+                    let classNameIcon = row.active ? "check" : "times";
+                    let statusText = row.active ? "ACTIVO" : "INACTIVO";
                     let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
                         elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
                         elementHTML += "</span>";
@@ -136,10 +136,10 @@ function getGenres() {
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='viewDetailsGenre(this)' class='btn btn-info' data-toggle='modal' data-target='#genreViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-genre-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
-                    if (row.activo) {
-                        elementHTML += "<button type='button' onclick='editGenre(this)' class='btn btn-warning' data-toggle='modal' data-target='#genreEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-genre-id='" + row.id + "'><i class='fas fa-pen'></i></button>"
-                        elementHTML += "<button type='button' onclick='disableGenre(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-genre-id='" + row.id + "' data-genre-name='" + row.nombre + "'><i class='fas fa-flag'></i></button>"
+                    elementHTML += "<button type='button' onclick='viewDetailsGenre(this)' class='btn btn-info' data-toggle='modal' data-target='#genreViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-genre-id='" + row.genreId + "'><i class='fas fa-eye'></i></button>";
+                    if (row.active) {
+                        elementHTML += "<button type='button' onclick='editGenre(this)' class='btn btn-warning' data-toggle='modal' data-target='#genreEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-genre-id='" + row.genreId + "'><i class='fas fa-pen'></i></button>"
+                        elementHTML += "<button type='button' onclick='disableGenre(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-genre-id='" + row.genreId + "' data-genre-name='" + row.name + "'><i class='fas fa-flag'></i></button>"
                     }
                     elementHTML += "</div>"
                     return elementHTML;

@@ -1,20 +1,20 @@
 $(function () {
 
-    getBooks();
+    getAllBooks();
 
-    $("#cbxAutores").select2({
+    $("#cbxAuthors").select2({
         ajax: {
-            url: "/biblioteca/libros?accion=listarAutoresActivos",
+            url: "/cruddemo/biblioteca/libros?accion=listarAutoresActivos",
             dataType: "JSON",
             delay: 250,
             data: function (params) {
-                return { filtro: params.term };
+                return { filter: params.term };
             },
             processResults: function (response) {
                 let results = $.map(response.result, function (item) {
                     return {
-                        id: item.id,
-                        text: item.nombres + " " + item.apellidos
+                        id: item.authorId,
+                        text: item.firstName + " " + item.lastName
                     };
                 });
                 return {
@@ -30,20 +30,20 @@ $(function () {
         theme: "bootstrap4",
         allowClear: true
     });
-    $("#cbxEditoriales").select2({
+    $("#cbxPublishers").select2({
         ajax: {
-            url: "/biblioteca/libros?accion=listarEditorialesActivos",
+            url: "/cruddemo/biblioteca/libros?accion=listarEditorialesActivos",
             dataType: "JSON",
             delay: 250,
             data: function (params) {
-                return { filtro: params.term };
+                return { filter: params.term };
             },
             processResults: function (response) {
                 console.log(response.result);
                 let results = $.map(response.result, function (item) {
                     return {
-                        id: item.id,
-                        text: item.nombre
+                        id: item.publisherId,
+                        text: item.name
                     };
                 });
                 return {
@@ -59,19 +59,19 @@ $(function () {
         theme: "bootstrap4",
         allowClear: true
     });
-    $("#cbxGeneros").select2({
+    $("#cbxGenres").select2({
         ajax: {
-            url: "/biblioteca/libros?accion=listarGenerosActivos",
+            url: "/cruddemo/biblioteca/libros?accion=listarGenerosActivos",
             dataType: "JSON",
             delay: 250,
             data: function (params) {
-                return { filtro: params.term };
+                return { filter: params.term };
             },
             processResults: function (response) {
                 let results = $.map(response.result, function (item) {
                     return {
-                        id: item.id,
-                        text: item.nombre
+                        id: item.genreId,
+                        text: item.name
                     };
                 });
                 return {
@@ -95,20 +95,20 @@ $(function () {
     $("#btnAdd").click(function () {
         $("#bookAddForm").validate({
             rules: {
-                titulo: { required: true },
+                title: { required: true },
                 isbn: { required: true, minlength: 13, maxlength:13, digits: true },
-                anioEdicion: { required: true },
-                portada: { required: true },
-                autor: {required: true },
-                editorial: {required: true },
-                genero: {required: true },
-                nroPaginas: { required: true },
-                ejemplares: { required: true },
-                precio: { required: true },
-                resenha: { required: true }
+                yearEdition: { required: true },
+                coverImage: { required: true },
+                author: {required: true },
+                publisher: {required: true },
+                genre: {required: true },
+                numberPages: { required: true },
+                copies: { required: true },
+                price: { required: true },
+                review: { required: true }
             },
             submitHandler: function (form) {
-                let url = "/biblioteca/libros?accion=crear";
+                let url = "/cruddemo/biblioteca/libros?accion=crear";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -145,37 +145,37 @@ function resetInvalidForm(button, validatedForm) {
 }
 
 function viewDetailsBook(button) {
-    let url = "/biblioteca/libros?accion=verDetalles";
+    let url = "/cruddemo/biblioteca/libros?accion=verDetalles";
     let bookId = $(button).data("bookId");
     $.ajax({
         url: url,
         method: "GET",
-        data: { id: bookId },
+        data: { bookId: bookId },
         dataType: "JSON",
         success: function (response) {
             if (response.status == "success") {
-                let objBook = response.result;
-                let classNameBadge = objBook.activo ? "success" : "danger";
-                let classNameIcon = objBook.activo ? "check" : "times";
-                let statusText = objBook.activo ? "ACTIVO" : "INACTIVO";
+                let bookObj = response.result;
+                let classNameBadge = bookObj.active ? "success" : "danger";
+                let classNameIcon = bookObj.active ? "check" : "times";
+                let statusText = bookObj.active ? "ACTIVO" : "INACTIVO";
                 let modalBody = $("#bookViewModal .modal-body");
                 modalBody.empty();
                 let regex = /(\d{3})?(\d{3})?(\d{5})?(\d)?(\d)/;
                 let elementHTML = "<dl>";
                     elementHTML += "<dt>ISBN</dt>";
-                    elementHTML += "<dd>" + objBook.isbn.replace(regex, "$1-$2-$3-$4-$5") + "</dd>";
+                    elementHTML += "<dd>" + bookObj.isbn.replace(regex, "$1-$2-$3-$4-$5") + "</dd>";
                     elementHTML += "<dt>Título</dt>";
-                    elementHTML += "<dd>" + objBook.titulo + "</dd>";
+                    elementHTML += "<dd>" + bookObj.title + "</dd>";
                     elementHTML += "<dt>Reseña</dt>";
-                    elementHTML += "<dd>" + objBook.resenia + "</dd>";
+                    elementHTML += "<dd>" + bookObj.review + "</dd>";
                     elementHTML += "<dt>Autor</dt>";
-                    elementHTML += "<dd>" + objBook.autor.nombres + " " + objBook.autor.apellidos + "</dd>";
+                    elementHTML += "<dd>" + bookObj.author.firstName + " " + bookObj.author.lastName + "</dd>";
                     elementHTML += "<dt>Editorial</dt>";
-                    elementHTML += "<dd>" + objBook.editorial.nombre + "</dd>";
+                    elementHTML += "<dd>" + bookObj.publisher.name + "</dd>";
                     elementHTML += "<dt>Género Literario</dt>";
-                    elementHTML += "<dd>" + objBook.genero.nombre + "</dd>";
+                    elementHTML += "<dd>" + bookObj.genre.name + "</dd>";
                     elementHTML += "<dt>Precio</dt>";
-                    elementHTML += "<dd>" + objBook.precio + "</dd>";
+                    elementHTML += "<dd>" + bookObj.price + "</dd>";
                     elementHTML += "<dt>Activo?</dt>";
                     elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText+ "</span></dd>";
                     elementHTML += "</dl>";
@@ -187,9 +187,9 @@ function viewDetailsBook(button) {
 }
 
 function disableBook(button) {
-    let book = $(button).data("bookTitle");
+    let bookTitle = $(button).data("bookTitle");
     Swal.fire({
-        title: "¿Estás seguro que quieres deshabilitar el libro: " + book + " ?",
+        title: "¿Estás seguro que quieres deshabilitar el libro: " + bookTitle + " ?",
         text: "No podrás revertir esta operación!",
         icon: "warning",
         showCancelButton: true,
@@ -198,12 +198,12 @@ function disableBook(button) {
         confirmButtonText: "Si, realizar operación"
     }).then((result) => {
         if (result.isConfirmed) {
-            let url = "/biblioteca/libros?accion=deshabilitar";
+            let url = "/cruddemo/biblioteca/libros?accion=deshabilitar";
             let bookId = $(button).data("bookId");
             $.ajax({
                 url: url,
                 method: "GET",
-                data: { id: bookId },
+                data: { bookId: bookId },
                 dataType: "JSON",
                 success: function (response) {
                     if (response.status == "success") {
@@ -237,8 +237,8 @@ function disableBook(button) {
 //     });
 // }
 
-function getBooks() {
-    let url = "/biblioteca/libros?accion=listar";
+function getAllBooks() {
+    let url = "/cruddemo/biblioteca/libros?accion=listar";
     let table = $("#booksDataTable").DataTable({
         destroy: true,
         ajax: {
@@ -253,32 +253,32 @@ function getBooks() {
                     return row.isbn.replace(regex, "$1-$2-$3-$4-$5");
                 }
             },
-            { data: "titulo" },
+            { data: "title" },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.autor.nombres + " " + row.autor.apellidos;
+                    return row.author.firstName + " " + row.author.lastName;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.editorial.nombre;
+                    return row.publisher.name;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.genero.nombre;
+                    return row.genre.name;
                 }
             },
             {
                 data: null,
                 className: "text-center",
                 render: function(data, type, row) {
-                    let classNameBadge = row.activo ? "success" : "danger";
-                    let classNameIcon = row.activo ? "check" : "times";
-                    let statusText = row.activo ? "ACTIVO" : "INACTIVO";
+                    let classNameBadge = row.active ? "success" : "danger";
+                    let classNameIcon = row.active ? "check" : "times";
+                    let statusText = row.active ? "ACTIVO" : "INACTIVO";
                     let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
                         elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
                         elementHTML += "</span>";
@@ -290,10 +290,10 @@ function getBooks() {
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='viewDetailsBook(this)' class='btn btn-info' data-toggle='modal' data-target='#bookViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-book-id='" + row.id + "'><i class='fas fa-eye'></i></button>";
-                    if (row.activo) {
-                        elementHTML += "<button type='button' onclick='editBook(this)' class='btn btn-warning' data-toggle='modal' data-target='#bookEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-book-id='" + row.id + "'><i class='fas fa-pen'></i></button>"
-                        elementHTML += "<button type='button' onclick='disableBook(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-book-id='" + row.id + "' data-book-title='" + row.titulo + "'><i class='fas fa-flag'></i></button>"
+                    elementHTML += "<button type='button' onclick='viewDetailsBook(this)' class='btn btn-info' data-toggle='modal' data-target='#bookViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-book-id='" + row.bookId + "'><i class='fas fa-eye'></i></button>";
+                    if (row.active) {
+                        elementHTML += "<button type='button' onclick='editBook(this)' class='btn btn-warning' data-toggle='modal' data-target='#bookEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-book-id='" + row.bookId + "'><i class='fas fa-pen'></i></button>"
+                        elementHTML += "<button type='button' onclick='disableBook(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-book-id='" + row.bookId + "' data-book-title='" + row.title + "'><i class='fas fa-flag'></i></button>"
                     }
                     elementHTML += "</div>"
                     return elementHTML;

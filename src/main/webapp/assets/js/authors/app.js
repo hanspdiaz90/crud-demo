@@ -1,6 +1,6 @@
 $(function () {
 
-    getAuthors();
+    getAllAuthors();
 
     $("#authorAddForm").submit(function (event) {
         event.preventDefault();
@@ -9,13 +9,13 @@ $(function () {
     $("#btnAdd").click(function () {
         $("#authorAddForm").validate({
             rules: {
-                firstname: { required: true, minlength: 3 },
-                lastname: { required: true, minlength: 3 },
+                firstName: { required: true, minlength: 3 },
+                lastName: { required: true, minlength: 3 },
                 city: { required: true, minlength: 3 },
-                birthDate: {required: true}
+                dob: { required: true }
             },
             submitHandler: function (form) {
-                let url = "/biblioteca/autores?accion=crear";
+                let url = "/cruddemo/biblioteca/autores?accion=crear";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -52,7 +52,7 @@ function resetInvalidForm(button, validatedForm) {
 }
 
 function viewDetailsAuthor(button) {
-    let url = "/biblioteca/autores?accion=verDetalles";
+    let url = "/cruddemo/biblioteca/autores?accion=verDetalles";
     let authorId = $(button).data("authorId");
     $.ajax({
         url: url,
@@ -69,9 +69,9 @@ function viewDetailsAuthor(button) {
                 modalBody.empty();
                 let elementHTML = "<dl>";
                 elementHTML += "<dt>Autor</dt>";
-                elementHTML += "<dd>" + authorObj.firstname + " " + authorObj.lastname + "</dd>";
-                elementHTML += "<dt>Ciudad</dt>";
-                elementHTML += "<dd>" + authorObj.city + "</dd>";
+                elementHTML += "<dd>" + authorObj.firstName + " " + authorObj.lastName + "</dd>";
+                elementHTML += "<dt>Ciudad, Año de Nacimiento</dt>";
+                elementHTML += "<dd>" + authorObj.city + ", " + authorObj.dob.year + "</dd>";
                 elementHTML += "<dt>Activo?</dt>";
                 elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText + "</span></dd>";
                 elementHTML += "</dl>";
@@ -94,7 +94,7 @@ function disableAuthor(button) {
         confirmButtonText: "Si, realizar operación"
     }).then((result) => {
         if (result.isConfirmed) {
-            let url = "/biblioteca/autores?accion=deshabilitar";
+            let url = "/cruddemo/biblioteca/autores?accion=deshabilitar";
             let authorId = $(button).data("authorId");
             $.ajax({
                 url: url,
@@ -112,8 +112,8 @@ function disableAuthor(button) {
     });
 }
 
-function getAuthors() {
-    let url = "/biblioteca/autores?accion=listar";
+function getAllAuthors() {
+    let url = "/cruddemo/biblioteca/autores?accion=listar";
     let table = $("#authorsDataTable").DataTable({
         destroy: true,
         ajax: {
@@ -124,13 +124,13 @@ function getAuthors() {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.firstname + " " + row.lastname;
+                    return row.firstName + " " + row.lastName;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.city + ", " + row.dateBirth.year;
+                    return row.city + ", " + row.dob.year;
                 }
             },
             {
@@ -154,7 +154,7 @@ function getAuthors() {
                     elementHTML += "<button type='button' onclick='viewDetailsAuthor(this)' class='btn btn-info' data-toggle='modal' data-target='#authorViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + row.authorId + "'><i class='fas fa-eye'></i></button>";
                     if (row.active) {
                         elementHTML += "<button type='button' onclick='editAuthor(this)' class='btn btn-warning' data-toggle='modal' data-target='#authorEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.authorId + "'><i class='fas fa-pen'></i></button>"
-                        elementHTML += "<button type='button' onclick='disableAuthor(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-author-id='" + row.authorId + "' data-author-fullname='" + row.firstname + " " + row.lastname + "'><i class='fas fa-flag'></i></button>"
+                        elementHTML += "<button type='button' onclick='disableAuthor(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-author-id='" + row.authorId + "' data-author-fullname='" + row.firstName + " " + row.lastName + "'><i class='fas fa-flag'></i></button>"
                     }
                     elementHTML += "</div>"
                     return elementHTML;

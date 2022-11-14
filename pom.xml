@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pe.edu.unprg.javaee</groupId>
-    <artifactId>InventarioLibros</artifactId>
+    <artifactId>crud-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>InventarioLibros</name>
+    <name>crud-demo</name>
     <packaging>war</packaging>
 
     <properties>
