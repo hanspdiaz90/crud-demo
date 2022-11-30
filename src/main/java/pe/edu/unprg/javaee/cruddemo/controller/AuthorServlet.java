@@ -78,9 +78,11 @@ public class AuthorServlet extends HttpServlet {
             String message = null;
             if (created) {
                 message = "El autor ha sido registrado con éxito";
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);
@@ -95,9 +97,11 @@ public class AuthorServlet extends HttpServlet {
             JsonElement result = null;
             if (foundAuthor != null) {
                 result = this.gson.toJsonTree(foundAuthor);
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.add("result", result);
             JSONResponse.writeFromServlet(response, json);
@@ -112,9 +116,11 @@ public class AuthorServlet extends HttpServlet {
             Type authorType = new TypeToken<List<Author>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(authorsList, authorType);
             data = result.getAsJsonArray();
+            json.addProperty("success", true);
             json.addProperty("status", "success");
         } else {
-            json.addProperty("status", "error");
+            json.addProperty("success", false);
+            json.addProperty("status", "failure");
         }
         json.add("result", data);
         JSONResponse.writeFromServlet(response, json);
@@ -128,9 +134,11 @@ public class AuthorServlet extends HttpServlet {
             String message = null;
             if (disabled) {
                 message = "El autor ha sido deshabilitado con éxito";
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);

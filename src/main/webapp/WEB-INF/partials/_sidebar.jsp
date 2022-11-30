@@ -15,8 +15,7 @@
                 <img src="${contextPath}/assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-<%--                <a href="#" class="d-block"><%= request.getAttribute("username") %></a>--%>
-                <a href="#" class="d-block"><%= session.getAttribute("username") %></a>
+                <a href="#" class="d-block"><c:out value="${sessionScope.username}"/></a>
             </div>
         </div>
         <!-- Sidebar Menu -->

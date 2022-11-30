@@ -63158,7 +63158,7 @@ var STATE_TABLE = [//   Non_Joining,        Left_Joining,       Right_Joining,  
 [[NONE, NONE, 0], [NONE, ISOL, 2], [NONE, ISOL, 1], [NONE, ISOL, 2], [NONE, FIN3, 5], [NONE, ISOL, 6]]];
 /**
  * This is a shaper for Arabic, and other cursive scripts.
- * It uses data from ArabicShaping.txt in the Unicode database,
+ * It uses data from ArabicShaping.txt in the Unicode setting,
  * compiled to a UnicodeTrie by generate-data.coffee.
  *
  * The shaping state machine was ported from Harfbuzz.
@@ -66588,7 +66588,7 @@ var LayoutEngine = /*#__PURE__*/function () {
   };
 
   _proto30.isDefaultIgnorable = function isDefaultIgnorable(ch) {
-    // From DerivedCoreProperties.txt in the Unicode database,
+    // From DerivedCoreProperties.txt in the Unicode setting,
     // minus U+115F, U+1160, U+3164 and U+FFA0, which is what
     // Harfbuzz and Uniscribe do.
     var plane = ch >> 16;

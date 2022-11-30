@@ -6,10 +6,10 @@ $(function () {
 
     $("#btnLogin").click(function () {
         $("#loginForm").validate({
-            // rules: {
-            //     email: {required: true, email: true},
-            //     password: { required: true }
-            // },
+            rules: {
+                email: {required: true, email: true},
+                password: { required: true }
+            },
             submitHandler: function (form) {
                 let url = contextPath + "/biblioteca/login";
                 let formData = $(form).serialize();
@@ -19,14 +19,10 @@ $(function () {
                     data: formData,
                     dataType: "JSON",
                     success: function (response) {
-                        console.log(response);
-                        if (response.message == "El email y/o contraseña no pueden estar vacíos") {
-                            Swal.fire("Upsss...!", response.message, "error");
-                        } else if (response.message == "El e-mail y/o contraseña son incorrectos") {
-                            Swal.fire("Upsss...!", response.message, "error");
-                        } else if (response.message === "success" ) {
-                            console.log("entró al login ok");
-                            $(location).attr('href', contextPath + '/biblioteca/dashboard');
+                        if (response.success === false) {
+                            $(location).attr("href", contextPath + response.url);
+                        } else if (response.success === true) {
+                            Swal.fire("Upsss...!", response.message, response.status);
                         }
                     },
                     processData: false,
