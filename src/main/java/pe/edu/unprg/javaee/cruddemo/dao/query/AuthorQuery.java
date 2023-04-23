@@ -9,6 +9,6 @@ public class AuthorQuery {
     public static final String SP_FIND_AUTHOR_BY_ID = "call sp_find_author_by_id(?)";
     public static final String SP_FIND_ALL_AUTHORS = "call sp_find_all_authors()";
     public static final String SP_DISABLE_AUTHOR_BY_ID = "call sp_disable_author_by_id(?)";
-//    public static final String SP_CHANGE_AUTHOR_STATUS_BY_ID = "call sp_change_author_status_by_id(?)";
+    //public static final String SP_CHANGE_AUTHOR_STATUS_BY_ID = "call sp_change_author_status_by_id(?)";
 
 }

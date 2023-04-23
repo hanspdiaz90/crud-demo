@@ -12,6 +12,6 @@ public interface AuthorDAO {
     Author findByAuthorId(int authorId) throws DAOException;
     List<Author> findAll() throws DAOException;
     boolean disableByAuthorId(int authorId) throws DAOException;
-//    boolean changeStatusById(int id) throws DAOException;
+    //boolean changeStatusById(int id) throws DAOException;
 
 }
