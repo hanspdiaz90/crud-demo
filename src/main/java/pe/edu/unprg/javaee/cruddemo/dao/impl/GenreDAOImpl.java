@@ -54,7 +54,7 @@ public class GenreDAOImpl implements GenreDAO {
                 genre = new Genre();
                 genre.setGenreId(rs.getInt("genre_id"));
                 genre.setName(rs.getString("name"));
-                genre.setActive(rs.getBoolean("active"));
+                genre.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.SP_FIND_GENRE_BY_ID, ex);
@@ -73,7 +73,7 @@ public class GenreDAOImpl implements GenreDAO {
                 Genre genre = new Genre();
                 genre.setGenreId(rs.getInt("genre_id"));
                 genre.setName(rs.getString("name"));
-                genre.setActive(rs.getBoolean("active"));
+                genre.setActive(rs.getBoolean("is_active"));
                 result.add(genre);
             }
         } catch (SQLException ex) {

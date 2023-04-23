@@ -61,7 +61,7 @@ public class AuthorDAOImpl implements AuthorDAO {
                 author.setLastName(rs.getString("last_name"));
                 author.setCity(rs.getString("city"));
                 author.setDob(JdbcUtils.toLocalDate(rs.getDate("dob")));
-                author.setActive(rs.getBoolean("active"));
+                author.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_FIND_AUTHOR_BY_ID, ex);
@@ -83,7 +83,7 @@ public class AuthorDAOImpl implements AuthorDAO {
                 author.setLastName(rs.getString("last_name"));
                 author.setCity(rs.getString("city"));
                 author.setDob(JdbcUtils.toLocalDate(rs.getDate("dob")));
-                author.setActive(rs.getBoolean("active"));
+                author.setActive(rs.getBoolean("is_active"));
                 result.add(author);
             }
         } catch (SQLException ex) {

@@ -4,7 +4,8 @@ import pe.edu.unprg.javaee.cruddemo.dao.UserDAO;
 import pe.edu.unprg.javaee.cruddemo.dao.query.UserQuery;
 import pe.edu.unprg.javaee.cruddemo.exception.DAOException;
 import pe.edu.unprg.javaee.cruddemo.model.User;
-import pe.edu.unprg.javaee.cruddemo.model.enums.Role;
+import pe.edu.unprg.javaee.cruddemo.model.enums.UserRole;
+import pe.edu.unprg.javaee.cruddemo.model.enums.UserStatus;
 import pe.edu.unprg.javaee.cruddemo.utils.DatabaseHandler;
 
 import java.sql.CallableStatement;
@@ -22,7 +23,7 @@ public class UserDAOImpl implements UserDAO {
             cstmt.setString(1, user.getEmail());
             cstmt.setString(2, user.getPassword());
             cstmt.setInt(3, user.getRole().getStatusId());
-            cstmt.setBoolean(4, user.isAdmin());
+            cstmt.setInt(4, user.getStatus().getStatusId());
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + UserQuery.SP_INSERT_USER, ex);
@@ -41,9 +42,9 @@ public class UserDAOImpl implements UserDAO {
             if (rs.next()) {
                 user = new User();
                 user.setEmail(rs.getString("email"));
-                user.setRole(Role.valueOf(rs.getString("role")));
-                user.setAdmin(rs.getBoolean("is_admin"));
-                user.setActivo(rs.getBoolean("active"));
+                user.setRole(UserRole.valueOf(rs.getString("role")));
+                user.setStatus(UserStatus.valueOf(rs.getString("status")));
+                user.setActivo(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + UserQuery.SP_LOGIN_USER, ex);

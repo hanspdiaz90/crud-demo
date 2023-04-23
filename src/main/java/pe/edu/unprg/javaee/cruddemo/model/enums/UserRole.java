@@ -1,6 +1,6 @@
 package pe.edu.unprg.javaee.cruddemo.model.enums;
 
-public enum Role {
+public enum UserRole {
 
     ADMIN(1),
     EDITOR(2),
@@ -8,7 +8,7 @@ public enum Role {
 
     private final int statusId;
 
-    Role(int statusId) {
+    UserRole(int statusId) {
         this.statusId = statusId;
     }
 

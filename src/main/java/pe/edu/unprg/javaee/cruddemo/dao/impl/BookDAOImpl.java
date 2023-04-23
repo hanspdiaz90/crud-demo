@@ -91,7 +91,7 @@ public class BookDAOImpl implements BookDAO {
                 book.getPublisher().setName(rs.getString("publisher"));
                 book.setGenre(new Genre());
                 book.getGenre().setName(rs.getString("genre"));
-                book.setActive(rs.getBoolean("active"));
+                book.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_BOOK_BY_ID, ex);
@@ -122,7 +122,7 @@ public class BookDAOImpl implements BookDAO {
                 book.getPublisher().setName(rs.getString("publisher"));
                 book.setGenre(new Genre());
                 book.getGenre().setName(rs.getString("genre"));
-                book.setActive(rs.getBoolean("active"));
+                book.setActive(rs.getBoolean("is_active"));
                 result.add(book);
             }
         } catch (SQLException ex) {
@@ -144,7 +144,7 @@ public class BookDAOImpl implements BookDAO {
                 author.setAuthorId(rs.getInt("author_id"));
                 author.setFirstName(rs.getString("first_name"));
                 author.setLastName(rs.getString("last_name"));
-                author.setActive(rs.getBoolean("active"));
+                author.setActive(rs.getBoolean("is_active"));
                 result.add(author);
             }
         } catch (SQLException ex) {
@@ -165,7 +165,7 @@ public class BookDAOImpl implements BookDAO {
                 Publisher publisher = new Publisher();
                 publisher.setPublisherId(rs.getInt("publisher_id"));
                 publisher.setName(rs.getString("name"));
-                publisher.setActive(rs.getBoolean("active"));
+                publisher.setActive(rs.getBoolean("is_active"));
                 result.add(publisher);
             }
         } catch (SQLException ex) {
@@ -186,7 +186,7 @@ public class BookDAOImpl implements BookDAO {
                 Genre genre = new Genre();
                 genre.setGenreId(rs.getInt("genre_id"));
                 genre.setName(rs.getString("name"));
-                genre.setActive(rs.getBoolean("active"));
+                genre.setActive(rs.getBoolean("is_active"));
                 result.add(genre);
             }
         } catch (SQLException ex) {

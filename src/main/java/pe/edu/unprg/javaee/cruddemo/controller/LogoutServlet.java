@@ -47,7 +47,7 @@ public class LogoutServlet extends HttpServlet {
                 //String[] roles = {"admin", "editor", "guest"};
                 HttpSession session = request.getSession();
 //                String role = "";
-//                switch (foundUser.getRole()) {
+//                switch (foundUser.getUserRole()) {
 //                    case ADMIN:
 //                        role = "admin";
 //                        break;

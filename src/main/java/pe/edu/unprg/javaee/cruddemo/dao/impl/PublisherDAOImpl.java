@@ -69,7 +69,7 @@ public class PublisherDAOImpl implements PublisherDAO {
                 publisher.setWebSite(rs.getString("web_site"));
                 publisher.setPhone(rs.getString("phone"));
                 publisher.setCellphone(rs.getString("cellphone"));
-                publisher.setActive(rs.getBoolean("active"));
+                publisher.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_FIND_PUBLISHER_BY_ID, ex);
@@ -93,7 +93,7 @@ public class PublisherDAOImpl implements PublisherDAO {
                 publisher.setWebSite(rs.getString("web_site"));
                 publisher.setPhone(rs.getString("phone"));
                 publisher.setCellphone(rs.getString("cellphone"));
-                publisher.setActive(rs.getBoolean("active"));
+                publisher.setActive(rs.getBoolean("is_active"));
                 result.add(publisher);
             }
         } catch (SQLException ex) {
