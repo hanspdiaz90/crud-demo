@@ -13,7 +13,7 @@ public class DatabaseHandler {
 
     private static DatabaseHandler instance = null;
     private static DataSource dataSource = null;
-    private static final String DATABASE_RESOURCE = "setting/database-cloud.properties";
+    private static final String DATABASE_RESOURCE = "setting/database-local.properties";
 
     private DatabaseHandler() {
         try {
