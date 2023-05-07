@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-@WebServlet(name = "genreServlet", urlPatterns = "/biblioteca/generos")
+@WebServlet(name = "genreServlet", urlPatterns = "/admincrud/generos")
 public class GenreServlet extends HttpServlet {
 
     private final GenreService genreService = new GenreServiceImpl();

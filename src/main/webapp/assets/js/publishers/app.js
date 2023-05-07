@@ -17,7 +17,7 @@ $(function () {
                 webSite: { required: true }
             },
             submitHandler: function (form) {
-                let url = contextPath + "/biblioteca/editoriales?accion=crear";
+                let url = contextPath + "/admincrud/editoriales?accion=crear";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -56,7 +56,7 @@ function resetInvalidForm(button, validatedForm) {
 
 function viewDetailsPublisher(button) {
     let publisherId = $(button).data("publisherId");
-    let url = contextPath + "/biblioteca/editoriales?accion=verDetalles";
+    let url = contextPath + "/admincrud/editoriales?accion=verDetalles";
     $.ajax({
         url: url,
         method: "GET",
@@ -105,7 +105,7 @@ function disablePublisher(button) {
         confirmButtonText: "Si, realizar operación"
     }).then((result) => {
         if (result.isConfirmed) {
-            let url = contextPath + "/biblioteca/editoriales?accion=deshabilitar";
+            let url = contextPath + "/admincrud/editoriales?accion=deshabilitar";
             let publisherId = $(button).data("publisherId");
             $.ajax({
                 url: url,
@@ -124,7 +124,7 @@ function disablePublisher(button) {
 }
 
 function getAllPublishers() {
-    let url = contextPath + "/biblioteca/editoriales?accion=listar";
+    let url = contextPath + "/admincrud/editoriales?accion=listar";
     let table = $("#publishersDataTable").DataTable({
         destroy: true,
         ajax: {

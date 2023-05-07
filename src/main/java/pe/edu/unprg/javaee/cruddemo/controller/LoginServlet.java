@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 
-@WebServlet(name = "loginServlet", urlPatterns = "/biblioteca/login")
+@WebServlet(name = "loginServlet", urlPatterns = "/admincrud/login")
 public class LoginServlet extends HttpServlet {
 
     private final UserService userService = new UserServiceImpl();

@@ -5,7 +5,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet(name = "dashboardServlet", urlPatterns = "/biblioteca/dashboard")
+@WebServlet(name = "dashboardServlet", urlPatterns = "/admincrud/dashboard")
 public class DashboardServlet extends HttpServlet {
 
     private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/dashboard/index.jsp";

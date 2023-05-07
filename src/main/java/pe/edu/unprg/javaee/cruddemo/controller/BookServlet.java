@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-@WebServlet(name = "bookServlet", urlPatterns = "/biblioteca/libros")
+@WebServlet(name = "bookServlet", urlPatterns = "/admincrud/libros")
 public class BookServlet extends HttpServlet {
 
     private final BookService bookService = new BookServiceImpl();

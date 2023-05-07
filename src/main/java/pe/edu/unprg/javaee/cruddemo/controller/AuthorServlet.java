@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@WebServlet(name = "authorServlet", urlPatterns = "/biblioteca/autores")
+@WebServlet(name = "authorServlet", urlPatterns = "/admincrud/autores")
 public class AuthorServlet extends HttpServlet {
 
     private final AuthorService authorService = new AuthorServiceImpl();

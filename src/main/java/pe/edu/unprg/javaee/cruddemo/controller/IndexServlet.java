@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "indexServlet", urlPatterns = "/biblioteca/index")
+@WebServlet(name = "indexServlet", urlPatterns = "/admincrud/index")
 public class IndexServlet extends HttpServlet {
 
     private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/login/index.jsp";

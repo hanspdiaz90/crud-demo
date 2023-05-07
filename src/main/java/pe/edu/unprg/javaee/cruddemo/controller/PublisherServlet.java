@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-@WebServlet(name = "publisherServlet", urlPatterns = "/biblioteca/editoriales")
+@WebServlet(name = "publisherServlet", urlPatterns = "/admincrud/editoriales")
 public class PublisherServlet extends HttpServlet {
 
     private final PublisherService publisherService = new PublisherServiceImpl();

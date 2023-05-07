@@ -12,7 +12,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "userServlet", urlPatterns = "/biblioteca/usuarios")
+@WebServlet(name = "userServlet", urlPatterns = "/admincrud/usuarios")
 public class UserServlet extends HttpServlet {
 
     private final UserService userService = new UserServiceImpl();

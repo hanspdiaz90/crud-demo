@@ -12,7 +12,7 @@ $(function () {
                 name: { required: true, minlength: 5 }
             },
             submitHandler: function (form) {
-                let url = contextPath + "/biblioteca/generos?accion=crear";
+                let url = contextPath + "/admincrud/generos?accion=crear";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -49,7 +49,7 @@ function resetInvalidForm(button, validatedForm) {
 }
 
 function viewDetailsGenre(button) {
-    let url = contextPath + "/biblioteca/generos?accion=verDetalles";
+    let url = contextPath + "/admincrud/generos?accion=verDetalles";
     let genreId = $(button).data("genreId");
     $.ajax({
         url: url,
@@ -89,7 +89,7 @@ function disableGenre(button) {
         confirmButtonText: "Si, realizar operación"
     }).then((result) => {
         if (result.isConfirmed) {
-            let url = contextPath + "/biblioteca/generos?accion=deshabilitar";
+            let url = contextPath + "/admincrud/generos?accion=deshabilitar";
             let genreId = $(button).data("genreId");
             $.ajax({
                 url: url,
@@ -108,7 +108,7 @@ function disableGenre(button) {
 }
 
 function getAllGenres() {
-    let url = contextPath + "/biblioteca/generos?accion=listar";
+    let url = contextPath + "/admincrud/generos?accion=listar";
     let table = $("#genresDataTable").DataTable({
         destroy: true,
         ajax: {

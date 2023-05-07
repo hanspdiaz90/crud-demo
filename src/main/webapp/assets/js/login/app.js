@@ -11,7 +11,7 @@ $(function () {
                 password: { required: true }
             },
             submitHandler: function (form) {
-                let url = contextPathLogin + "/biblioteca/login";
+                let url = contextPathLogin + "/admincrud/login";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,

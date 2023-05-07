@@ -15,7 +15,7 @@ $(function () {
                 dob: { required: true }
             },
             submitHandler: function (form) {
-                let url = contextPath + "/biblioteca/autores?accion=crear";
+                let url = contextPath + "/admincrud/autores?accion=crear";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -52,7 +52,7 @@ function resetInvalidForm(button, validatedForm) {
 }
 
 function viewDetailsAuthor(button) {
-    let url = contextPath + "/biblioteca/autores?accion=verDetalles";
+    let url = contextPath + "/admincrud/autores?accion=verDetalles";
     let authorId = $(button).data("authorId");
     $.ajax({
         url: url,
@@ -94,7 +94,7 @@ function disableAuthor(button) {
         confirmButtonText: "Si, realizar operación"
     }).then((result) => {
         if (result.isConfirmed) {
-            let url = contextPath + "/biblioteca/autores?accion=deshabilitar";
+            let url = contextPath + "/admincrud/autores?accion=deshabilitar";
             let authorId = $(button).data("authorId");
             $.ajax({
                 url: url,
@@ -113,7 +113,7 @@ function disableAuthor(button) {
 }
 
 function getAllAuthors() {
-    let url = contextPath + "/biblioteca/autores?accion=listar";
+    let url = contextPath + "/admincrud/autores?accion=listar";
     let table = $("#authorsDataTable").DataTable({
         destroy: true,
         ajax: {
