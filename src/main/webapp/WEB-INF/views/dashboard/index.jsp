@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="${contextPath}/biblioteca/dashboard">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="${contextPath}/admincrud/dashboard">Inicio</a></li>
                         <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
                 </div>
@@ -37,7 +37,7 @@
                         <div class="icon">
                             <i class="fas fa-glasses"></i>
                         </div>
-                        <a href="${contextPath}/biblioteca/autores" class="small-box-footer">
+                        <a href="${contextPath}/admincrud/autores" class="small-box-footer">
                             Más información <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
@@ -53,7 +53,7 @@
                         <div class="icon">
                             <i class="fas fa-copyright"></i>
                         </div>
-                        <a href="${contextPath}/biblioteca/editoriales" class="small-box-footer">
+                        <a href="${contextPath}/admincrud/editoriales" class="small-box-footer">
                             Más información <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
@@ -69,7 +69,7 @@
                         <div class="icon">
                             <i class="fas fa-star"></i>
                         </div>
-                        <a href="${contextPath}/biblioteca/generos" class="small-box-footer">
+                        <a href="${contextPath}/admincrud/generos" class="small-box-footer">
                             Más información <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
@@ -85,7 +85,7 @@
                         <div class="icon">
                             <i class="fas fa-book"></i>
                         </div>
-                        <a href="${contextPath}/biblioteca/libros" class="small-box-footer">
+                        <a href="${contextPath}/admincrud/libros" class="small-box-footer">
                             Más información <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>

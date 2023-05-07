@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="${contextPath}/biblioteca/dashboard">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="${contextPath}/admincrud/dashboard">Inicio</a></li>
                         <li class="breadcrumb-item active">Libros</li>
                     </ol>
                 </div>

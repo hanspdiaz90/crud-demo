@@ -3,7 +3,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="${contextPath}/biblioteca/dashboard" class="brand-link">
+    <a href="${contextPath}/admincrud/dashboard" class="brand-link">
         <img src="${contextPath}/assets/dist/img/AdminLTELogo.png" alt="AdminCRUD Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">AdminCRUD</span>
     </a>
@@ -25,7 +25,7 @@
                      with font-awesome or any other icon font library -->
 <%--                <li class="nav-header">DASHBOARD</li>--%>
                 <li class="nav-item">
-                    <a href="${contextPath}/biblioteca/dashboard" class="nav-link">
+                    <a href="${contextPath}/admincrud/dashboard" class="nav-link">
                         <i class="fas fa-chart-area"></i>
                         <p>Escritorio</p>
                     </a>
@@ -42,25 +42,25 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="${contextPath}/biblioteca/autores" class="nav-link">
+                            <a href="${contextPath}/admincrud/autores" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Autores</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="${contextPath}/biblioteca/editoriales" class="nav-link">
+                            <a href="${contextPath}/admincrud/editoriales" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Editoriales</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="${contextPath}/biblioteca/generos" class="nav-link">
+                            <a href="${contextPath}/admincrud/generos" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Géneros Literarios</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="${contextPath}/biblioteca/libros" class="nav-link">
+                            <a href="${contextPath}/admincrud/libros" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Libros</p>
                             </a>

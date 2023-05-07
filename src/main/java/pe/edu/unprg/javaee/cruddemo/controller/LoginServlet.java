@@ -60,7 +60,7 @@ public class LoginServlet extends HttpServlet {
 //                }
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
-                json.addProperty("url", "/biblioteca/dashboard");
+                json.addProperty("url", "/admincrud/dashboard");
                 session.setAttribute("username", foundUser.getEmail());
                 JSONResponse.writeFromServlet(response, json);
 
