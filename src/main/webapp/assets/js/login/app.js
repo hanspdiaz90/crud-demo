@@ -11,7 +11,7 @@ $(function () {
                 password: { required: true }
             },
             submitHandler: function (form) {
-                let url = contextPath + "/biblioteca/login";
+                let url = contextPathLogin + "/biblioteca/login";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -20,7 +20,7 @@ $(function () {
                     dataType: "JSON",
                     success: function (response) {
                         if (response.success === true) {
-                            $(location).attr("href", contextPath + response.url);
+                            $(location).attr("href", contextPathLogin + response.url);
                         } else if (response.success === false) {
                             Swal.fire("Upsss...!", response.message, response.status);
                         }

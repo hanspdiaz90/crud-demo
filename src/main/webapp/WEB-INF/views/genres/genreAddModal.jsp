@@ -14,7 +14,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="txtGenero">Género Literario (*)</label>
-                        <input type="text" class="form-control" id="txtGenero" placeholder="Género Literario" name="nombre">
+                        <input type="text" class="form-control" id="txtGenero" placeholder="Género Literario" name="name">
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">

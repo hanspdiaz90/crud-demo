@@ -71,9 +71,11 @@ public class GenreServlet extends HttpServlet {
             String message = null;
             if (created) {
                 message = "El género literario ha sido registrado con éxito";
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);
@@ -88,9 +90,11 @@ public class GenreServlet extends HttpServlet {
             JsonElement result = null;
             if (foundGenre != null) {
                 result = this.gson.toJsonTree(foundGenre);
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.add("result", result);
             JSONResponse.writeFromServlet(response, json);
@@ -105,9 +109,11 @@ public class GenreServlet extends HttpServlet {
             Type genreType = new TypeToken<List<Genre>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(genreList, genreType);
             data = result.getAsJsonArray();
+            json.addProperty("success", true);
             json.addProperty("status", "success");
         } else {
-            json.addProperty("status", "error");
+            json.addProperty("success", false);
+            json.addProperty("status", "failure");
         }
         json.add("result", data);
         JSONResponse.writeFromServlet(response, json);
@@ -121,9 +127,11 @@ public class GenreServlet extends HttpServlet {
             String message = null;
             if (disabled) {
                 message = "El género literario ha sido deshabilitado con éxito";
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);

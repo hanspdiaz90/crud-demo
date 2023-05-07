@@ -84,7 +84,7 @@
 <!-- AdminLTE App -->
 <script src="${contextPath}/assets/dist/js/adminlte.min.js"></script>
 <!-- CustomJS -->
-<script>let contextPath = "${contextPath}";</script>
+<script>let contextPathLogin = "${contextPath}";</script>
 <script src="${contextPath}/assets/js/login/app.js"></script>
 </body>
 </html>

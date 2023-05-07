@@ -116,11 +116,11 @@ $(function () {
                     data: formData,
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.status == "success") {
+                        if (response.success === true) {
                             $(form).trigger("reset");
                             $("#authorAddModal").modal("hide");
                             $("#authorsDataTable").DataTable().ajax.reload(null, false);
-                            Swal.fire("Registrado!", response.message, "success");
+                            Swal.fire("Registrado!", response.message, response.status);
                         }
                     },
                     processData: false,
@@ -153,7 +153,7 @@ function viewDetailsBook(button) {
         data: { bookId: bookId },
         dataType: "JSON",
         success: function (response) {
-            if (response.status == "success") {
+            if (response.success === true) {
                 let bookObj = response.result;
                 let classNameBadge = bookObj.active ? "success" : "danger";
                 let classNameIcon = bookObj.active ? "check" : "times";
@@ -206,9 +206,9 @@ function disableBook(button) {
                 data: { bookId: bookId },
                 dataType: "JSON",
                 success: function (response) {
-                    if (response.status == "success") {
+                    if (response.success === true) {
                         $("#gendersDataTable").DataTable().ajax.reload(null, false);
-                        Swal.fire("Deshabilitado!", response.message, "success");
+                        Swal.fire("Deshabilitado!", response.message, response.status);
                     }
                 }
             });

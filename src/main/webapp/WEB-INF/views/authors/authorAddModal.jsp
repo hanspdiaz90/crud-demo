@@ -28,7 +28,7 @@
                         <div class="form-group col-md-6">
                             <label>Fecha de Nacimiento (*)</label>
                             <div class="input-group date" id="dtDob" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#dtDob" name="dob"/>
+                                <input type="text" class="form-control datetimepicker-input" data-target="#dtDob" placeholder="DD/MM/YYYY" name="dob"/>
                                 <div class="input-group-append" data-target="#dtDob" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>

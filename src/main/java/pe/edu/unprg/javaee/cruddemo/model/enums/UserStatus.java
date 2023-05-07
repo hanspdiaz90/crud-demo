@@ -2,8 +2,8 @@ package pe.edu.unprg.javaee.cruddemo.model.enums;
 
 public enum UserStatus {
 
-    REGISTERED(1),
-    PENDING(2),
+    PENDING(1),
+    REGISTERED(2),
     BLOCKED(3);
 
     private final int statusId;

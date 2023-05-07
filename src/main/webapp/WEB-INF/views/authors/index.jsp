@@ -90,8 +90,8 @@
             $(function () {
                 $("#dtDob").datetimepicker({
                     locale: "es",
-                    format: "DD/MM/YYYY",
-                    defaultDate: moment()
+                    format: "DD/MM/YYYY"
+                    // defaultDate: moment()
                 });
             });
         </script>

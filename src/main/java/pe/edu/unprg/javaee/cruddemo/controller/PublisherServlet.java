@@ -86,9 +86,11 @@ public class PublisherServlet extends HttpServlet {
             String message = null;
             if (created) {
                 message = "La editorial ha sido registrado con éxito";
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);
@@ -103,9 +105,11 @@ public class PublisherServlet extends HttpServlet {
             JsonElement result = null;
             if (foundPublisher != null) {
                 result = this.gson.toJsonTree(foundPublisher);
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.add("result", result);
             JSONResponse.writeFromServlet(response, json);
@@ -120,9 +124,11 @@ public class PublisherServlet extends HttpServlet {
             Type publisherType = new TypeToken<List<Publisher>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(publishersList, publisherType);
             data = result.getAsJsonArray();
+            json.addProperty("success", true);
             json.addProperty("status", "success");
         } else {
-            json.addProperty("status", "error");
+            json.addProperty("success", false);
+            json.addProperty("status", "failure");
         }
         json.add("result", data);
         JSONResponse.writeFromServlet(response, json);
@@ -136,9 +142,11 @@ public class PublisherServlet extends HttpServlet {
             String message = null;
             if (disabled) {
                 message = "La editorial ha sido deshabilitado con éxito";
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);

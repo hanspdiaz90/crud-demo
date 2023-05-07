@@ -112,9 +112,11 @@ public class BookServlet extends HttpServlet {
             String message = null;
             if (created) {
                 message = "El libro ha sido registrado con éxito";
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);
@@ -129,9 +131,11 @@ public class BookServlet extends HttpServlet {
             JsonElement result = null;
             if (foundBook != null) {
                 result = this.gson.toJsonTree(foundBook);
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.add("result", result);
             JSONResponse.writeFromServlet(response, json);
@@ -146,9 +150,11 @@ public class BookServlet extends HttpServlet {
             Type bookType = new TypeToken<List<Book>>(){}.getType();
             JsonElement result = gson.toJsonTree(bookList, bookType);
             data = result.getAsJsonArray();
+            json.addProperty("success", true);
             json.addProperty("status", "success");
         } else {
-            json.addProperty("status", "error");
+            json.addProperty("success", false);
+            json.addProperty("status", "failure");
         }
         json.add("result", data);
         JSONResponse.writeFromServlet(response, json);
@@ -163,9 +169,11 @@ public class BookServlet extends HttpServlet {
             Type authorType = new TypeToken<List<Author>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(activeAuthors, authorType);
             data = result.getAsJsonArray();
+            json.addProperty("success", true);
             json.addProperty("status", "success");
         } else {
-            json.addProperty("status", "error");
+            json.addProperty("success", false);
+            json.addProperty("status", "failure");
         }
         json.add("result", data);
         JSONResponse.writeFromServlet(response, json);
@@ -180,9 +188,11 @@ public class BookServlet extends HttpServlet {
             Type publisherType = new TypeToken<List<Publisher>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(activePublishers, publisherType);
             data = result.getAsJsonArray();
+            json.addProperty("success", true);
             json.addProperty("status", "success");
         } else {
-            json.addProperty("status", "error");
+            json.addProperty("success", false);
+            json.addProperty("status", "failure");
         }
         json.add("result", data);
         JSONResponse.writeFromServlet(response, json);
@@ -197,9 +207,11 @@ public class BookServlet extends HttpServlet {
             Type genreType = new TypeToken<List<Genre>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(activeGenres, genreType);
             data = result.getAsJsonArray();
+            json.addProperty("success", true);
             json.addProperty("status", "success");
         } else {
-            json.addProperty("status", "error");
+            json.addProperty("success", false);
+            json.addProperty("status", "failure");
         }
         json.add("result", data);
         JSONResponse.writeFromServlet(response, json);
@@ -213,9 +225,11 @@ public class BookServlet extends HttpServlet {
             String message = null;
             if (disabled) {
                 message = "El libro ha sido deshabilitado con éxito";
+                json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
-                json.addProperty("status", "error");
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
             }
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);

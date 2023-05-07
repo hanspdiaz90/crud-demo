@@ -25,11 +25,11 @@ $(function () {
                     data: formData,
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.status == "success") {
+                        if (response.success === true) {
                             $(form).trigger("reset");
                             $("#publisherAddModal").modal("hide");
                             $("#publishersDataTable").DataTable().ajax.reload(null, false);
-                            Swal.fire("Registrado!", response.message, "success");
+                            Swal.fire("Registrado!", response.message, response.status);
                         }
                     },
                     processData: false,
@@ -63,7 +63,7 @@ function viewDetailsPublisher(button) {
         data: { publisherId: publisherId },
         dataType: "JSON",
         success: function (response) {
-            if (response.status == "success") {
+            if (response.success === true) {
                 let publisherObj = response.result;
                 let classNameBadge = publisherObj.active ? "success" : "danger";
                 let classNameIcon = publisherObj.active ? "check" : "times";
@@ -113,9 +113,9 @@ function disablePublisher(button) {
                 data: { publisherId: publisherId },
                 dataType: "JSON",
                 success: function (response) {
-                    if (response.status == "success") {
+                    if (response.success === true) {
                         $("#publishersDataTable").DataTable().ajax.reload(null, false);
-                        Swal.fire("Deshabilitado!", response.message, "success");
+                        Swal.fire("Deshabilitado!", response.message, response.status);
                     }
                 }
             });

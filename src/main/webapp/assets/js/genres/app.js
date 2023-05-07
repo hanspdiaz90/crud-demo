@@ -20,11 +20,11 @@ $(function () {
                     data: formData,
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.status == "success") {
+                        if (response.success === true) {
                             $(form).trigger("reset");
                             $("#genreAddModal").modal("hide");
                             $("#genresDataTable").DataTable().ajax.reload(null, false);
-                            Swal.fire("Registrado!", response.message, "success");
+                            Swal.fire("Registrado!", response.message, response.status);
                         }
                     },
                     processData: false,
@@ -32,7 +32,6 @@ $(function () {
                 });
             }
         });
-
     });
 
     $("#btnResetAdd").click(function () {
@@ -58,7 +57,7 @@ function viewDetailsGenre(button) {
         data: { genreId: genreId },
         dataType: "JSON",
         success: function (response) {
-            if (response.status == "success") {
+            if (response.success === true) {
                 let genreObj = response.result;
                 let classNameBadge = genreObj.active ? "success" : "danger";
                 let classNameIcon = genreObj.active ? "check" : "times";
@@ -98,9 +97,9 @@ function disableGenre(button) {
                 data: { genreId: genreId },
                 dataType: "JSON",
                 success: function (response) {
-                    if (response.status == "success") {
+                    if (response.success === true) {
                         $("#genresDataTable").DataTable().ajax.reload(null, false);
-                        Swal.fire("Deshabilitado!", response.message, "success");
+                        Swal.fire("Deshabilitado!", response.message, response.status);
                     }
                 }
             });

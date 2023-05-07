@@ -64,7 +64,7 @@
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>40</h3>
-                            <p>Géneros</p>
+                            <p>Géneros Literarios</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-star"></i>

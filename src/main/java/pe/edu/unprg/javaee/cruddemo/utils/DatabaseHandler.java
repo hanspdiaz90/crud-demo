@@ -3,7 +3,6 @@ package pe.edu.unprg.javaee.cruddemo.utils;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -14,7 +13,7 @@ public class DatabaseHandler {
 
     private static DatabaseHandler instance = null;
     private static DataSource dataSource = null;
-    private static final String DATABASE_RESOURCE = "setting/database.properties";
+    private static final String DATABASE_RESOURCE = "setting/database-cloud.properties";
 
     private DatabaseHandler() {
         try {
@@ -29,10 +28,8 @@ public class DatabaseHandler {
                 bds.setUsername(props.getProperty("db.username"));
                 bds.setPassword(props.getProperty("db.password"));
                 bds.setUrl(props.getProperty("db.url"));
-                //bds.setInitialSize(10);
-                //bds.setMaxTotal(10);
                 bds.setMinIdle(5);
-                bds.setMaxIdle(20);
+                bds.setMaxIdle(12);
                 bds.setMaxWaitMillis(10000);
                 dataSource = bds;
             }
