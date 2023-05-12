@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/*
+Este servlet sólo sirve en caso de no existir configuración inicial en el web.xml
+y se está cargando inicialmente el index.jsp
+ */
+
 @WebServlet(name = "indexServlet", urlPatterns = "/admincrud/index")
 public class IndexServlet extends HttpServlet {
 

@@ -4,14 +4,14 @@ import lombok.Data;
 import pe.edu.unprg.javaee.cruddemo.utils.enums.UserStatus;
 
 @Data
-public class User {
+public class Permission {
 
-    private int userId;
-    private String username;
-    private String email;
-    private String password;
+    private int permissionId;
     private Role role;
-    private UserStatus status;
+    private NavMenu menu;
+    private boolean read;
+    private boolean write;
+    private boolean delete;
     private boolean active;
 
 }

@@ -2,6 +2,10 @@
 <%@ taglib prefix="tm" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<c:set var="loggedUser" value="${sessionScope.loggedUser}"/>
+<c:if test="${empty loggedUser}">
+    <c:redirect url="/"></c:redirect>
+</c:if>
 <tm:template tittle="DemoCRUD | Autores">
     <jsp:attribute name="head">
         <jsp:include page="/WEB-INF/partials/_head.jsp"/>

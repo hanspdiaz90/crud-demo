@@ -29,7 +29,7 @@
                     <jsp:invoke fragment="breadcrumb"/>
                 </section>
                 <!-- /.content-header -->
-                <!-- Content -->
+                <!-- Main content -->
                 <section class="content">
                     <jsp:invoke fragment="content"/>
                 </section>

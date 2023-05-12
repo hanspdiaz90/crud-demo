@@ -3,9 +3,9 @@ package pe.edu.unprg.javaee.cruddemo.dao.impl;
 import pe.edu.unprg.javaee.cruddemo.dao.UserDAO;
 import pe.edu.unprg.javaee.cruddemo.dao.query.UserQuery;
 import pe.edu.unprg.javaee.cruddemo.exception.DAOException;
+import pe.edu.unprg.javaee.cruddemo.model.Role;
 import pe.edu.unprg.javaee.cruddemo.model.User;
-import pe.edu.unprg.javaee.cruddemo.model.enums.UserRole;
-import pe.edu.unprg.javaee.cruddemo.model.enums.UserStatus;
+import pe.edu.unprg.javaee.cruddemo.utils.enums.RoleType;
 import pe.edu.unprg.javaee.cruddemo.utils.DatabaseHandler;
 
 import java.sql.CallableStatement;
@@ -17,6 +17,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean createUser(User user) throws DAOException {
+        /*
         boolean rowsInserted;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(UserQuery.SP_INSERT_USER)) {
@@ -29,6 +30,8 @@ public class UserDAOImpl implements UserDAO {
             throw new DAOException("Error al ejecutar la consulta: " + UserQuery.SP_INSERT_USER, ex);
         }
         return rowsInserted;
+         */
+        return true;
     }
 
     @Override
@@ -42,9 +45,14 @@ public class UserDAOImpl implements UserDAO {
             if (rs.next()) {
                 user = new User();
                 user.setEmail(rs.getString("email"));
-                user.setRole(UserRole.valueOf(rs.getString("role")));
-                user.setStatus(UserStatus.valueOf(rs.getString("status")));
-                user.setActivo(rs.getBoolean("is_active"));
+                user.setUsername(rs.getString("username"));
+
+                Role role = new Role();
+                role.setRoleType(RoleType.valueOf(rs.getString("role_type")));
+                role.setRoot(rs.getBoolean("is_root"));
+
+                user.setRole(role);
+                user.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + UserQuery.SP_LOGIN_USER, ex);

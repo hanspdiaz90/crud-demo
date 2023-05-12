@@ -1,4 +1,4 @@
-package pe.edu.unprg.javaee.cruddemo.model.enums;
+package pe.edu.unprg.javaee.cruddemo.utils.enums;
 
 public enum UserStatus {
 
