@@ -25,7 +25,7 @@ $(function () {
                     data: formData,
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.success === true) {
+                        if (response.success) {
                             $(form).trigger("reset");
                             $("#publisherAddModal").modal("hide");
                             $("#publishersDataTable").DataTable().ajax.reload(null, false);
@@ -63,7 +63,7 @@ function viewDetailsPublisher(button) {
         data: { publisherId: publisherId },
         dataType: "JSON",
         success: function (response) {
-            if (response.success === true) {
+            if (response.success) {
                 let publisherObj = response.result;
                 let classNameBadge = publisherObj.active ? "success" : "danger";
                 let classNameIcon = publisherObj.active ? "check" : "times";
@@ -113,7 +113,7 @@ function disablePublisher(button) {
                 data: { publisherId: publisherId },
                 dataType: "JSON",
                 success: function (response) {
-                    if (response.success === true) {
+                    if (response.success) {
                         $("#publishersDataTable").DataTable().ajax.reload(null, false);
                         Swal.fire("Deshabilitado!", response.message, response.status);
                     }

@@ -3,7 +3,7 @@ package pe.edu.unprg.javaee.cruddemo.model;
 import lombok.Data;
 
 @Data
-public class NavMenu {
+public class Menu {
 
     private int menuId;
     private String title;

@@ -19,9 +19,9 @@ $(function () {
                     data: formData,
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.success === true) {
+                        if (response.success) {
                             $(location).attr("href", contextPathLogin + response.url);
-                        } else if (response.success === false) {
+                        } else {
                             Swal.fire("Upsss...!", response.message, response.status);
                         }
                     },

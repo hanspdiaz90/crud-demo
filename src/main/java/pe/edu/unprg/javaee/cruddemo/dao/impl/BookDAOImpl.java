@@ -29,11 +29,10 @@ public class BookDAOImpl implements BookDAO {
             cstmt.setString(4, book.getReview());
             cstmt.setInt(5, book.getYearEdition());
             cstmt.setInt(6, book.getNumberPages());
-            cstmt.setInt(7, book.getCopies());
-            cstmt.setDouble(8, book.getPrice());
-            cstmt.setInt(9, book.getAuthor().getAuthorId());
-            cstmt.setInt(10, book.getPublisher().getPublisherId());
-            cstmt.setInt(11, book.getGenre().getGenreId());
+            cstmt.setDouble(7, book.getPrice());
+            cstmt.setInt(8, book.getAuthor().getAuthorId());
+            cstmt.setInt(9, book.getPublisher().getPublisherId());
+            cstmt.setInt(10, book.getGenre().getGenreId());
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_CREATE_BOOK, ex);
@@ -52,13 +51,12 @@ public class BookDAOImpl implements BookDAO {
             cstmt.setString(4, book.getReview());
             cstmt.setInt(5, book.getYearEdition());
             cstmt.setInt(6, book.getNumberPages());
-            cstmt.setInt(7, book.getCopies());
-            cstmt.setDouble(8, book.getPrice());
-            cstmt.setInt(9, book.getAuthor().getAuthorId());
-            cstmt.setInt(10, book.getPublisher().getPublisherId());
-            cstmt.setInt(11, book.getGenre().getGenreId());
-            cstmt.setBoolean(12, book.isActive());
-            cstmt.setInt(13, book.getBookId());
+            cstmt.setDouble(7, book.getPrice());
+            cstmt.setInt(8, book.getAuthor().getAuthorId());
+            cstmt.setInt(9, book.getPublisher().getPublisherId());
+            cstmt.setInt(10, book.getGenre().getGenreId());
+            cstmt.setBoolean(11, book.isActive());
+            cstmt.setInt(12, book.getBookId());
             rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_EDIT_BOOK, ex);
@@ -82,7 +80,6 @@ public class BookDAOImpl implements BookDAO {
                 book.setReview(rs.getString("review"));
                 book.setYearEdition(rs.getInt("year_edition"));
                 book.setNumberPages(rs.getInt("number_pages"));
-                book.setCopies(rs.getInt("copies"));
                 book.setPrice(rs.getDouble("price"));
                 book.setAuthor(new Author());
                 book.getAuthor().setFirstName(rs.getString("first_name"));
@@ -113,7 +110,6 @@ public class BookDAOImpl implements BookDAO {
                 book.setTitle(rs.getString("title"));
                 book.setYearEdition(rs.getInt("year_edition"));
                 book.setNumberPages(rs.getInt("number_pages"));
-                book.setCopies(rs.getInt("copies"));
                 book.setPrice(rs.getDouble("price"));
                 book.setAuthor(new Author());
                 book.getAuthor().setFirstName(rs.getString("first_name"));

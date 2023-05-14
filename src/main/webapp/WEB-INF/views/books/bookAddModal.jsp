@@ -28,8 +28,8 @@
                             <input type="text" class="form-control" id="txtYearEdition" placeholder="Año de edición" name="yearEdition">
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="txtCoverImage">Foto de portada (*)</label>
-                            <input type="text" class="form-control" id="txtCoverImage" placeholder="Foto de portada" name="coverImage">
+                            <label for="txtNumberPages">N° Páginas (*)</label>
+                            <input type="number" class="form-control" id="txtNumberPages" name="numberPages">
                         </div>
                     </div>
                     <div class="form-row">
@@ -51,23 +51,18 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="txtNumberPages">N° Páginas (*)</label>
-                            <input type="number" class="form-control" id="txtNumberPages" name="numberPages">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="txtCopies">Ejemplares (*)</label>
-                            <input type="number" class="form-control" id="txtCopies" name="copies">
-                        </div>
-                        <div class="form-group col-md-4">
                             <label for="txtPrice">Precio (*)</label>
                             <input type="number" class="form-control" id="txtPrice" name="price">
                         </div>
+                        <div class="form-group col-md-8">
+                            <label for="txtCoverImage">Foto de portada (*)</label>
+                            <input type="text" class="form-control" id="txtCoverImage" placeholder="Foto de portada" name="coverImage">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="txtReview">Reseña</label>
+                        <label for="txtReview">Reseña (Opcional)</label>
                         <textarea class="form-control" id="txtReview" rows="5" placeholder="Descripción" name="review"></textarea>
                     </div>
-
                 </div>
 
                 <div class="modal-footer d-flex justify-content-end">

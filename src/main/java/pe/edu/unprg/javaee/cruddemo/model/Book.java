@@ -12,7 +12,6 @@ public class Book {
     private String review;
     private int yearEdition;
     private int numberPages;
-    private int copies;
     private double price;
     private Author author;
     private Publisher publisher;

@@ -20,7 +20,7 @@ $(function () {
                     data: formData,
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.success === true) {
+                        if (response.success) {
                             $(form).trigger("reset");
                             $("#genreAddModal").modal("hide");
                             $("#genresDataTable").DataTable().ajax.reload(null, false);
@@ -57,7 +57,7 @@ function viewDetailsGenre(button) {
         data: { genreId: genreId },
         dataType: "JSON",
         success: function (response) {
-            if (response.success === true) {
+            if (response.success) {
                 let genreObj = response.result;
                 let classNameBadge = genreObj.active ? "success" : "danger";
                 let classNameIcon = genreObj.active ? "check" : "times";
@@ -97,7 +97,7 @@ function disableGenre(button) {
                 data: { genreId: genreId },
                 dataType: "JSON",
                 success: function (response) {
-                    if (response.success === true) {
+                    if (response.success) {
                         $("#genresDataTable").DataTable().ajax.reload(null, false);
                         Swal.fire("Deshabilitado!", response.message, response.status);
                     }

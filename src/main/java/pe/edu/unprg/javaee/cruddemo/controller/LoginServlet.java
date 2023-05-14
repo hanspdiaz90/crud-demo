@@ -1,6 +1,7 @@
 package pe.edu.unprg.javaee.cruddemo.controller;
 
 import com.google.gson.JsonObject;
+import pe.edu.unprg.javaee.cruddemo.model.Menu;
 import pe.edu.unprg.javaee.cruddemo.model.User;
 import pe.edu.unprg.javaee.cruddemo.service.UserService;
 import pe.edu.unprg.javaee.cruddemo.service.impl.UserServiceImpl;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "loginServlet", urlPatterns = "/admincrud/login")
 public class LoginServlet extends HttpServlet {
@@ -38,12 +40,15 @@ public class LoginServlet extends HttpServlet {
             String password = request.getParameter("password");
             User foundUser = userService.authenticateUser(email, password);
             if (foundUser != null) {
+                String role = foundUser.getRole().getRoleType().name();
+                List<Menu> navs = userService.findNavMenuByRole(role);
                 HttpSession session = request.getSession();
                 String url = "/admincrud/dashboard";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
                 json.addProperty("url", url);
                 session.setAttribute("loggedUser", foundUser);
+                session.setAttribute("navsUser", navs);
                 JSONResponse.writeFromServlet(response, json);
 
             } else {

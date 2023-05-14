@@ -76,7 +76,6 @@ public class BookServlet extends HttpServlet {
                 request.getParameter("review") != null &&
                 request.getParameter("yearEdition") != null &&
                 request.getParameter("numberPages") != null &&
-                request.getParameter("copies") != null &&
                 request.getParameter("price") != null &&
                 request.getParameter("author") != null &&
                 request.getParameter("publisher") != null &&
@@ -87,7 +86,6 @@ public class BookServlet extends HttpServlet {
             String review = request.getParameter("review");
             int yearEdition = Integer.parseInt(request.getParameter("yearEdition"));
             int numberPages = Integer.parseInt(request.getParameter("numberPages"));
-            int copies = Integer.parseInt(request.getParameter("copies"));
             double price = Double.parseDouble(request.getParameter("price"));
             int authorId = Integer.parseInt(request.getParameter("author"));
             int publisherId = Integer.parseInt(request.getParameter("publisher"));
@@ -99,7 +97,6 @@ public class BookServlet extends HttpServlet {
             savedBook.setReview(review);
             savedBook.setYearEdition(yearEdition);
             savedBook.setNumberPages(numberPages);
-            savedBook.setCopies(copies);
             savedBook.setPrice(price);
             savedBook.setAuthor(new Author());
             savedBook.getAuthor().setAuthorId(authorId);

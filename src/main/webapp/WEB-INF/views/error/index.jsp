@@ -33,7 +33,7 @@
                 <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Página no encontrada.</h3>
                 <p>
                     No pudimos encontrar la página que estabas buscando.
-                    Mientras tanto, puedes volver al panel de <a href="${contextPath}/admincrud/dashboard">inicio</a> o intentar usar el formulario de búsqueda.
+                    Mientras tanto, puedes volver al <a href="${contextPath}/admincrud/dashboard">panel de inicio</a> o intentar usar el formulario de búsqueda.
                 </p>
                 <form class="search-form">
                     <div class="input-group">

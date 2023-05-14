@@ -3,8 +3,12 @@ package pe.edu.unprg.javaee.cruddemo.service.impl;
 import pe.edu.unprg.javaee.cruddemo.dao.UserDAO;
 import pe.edu.unprg.javaee.cruddemo.dao.impl.UserDAOImpl;
 import pe.edu.unprg.javaee.cruddemo.exception.DAOException;
+import pe.edu.unprg.javaee.cruddemo.model.Genre;
+import pe.edu.unprg.javaee.cruddemo.model.Menu;
 import pe.edu.unprg.javaee.cruddemo.model.User;
 import pe.edu.unprg.javaee.cruddemo.service.UserService;
+
+import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
@@ -26,6 +30,17 @@ public class UserServiceImpl implements UserService {
         User result;
         try {
             result =  userDAO.authenticateUser(email, password);
+        } catch (DAOException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Menu> findNavMenuByRole(String roleType) {
+        List<Menu> result;
+        try {
+            result = userDAO.findNavMenuByRole(roleType);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }

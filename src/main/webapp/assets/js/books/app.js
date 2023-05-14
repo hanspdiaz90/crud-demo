@@ -103,7 +103,6 @@ $(function () {
                 publisher: {required: true },
                 genre: {required: true },
                 numberPages: { required: true },
-                copies: { required: true },
                 price: { required: true },
                 review: { required: true }
             },
@@ -116,7 +115,7 @@ $(function () {
                     data: formData,
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.success === true) {
+                        if (response.success) {
                             $(form).trigger("reset");
                             $("#authorAddModal").modal("hide");
                             $("#authorsDataTable").DataTable().ajax.reload(null, false);
@@ -153,7 +152,7 @@ function viewDetailsBook(button) {
         data: { bookId: bookId },
         dataType: "JSON",
         success: function (response) {
-            if (response.success === true) {
+            if (response.success) {
                 let bookObj = response.result;
                 let classNameBadge = bookObj.active ? "success" : "danger";
                 let classNameIcon = bookObj.active ? "check" : "times";
@@ -174,8 +173,6 @@ function viewDetailsBook(button) {
                     elementHTML += "<dd>" + bookObj.publisher.name + "</dd>";
                     elementHTML += "<dt>Género Literario</dt>";
                     elementHTML += "<dd>" + bookObj.genre.name + "</dd>";
-                    elementHTML += "<dt>Precio</dt>";
-                    elementHTML += "<dd>" + bookObj.price + "</dd>";
                     elementHTML += "<dt>Activo?</dt>";
                     elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText+ "</span></dd>";
                     elementHTML += "</dl>";
@@ -206,7 +203,7 @@ function disableBook(button) {
                 data: { bookId: bookId },
                 dataType: "JSON",
                 success: function (response) {
-                    if (response.success === true) {
+                    if (response.success) {
                         $("#gendersDataTable").DataTable().ajax.reload(null, false);
                         Swal.fire("Deshabilitado!", response.message, response.status);
                     }
