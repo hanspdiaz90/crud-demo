@@ -2,6 +2,9 @@ package pe.edu.unprg.javaee.cruddemo.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class Menu {
 
@@ -13,5 +16,6 @@ public class Menu {
     private int parentId;
     private int sortOrder;
     private boolean active;
+    private List<Menu> children = new ArrayList<>();
 
 }

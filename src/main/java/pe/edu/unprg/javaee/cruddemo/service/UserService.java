@@ -9,6 +9,6 @@ public interface UserService {
 
     boolean createUser(User user);
     User authenticateUser(String email, String password);
-    List<Menu> findNavMenuByRole(String roleType);
+    List<Menu> findAllMenuByRole(String roleType);
 
 }

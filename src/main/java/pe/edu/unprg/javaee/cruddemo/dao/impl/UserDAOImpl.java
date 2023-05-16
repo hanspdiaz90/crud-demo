@@ -64,7 +64,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<Menu> findNavMenuByRole(String roleType) throws DAOException {
+    public List<Menu> findAllMenuByRole(String roleType) throws DAOException {
         List<Menu> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(UserQuery.SP_FIND_MENU_BY_ROLE)) {
@@ -73,13 +73,13 @@ public class UserDAOImpl implements UserDAO {
             result = new ArrayList<>();
             while (rs.next()) {
                 Menu menu = new Menu();
+                menu.setMenuId(rs.getInt("menu_id"));
                 menu.setTitle(rs.getString("title"));
                 menu.setModule(rs.getString("module"));
                 menu.setIcon(rs.getString("icon"));
                 menu.setRoute(rs.getString("route"));
                 menu.setParentId(rs.getInt("parent_id"));
                 menu.setSortOrder(rs.getInt("sort_order"));
-                menu.setActive(rs.getBoolean("is_active"));
                 result.add(menu);
             }
         } catch (SQLException ex) {

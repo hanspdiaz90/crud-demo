@@ -41,14 +41,14 @@ public class LoginServlet extends HttpServlet {
             User foundUser = userService.authenticateUser(email, password);
             if (foundUser != null) {
                 String role = foundUser.getRole().getRoleType().name();
-                List<Menu> navs = userService.findNavMenuByRole(role);
+                List<Menu> menu = userService.findAllMenuByRole(role);
                 HttpSession session = request.getSession();
                 String url = "/admincrud/dashboard";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
                 json.addProperty("url", url);
                 session.setAttribute("loggedUser", foundUser);
-                session.setAttribute("navsUser", navs);
+                session.setAttribute("navUser", menu);
                 JSONResponse.writeFromServlet(response, json);
 
             } else {

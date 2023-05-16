@@ -10,6 +10,6 @@ public interface UserDAO {
 
     boolean createUser(User user) throws DAOException;
     User authenticateUser(String email, String password) throws DAOException;
-    List<Menu> findNavMenuByRole(String roleType) throws DAOException;
+    List<Menu> findAllMenuByRole(String roleType) throws DAOException;
 
 }
