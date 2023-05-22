@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Menu {
+public class MenuPermission {
 
     private Integer menuId;
     private String title;
@@ -15,7 +15,11 @@ public class Menu {
     private String route;
     private Integer parentId;
     private Integer order;
+    private Integer level;
+    private boolean read;
+    private boolean write;
+    private boolean delete;
     private boolean active;
-    private List<Menu> children = new ArrayList<>();
+    List<MenuPermission> children = new ArrayList<>();
 
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Permission {
 
-    private int permissionId;
+    private Integer permissionId;
     private Role role;
     private Menu menu;
     private boolean read;

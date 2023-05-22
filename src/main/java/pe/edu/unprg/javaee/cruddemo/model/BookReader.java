@@ -1,20 +1,20 @@
 package pe.edu.unprg.javaee.cruddemo.model;
 
 import lombok.Data;
-import pe.edu.unprg.javaee.cruddemo.utils.enums.ReaderType;
-import pe.edu.unprg.javaee.cruddemo.utils.enums.ReaderGender;
+import pe.edu.unprg.javaee.cruddemo.utils.enums.BookReaderType;
+import pe.edu.unprg.javaee.cruddemo.utils.enums.Gender;
 
 @Data
 public class BookReader {
 
-    private int userId;
-    private String dni;
+    private Integer userId;
+    private String nic;
     private String firstName;
     private String paternalSurname;
     private String maternalSurname;
     private String email;
-    ReaderType readerType;
-    ReaderGender readerGender;
+    BookReaderType readerType;
+    Gender gender;
     private String cellphone;
     private String phone;
     private boolean active;

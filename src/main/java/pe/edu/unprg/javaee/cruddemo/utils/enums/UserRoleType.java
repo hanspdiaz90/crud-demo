@@ -1,15 +1,16 @@
 package pe.edu.unprg.javaee.cruddemo.utils.enums;
 
-public enum ReaderGender {
+public enum UserRoleType {
 
-    MALE(1),
-    FEMALE(2),
-    BINARY(3),
-    OTHERS(4);
+    ADMIN(1),
+    EDITOR(2),
+    USER(3),
+    REPORT(4),
+    GUEST(5);
 
     private final int statusId;
 
-    ReaderGender(int statusId) {
+    UserRoleType(int statusId) {
         this.statusId = statusId;
     }
 

@@ -5,14 +5,14 @@ import lombok.Data;
 @Data
 public class Book {
 
-    private int bookId;
+    private Integer bookId;
     private String isbn;
     private String title;
     private String coverImage;
     private String review;
-    private int yearEdition;
-    private int numberPages;
-    private double price;
+    private Integer yearEdition;
+    private Integer numberPages;
+    private Double price;
     private Author author;
     private Publisher publisher;
     private Genre genre;

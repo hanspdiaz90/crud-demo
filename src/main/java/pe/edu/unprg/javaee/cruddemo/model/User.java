@@ -6,7 +6,7 @@ import pe.edu.unprg.javaee.cruddemo.utils.enums.UserStatus;
 @Data
 public class User {
 
-    private int userId;
+    private Integer userId;
     private String username;
     private String email;
     private String password;

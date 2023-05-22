@@ -20,26 +20,24 @@
                      alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">
-                    <c:out value="${loggedUser.username}"/>
-                </a>
+                <a href="#" class="d-block"><c:out value="${loggedUser.username}"/></a>
             </div>
         </div>
         <c:if test="${fn:length(navUser) > 0}">
             <!-- Sidebar Menu -->
             <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview" role="menu"
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                     data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
-
                     <c:forEach var="nav" items="${navUser}">
                         <li class="nav-header">${"MÓDULO ".concat(nav.module)}</li>
                         <li class="nav-item">
                             <c:choose>
                                 <c:when test="${fn:length(nav.children) == 0}">
-                                    <a href="${not empty nav.route ? contextPath.concat(nav.route) : '#'}" class="nav-link">
-                                        <i class="${nav.icon}"></i>
+                                    <a href="${not empty nav.route ? contextPath.concat(nav.route) : '#'}"
+                                       class="nav-link">
+                                        <i class="nav-icon ${nav.icon}"></i>
                                         <p>${nav.title}</p>
                                     </a>
                                 </c:when>
@@ -65,7 +63,6 @@
                             </c:choose>
                         </li>
                     </c:forEach>
-
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->

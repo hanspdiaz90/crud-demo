@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Data
 public class Author {
 
-    private int authorId;
+    private Integer authorId;
     private String firstName;
     private String lastName;
     private String city;

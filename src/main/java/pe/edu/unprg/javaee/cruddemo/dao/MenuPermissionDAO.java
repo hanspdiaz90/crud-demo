@@ -7,9 +7,8 @@ import pe.edu.unprg.javaee.cruddemo.model.User;
 
 import java.util.List;
 
-public interface UserDAO {
+public interface MenuPermissionDAO {
 
-    boolean createUser(User user) throws DAOException;
-    User authenticateUser(String email, String password) throws DAOException;
+    List<MenuPermission> findAllMenuPermissionByRole(Integer roleId) throws DAOException;
 
 }
