@@ -104,7 +104,8 @@ public class PublisherServlet extends HttpServlet {
             JsonObject json = new JsonObject();
             JsonElement result = null;
             if (foundPublisher != null) {
-                result = this.gson.toJsonTree(foundPublisher);
+                Type publisherType = new TypeToken<Publisher>(){}.getType();
+                result = this.gson.toJsonTree(foundPublisher, publisherType);
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {

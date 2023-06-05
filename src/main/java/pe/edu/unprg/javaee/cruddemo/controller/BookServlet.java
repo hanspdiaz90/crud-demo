@@ -127,7 +127,8 @@ public class BookServlet extends HttpServlet {
             JsonObject json = new JsonObject();
             JsonElement result = null;
             if (foundBook != null) {
-                result = this.gson.toJsonTree(foundBook);
+                Type bookType = new TypeToken<Book>(){}.getType();
+                result = this.gson.toJsonTree(foundBook, bookType);
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {

@@ -1,7 +1,6 @@
 package pe.edu.unprg.javaee.cruddemo.controller;
 
 import com.google.gson.JsonObject;
-import pe.edu.unprg.javaee.cruddemo.model.Menu;
 import pe.edu.unprg.javaee.cruddemo.model.MenuPermission;
 import pe.edu.unprg.javaee.cruddemo.model.User;
 import pe.edu.unprg.javaee.cruddemo.service.UserService;
@@ -40,17 +39,15 @@ public class LoginServlet extends HttpServlet {
             String password = request.getParameter("password");
             User foundUser = userService.authenticateUser(email, password);
             if (foundUser != null) {
-                //String role = foundUser.getRole().getRoleType().name();
-                //List<Menu> menu = userService.findAllMenuByRole(role);
-                Integer roleId = foundUser.getRole().getRoleType().getStatusId();
-                List<MenuPermission> menu = userService.findAllMenuPermissionByRole(roleId);
+                Integer roleId = foundUser.getRole().getRoleType().getCode();
+                List<MenuPermission> menus = userService.findAllMenuPermissionByRole(roleId);
                 HttpSession session = request.getSession();
-                String url = menu.get(0).getRoute();
+                String url = menus.get(0).getMenu().getRoute();
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
                 json.addProperty("url", url);
                 session.setAttribute("loggedUser", foundUser);
-                session.setAttribute("navUser", menu);
+                session.setAttribute("navUser", menus);
                 JSONResponse.writeFromServlet(response, json);
             } else {
                 json.addProperty("success", false);

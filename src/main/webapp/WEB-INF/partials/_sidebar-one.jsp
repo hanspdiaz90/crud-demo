@@ -35,9 +35,8 @@
                         <li class="nav-item">
                             <c:choose>
                                 <c:when test="${fn:length(nav.children) == 0}">
-                                    <a href="${not empty nav.route ? contextPath.concat(nav.route) : '#'}"
-                                       class="nav-link">
-                                        <i class="nav-icon ${nav.icon}"></i>
+                                    <a href="${not empty nav.route ? contextPath.concat(nav.route) : '#'}" class="nav-link">
+                                        <i class="${nav.icon} nav-icon"></i>
                                         <p>${nav.title}</p>
                                     </a>
                                 </c:when>
@@ -50,12 +49,35 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        <c:forEach var="children" items="${nav.children}">
+                                        <c:forEach var="level" items="${nav.children}">
                                             <li class="nav-item">
-                                                <a href="${contextPath.concat(children.route)}" class="nav-link">
-                                                    <i class="${children.icon} nav-icon"></i>
-                                                    <p>${children.title}</p>
-                                                </a>
+                                                <c:choose>
+                                                    <c:when test="${fn:length(level.children) == 0}">
+                                                        <a href="${not empty level.route ? contextPath.concat(level.route) : '#'}" class="nav-link">
+                                                            <i class="${level.icon} nav-icon"></i>
+                                                            <p>${level.title}</p>
+                                                        </a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <a href="#" class="nav-link">
+                                                            <i class="${level.icon} nav-icon"></i>
+                                                            <p>${level.title}
+                                                                <i class="fas fa-angle-left right"></i>
+                                                                <span class="badge badge-info right">${fn:length(level.children)}</span>
+                                                            </p>
+                                                        </a>
+                                                        <ul class="nav nav-treeview">
+                                                            <c:forEach var="sublevel" items="${level.children}">
+                                                                <li class="nav-item">
+                                                                    <a href="${contextPath.concat(sublevel.route)}" class="nav-link">
+                                                                        <i class="${sublevel.icon} nav-icon"></i>
+                                                                        <p>${sublevel.title}</p>
+                                                                    </a>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </ul>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </li>
                                         </c:forEach>
                                     </ul>

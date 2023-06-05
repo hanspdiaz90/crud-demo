@@ -10,7 +10,6 @@ public interface UserService {
 
     boolean createUser(User user);
     User authenticateUser(String email, String password);
-    List<Menu> findAllMenuByRole(String roleType);
     List<MenuPermission> findAllMenuPermissionByRole(Integer roleId);
 
 }

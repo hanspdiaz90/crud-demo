@@ -2,18 +2,24 @@ package pe.edu.unprg.javaee.cruddemo.utils.enums;
 
 public enum UserStatus {
 
-    PENDING(1),
-    REGISTERED(2),
-    BLOCKED(3);
+    PENDING("PENDIENTE", 1),
+    REGISTERED("REGISTRADO", 2),
+    BLOCKED("BLOQUEADO", 3);
 
-    private final int statusId;
+    private final String value;
+    private final int code;
 
-    UserStatus(int statusId) {
-        this.statusId = statusId;
+    UserStatus(String value, int code) {
+        this.value = value;
+        this.code = code;
     }
 
-    public int getStatusId() {
-        return statusId;
+    public String getValue() {
+        return value;
+    }
+
+    public int getCode() {
+        return code;
     }
 
 }

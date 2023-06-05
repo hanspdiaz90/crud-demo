@@ -89,7 +89,8 @@ public class GenreServlet extends HttpServlet {
             JsonObject json = new JsonObject();
             JsonElement result = null;
             if (foundGenre != null) {
-                result = this.gson.toJsonTree(foundGenre);
+                Type genreType = new TypeToken<Genre>(){}.getType();
+                result = this.gson.toJsonTree(foundGenre, genreType);
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {

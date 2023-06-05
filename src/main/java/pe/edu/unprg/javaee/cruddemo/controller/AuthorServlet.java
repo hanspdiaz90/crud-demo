@@ -6,6 +6,7 @@ import pe.edu.unprg.javaee.cruddemo.model.Author;
 import pe.edu.unprg.javaee.cruddemo.service.AuthorService;
 import pe.edu.unprg.javaee.cruddemo.service.impl.AuthorServiceImpl;
 import pe.edu.unprg.javaee.cruddemo.utils.JSONResponse;
+import pe.edu.unprg.javaee.cruddemo.utils.LocalDateTypeAdapter;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -21,7 +22,11 @@ public class AuthorServlet extends HttpServlet {
 
     private final AuthorService authorService = new AuthorServiceImpl();
     private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/authors/index.jsp";
-    private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+    private final Gson gson = new GsonBuilder()
+            .serializeNulls()
+            .setPrettyPrinting()
+            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+            .create();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -96,7 +101,8 @@ public class AuthorServlet extends HttpServlet {
             JsonObject json = new JsonObject();
             JsonElement result = null;
             if (foundAuthor != null) {
-                result = this.gson.toJsonTree(foundAuthor);
+                Type authorType = new TypeToken<Author>(){}.getType();
+                result = this.gson.toJsonTree(foundAuthor, authorType);
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {

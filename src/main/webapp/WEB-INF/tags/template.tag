@@ -20,7 +20,7 @@
             <jsp:include page="/WEB-INF/partials/_navbar.jsp"/>
             <!-- /.navbar -->
             <!-- Main Sidebar Container -->
-            <jsp:include page="/WEB-INF/partials/_sidebar.jsp"/>
+            <jsp:include page="/WEB-INF/partials/_sidebar-two.jsp"/>
             <!-- /.main-sidebar -->
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">

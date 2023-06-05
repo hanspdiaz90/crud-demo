@@ -8,13 +8,7 @@ import java.util.List;
 @Data
 public class MenuPermission {
 
-    private Integer menuId;
-    private String title;
-    private String module;
-    private String icon;
-    private String route;
-    private Integer parentId;
-    private Integer order;
+    private Menu menu;
     private Integer level;
     private boolean read;
     private boolean write;

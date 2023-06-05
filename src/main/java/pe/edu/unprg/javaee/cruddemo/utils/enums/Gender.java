@@ -7,14 +7,14 @@ public enum Gender {
     BINARY(3),
     OTHERS(4);
 
-    private final int statusId;
+    private final int code;
 
-    Gender(int statusId) {
-        this.statusId = statusId;
+    Gender(int code) {
+        this.code = code;
     }
 
-    public int getStatusId() {
-        return statusId;
+    public int getCode() {
+        return code;
     }
 
 }

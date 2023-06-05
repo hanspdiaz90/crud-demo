@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -53,7 +54,11 @@ public class UserDAOImpl implements UserDAO {
 
                 Role role = new Role();
                 role.setRoleId(rs.getInt("role_id"));
-                role.setRoleType(UserRoleType.valueOf(rs.getString("role_type")));
+                String roleType = rs.getString("role_type");
+                role.setRoleType(Stream.of(UserRoleType.values())
+                        .filter(roleAttribute -> roleAttribute.getValue().equals(roleType))
+                        .findFirst()
+                        .get());
                 role.setRoot(rs.getBoolean("is_root"));
 
                 user.setRole(role);

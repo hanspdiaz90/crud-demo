@@ -5,14 +5,14 @@ public enum BookReaderType {
     STUDENT(1),
     TEACHER(2);
 
-    private final int statusId;
+    private final int code;
 
-    BookReaderType(int statusId) {
-        this.statusId = statusId;
+    BookReaderType(int code) {
+        this.code = code;
     }
 
-    public int getStatusId() {
-        return statusId;
+    public int getCode() {
+        return code;
     }
 
 }

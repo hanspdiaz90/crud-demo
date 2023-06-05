@@ -71,7 +71,7 @@ function viewDetailsAuthor(button) {
                 elementHTML += "<dt>Autor</dt>";
                 elementHTML += "<dd>" + authorObj.firstName + " " + authorObj.lastName + "</dd>";
                 elementHTML += "<dt>Ciudad, Año de Nacimiento</dt>";
-                elementHTML += "<dd>" + authorObj.city + ", " + authorObj.dob.year + "</dd>";
+                elementHTML += "<dd>" + authorObj.city + ", " + new Date(authorObj.dob).getFullYear() + "</dd>";
                 elementHTML += "<dt>Activo?</dt>";
                 elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText + "</span></dd>";
                 elementHTML += "</dl>";
@@ -130,7 +130,7 @@ function getAllAuthors() {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.city + ", " + row.dob.year;
+                    return row.city + ", " + new Date(row.dob).getFullYear();
                 }
             },
             {
