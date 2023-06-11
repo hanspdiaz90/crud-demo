@@ -3,8 +3,6 @@ package pe.edu.unprg.javaee.cruddemo.dao.impl;
 import pe.edu.unprg.javaee.cruddemo.dao.UserDAO;
 import pe.edu.unprg.javaee.cruddemo.dao.query.UserQuery;
 import pe.edu.unprg.javaee.cruddemo.exception.DAOException;
-import pe.edu.unprg.javaee.cruddemo.model.Menu;
-import pe.edu.unprg.javaee.cruddemo.model.MenuPermission;
 import pe.edu.unprg.javaee.cruddemo.model.Role;
 import pe.edu.unprg.javaee.cruddemo.model.User;
 import pe.edu.unprg.javaee.cruddemo.utils.DatabaseHandler;
@@ -14,8 +12,6 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class UserDAOImpl implements UserDAO {
@@ -51,16 +47,14 @@ public class UserDAOImpl implements UserDAO {
                 user = new User();
                 user.setEmail(rs.getString("email"));
                 user.setUsername(rs.getString("username"));
-
                 Role role = new Role();
                 role.setRoleId(rs.getInt("role_id"));
                 String roleType = rs.getString("role_type");
                 role.setRoleType(Stream.of(UserRoleType.values())
-                        .filter(roleAttribute -> roleAttribute.getValue().equals(roleType))
+                        .filter(userRoleType -> userRoleType.getKey().equals(roleType))
                         .findFirst()
                         .get());
                 role.setRoot(rs.getBoolean("is_root"));
-
                 user.setRole(role);
                 user.setActive(rs.getBoolean("is_active"));
             }

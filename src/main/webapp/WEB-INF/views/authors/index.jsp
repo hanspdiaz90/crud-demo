@@ -100,5 +100,7 @@
             });
         </script>
         <script src="${contextPath}/assets/js/authors/app.js"></script>
+        <script src="${contextPath}/assets/js/dashboard/app.js"></script>
+        <script src="${contextPath}/assets/js/nav-sidebar-active.js"></script>
     </jsp:attribute>
 </tm:template>

@@ -8,20 +8,20 @@ public enum UserRoleType {
     REPORTS("REPORTES", 4),
     GUEST("INVITADO", 5);
 
-    private final String value;
-    private final int code;
+    private final String key;
+    private final int value;
 
-    UserRoleType(String value, int code) {
+    UserRoleType(String key, int value) {
+        this.key = key;
         this.value = value;
-        this.code = code;
     }
 
-    public String getValue() {
+    public String getKey() {
+        return key;
+    }
+
+    public int getValue() {
         return value;
-    }
-
-    public int getCode() {
-        return code;
     }
 
 }

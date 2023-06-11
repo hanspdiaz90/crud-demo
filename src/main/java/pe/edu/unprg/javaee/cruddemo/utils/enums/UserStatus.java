@@ -6,20 +6,20 @@ public enum UserStatus {
     REGISTERED("REGISTRADO", 2),
     BLOCKED("BLOQUEADO", 3);
 
-    private final String value;
-    private final int code;
+    private final String key;
+    private final int value;
 
-    UserStatus(String value, int code) {
+    UserStatus(String key, int value) {
+        this.key = key;
         this.value = value;
-        this.code = code;
     }
 
-    public String getValue() {
+    public String getKey() {
+        return key;
+    }
+
+    public int getValue() {
         return value;
-    }
-
-    public int getCode() {
-        return code;
     }
 
 }

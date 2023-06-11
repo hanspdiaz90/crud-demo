@@ -10,9 +10,12 @@ import pe.edu.unprg.javaee.cruddemo.service.BookService;
 import pe.edu.unprg.javaee.cruddemo.service.impl.BookServiceImpl;
 import pe.edu.unprg.javaee.cruddemo.utils.JSONResponse;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;

@@ -11,6 +11,7 @@ import java.io.IOException;
 @WebServlet(name = "dashboardServlet", urlPatterns = "/admincrud/dashboard")
 public class DashboardServlet extends HttpServlet {
 
+    //private final MenuPermissionService menuPermissionService = new MenuPermissionServiceImpl();
     private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/dashboard/index.jsp";
 
     @Override
@@ -24,6 +25,12 @@ public class DashboardServlet extends HttpServlet {
     }
 
     private void mainAction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        /*
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loggedUser");
+        List<MenuPermission> menus = menuPermissionService.findAllMenuPermissionByRole(user.getRole().getRoleId());
+        request.setAttribute("navUser", menus);
+        */
         RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_TEMPLATE_PATH);
         dispatcher.forward(request, response);
     }

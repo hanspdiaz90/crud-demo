@@ -1,7 +1,6 @@
 package pe.edu.unprg.javaee.cruddemo.controller;
 
 import com.google.gson.JsonObject;
-import pe.edu.unprg.javaee.cruddemo.model.MenuPermission;
 import pe.edu.unprg.javaee.cruddemo.model.User;
 import pe.edu.unprg.javaee.cruddemo.service.UserService;
 import pe.edu.unprg.javaee.cruddemo.service.impl.UserServiceImpl;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet(name = "loginServlet", urlPatterns = "/admincrud/login")
 public class LoginServlet extends HttpServlet {
@@ -39,15 +37,15 @@ public class LoginServlet extends HttpServlet {
             String password = request.getParameter("password");
             User foundUser = userService.authenticateUser(email, password);
             if (foundUser != null) {
-                Integer roleId = foundUser.getRole().getRoleType().getCode();
-                List<MenuPermission> menus = userService.findAllMenuPermissionByRole(roleId);
+                //obtener el menu para obtener el DASHBOARD
                 HttpSession session = request.getSession();
-                String url = menus.get(0).getMenu().getRoute();
+                //String url = myVariale;
+                String url = "/admincrud/dashboard";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
                 json.addProperty("url", url);
                 session.setAttribute("loggedUser", foundUser);
-                session.setAttribute("navUser", menus);
+                session.setAttribute("loggedIn", true);
                 JSONResponse.writeFromServlet(response, json);
             } else {
                 json.addProperty("success", false);

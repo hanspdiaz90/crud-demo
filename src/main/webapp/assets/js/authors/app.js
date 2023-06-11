@@ -9,10 +9,10 @@ $(function () {
     $("#btnAdd").click(function () {
         $("#authorAddForm").validate({
             rules: {
-                firstName: { required: true, minlength: 3 },
-                lastName: { required: true, minlength: 3 },
-                city: { required: true, minlength: 3 },
-                dob: { required: true }
+                firstName: {required: true, minlength: 3},
+                lastName: {required: true, minlength: 3},
+                city: {required: true, minlength: 3},
+                dob: {required: true}
             },
             submitHandler: function (form) {
                 let url = contextPath + "/admincrud/autores?accion=crear";
@@ -57,7 +57,7 @@ function viewDetailsAuthor(button) {
     $.ajax({
         url: url,
         method: "GET",
-        data: { authorId: authorId },
+        data: {authorId: authorId},
         dataType: "JSON",
         success: function (response) {
             if (response.success) {
@@ -99,7 +99,7 @@ function disableAuthor(button) {
             $.ajax({
                 url: url,
                 method: "GET",
-                data: { authorId: authorId },
+                data: {authorId: authorId},
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
@@ -165,8 +165,9 @@ function getAllAuthors() {
     table.on("draw", function () {
         $("[data-tooltip='tooltip']").tooltip();
     });
+}
 
-    // function changeStatusAuthor(button) {
+// function changeStatusAuthor(button) {
 //     let active = $(button).data("authorStatus");
 //     Swal.fire({
 //         title: (active ? "¿Estás seguro que quieres dar de baja al autor?" : "¿Estás seguro que quieres dar de alta al autor?"),
@@ -198,5 +199,3 @@ function getAllAuthors() {
 //         }
 //     });
 // }
-
-}
