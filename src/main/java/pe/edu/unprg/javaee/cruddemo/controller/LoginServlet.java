@@ -37,9 +37,7 @@ public class LoginServlet extends HttpServlet {
             String password = request.getParameter("password");
             User foundUser = userService.authenticateUser(email, password);
             if (foundUser != null) {
-                //obtener el menu para obtener el DASHBOARD
                 HttpSession session = request.getSession();
-                //String url = myVariale;
                 String url = "/admincrud/dashboard";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");

@@ -12,10 +12,12 @@
         <!-- SweetAlert2 -->
         <link rel="stylesheet" href="${contextPath}/assets/plugins/sweetalert2/sweetalert2.min.css">
         <!-- Tempusdominus Bootstrap 4 -->
-        <link rel="stylesheet" href="${contextPath}/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+        <link rel="stylesheet"
+              href="${contextPath}/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
         <!-- DataTables -->
         <link rel="stylesheet" href="${contextPath}/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-        <link rel="stylesheet" href="${contextPath}/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+        <link rel="stylesheet"
+              href="${contextPath}/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     </jsp:attribute>
     <jsp:attribute name="breadcrumb">
         <div class="container-fluid">
@@ -99,6 +101,7 @@
                 });
             });
         </script>
+        <script src="${contextPath}/assets/js/menu/menu-recursive.js"></script>
         <script src="${contextPath}/assets/js/authors/app.js"></script>
     </jsp:attribute>
 </tm:template>

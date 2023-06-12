@@ -41,22 +41,24 @@ public class MenuPermissionServlet extends HttpServlet {
     }
 
     private void listNavigationMenuByRoleAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        JsonObject json = new JsonObject();
-        JsonArray data = null;
-        Integer roleId = Integer.parseInt(request.getParameter("roleId"));
-        List<MenuPermission> menus = menuPermissionService.findAllMenuPermissionByRole(roleId);
-        if (menus != null) {
-            Type menuPermissionType = new TypeToken<List<MenuPermission>>(){}.getType();
-            JsonElement result = this.gson.toJsonTree(menus, menuPermissionType);
-            data = result.getAsJsonArray();
-            json.addProperty("success", true);
-            json.addProperty("status", "success");
-        } else {
-            json.addProperty("success", false);
-            json.addProperty("status", "failure");
+        if (request.getParameter("roleId") != null) {
+            Integer roleId = Integer.parseInt(request.getParameter("roleId"));
+            List<MenuPermission> menus = menuPermissionService.findAllMenuPermissionByRole(roleId);
+            JsonObject json = new JsonObject();
+            JsonArray data = null;
+            if (menus != null) {
+                Type menuPermissionType = new TypeToken<List<MenuPermission>>(){}.getType();
+                JsonElement result = this.gson.toJsonTree(menus, menuPermissionType);
+                data = result.getAsJsonArray();
+                json.addProperty("success", true);
+                json.addProperty("status", "success");
+            } else {
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
+            }
+            json.add("result", data);
+            JSONResponse.writeFromServlet(response, json);
         }
-        json.add("result", data);
-        JSONResponse.writeFromServlet(response, json);
     }
 
 }

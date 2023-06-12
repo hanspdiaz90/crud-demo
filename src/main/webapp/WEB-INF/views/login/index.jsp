@@ -72,6 +72,7 @@
     </div>
 </div>
 <!-- /.login-box -->
+<script>let contextPathLogin = "${contextPath}";</script>
 <!-- jQuery -->
 <script src="${contextPath}/assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -84,7 +85,6 @@
 <!-- AdminLTE App -->
 <script src="${contextPath}/assets/dist/js/adminlte.min.js"></script>
 <!-- CustomJS -->
-<script>let contextPathLogin = "${contextPath}";</script>
 <script src="${contextPath}/assets/js/login/app.js"></script>
 </body>
 </html>

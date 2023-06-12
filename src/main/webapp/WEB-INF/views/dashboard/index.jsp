@@ -102,5 +102,6 @@
     </jsp:attribute>
     <jsp:attribute name="javascript">
         <jsp:include page="/WEB-INF/partials/_javascript.jsp"/>
+        <script src="${contextPath}/assets/js/menu/menu-recursive.js"></script>
     </jsp:attribute>
 </mt:template>
