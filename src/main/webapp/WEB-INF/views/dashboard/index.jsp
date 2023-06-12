@@ -102,8 +102,5 @@
     </jsp:attribute>
     <jsp:attribute name="javascript">
         <jsp:include page="/WEB-INF/partials/_javascript.jsp"/>
-        <!-- CustomJS -->
-        <script src="${contextPath}/assets/js/dashboard/app.js"></script>
-        <script src="${contextPath}/assets/js/nav-sidebar-active.js"></script>
     </jsp:attribute>
 </mt:template>

@@ -1,7 +1,5 @@
 $(function () {
-
     getNavigationMenu(roleId);
-
 });
 
 function getNavigationMenu(sessionRoleId) {

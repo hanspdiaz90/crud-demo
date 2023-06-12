@@ -90,7 +90,5 @@
         <script src="${contextPath}/assets/js/default-datatable.js"></script>
         <script src="${contextPath}/assets/js/default-validation-bs4.js"></script>
         <script src="${contextPath}/assets/js/books/app.js"></script>
-        <script src="${contextPath}/assets/js/dashboard/app.js"></script>
-        <script src="${contextPath}/assets/js/nav-sidebar-active.js"></script>
     </jsp:attribute>
 </mt:template>
