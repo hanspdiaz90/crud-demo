@@ -10,8 +10,9 @@ public class MenuPermission {
 
     private Menu menu;
     private Integer level;
+    private boolean create;
     private boolean read;
-    private boolean write;
+    private boolean update;
     private boolean delete;
     private boolean active;
     List<MenuPermission> children = new ArrayList<>();

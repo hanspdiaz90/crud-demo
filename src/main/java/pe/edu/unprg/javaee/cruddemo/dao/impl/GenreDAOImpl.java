@@ -4,6 +4,7 @@ import pe.edu.unprg.javaee.cruddemo.dao.GenreDAO;
 import pe.edu.unprg.javaee.cruddemo.dao.query.GenreQuery;
 import pe.edu.unprg.javaee.cruddemo.model.Genre;
 import pe.edu.unprg.javaee.cruddemo.exception.DAOException;
+import pe.edu.unprg.javaee.cruddemo.utils.Constants;
 import pe.edu.unprg.javaee.cruddemo.utils.DatabaseHandler;
 
 import java.sql.CallableStatement;
@@ -66,8 +67,10 @@ public class GenreDAOImpl implements GenreDAO {
     public List<Genre> findAll() throws DAOException {
         List<Genre> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(GenreQuery.SP_FIND_ALL_GENRES);
-             ResultSet rs = cstmt.executeQuery()) {
+             CallableStatement cstmt = conn.prepareCall(GenreQuery.SP_FIND_ALL_GENRES)) {
+            cstmt.setString(1, Constants.DEFAULT_STRING);
+            cstmt.setInt(2, Constants.DEFAULT_INTEGER);
+            ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
                 Genre genre = new Genre();

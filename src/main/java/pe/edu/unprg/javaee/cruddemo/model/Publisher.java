@@ -9,9 +9,9 @@ public class Publisher {
     private String name;
     private String address;
     private String email;
-    private String webSite;
     private String phone;
     private String cellphone;
+    private String webSite;
     private boolean active;
 
 }

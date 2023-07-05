@@ -4,6 +4,7 @@ import pe.edu.unprg.javaee.cruddemo.dao.PublisherDAO;
 import pe.edu.unprg.javaee.cruddemo.dao.query.PublisherQuery;
 import pe.edu.unprg.javaee.cruddemo.model.Publisher;
 import pe.edu.unprg.javaee.cruddemo.exception.DAOException;
+import pe.edu.unprg.javaee.cruddemo.utils.Constants;
 import pe.edu.unprg.javaee.cruddemo.utils.DatabaseHandler;
 
 import java.sql.CallableStatement;
@@ -23,9 +24,9 @@ public class PublisherDAOImpl implements PublisherDAO {
             cstmt.setString(1, publisher.getName());
             cstmt.setString(2, publisher.getAddress());
             cstmt.setString(3, publisher.getEmail());
-            cstmt.setString(4, publisher.getWebSite());
-            cstmt.setString(5, publisher.getPhone());
-            cstmt.setString(6, publisher.getCellphone());
+            cstmt.setString(4, publisher.getPhone());
+            cstmt.setString(5, publisher.getCellphone());
+            cstmt.setString(6, publisher.getWebSite());
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + PublisherQuery.SP_CREATE_PUBLISHER, ex);
@@ -41,9 +42,9 @@ public class PublisherDAOImpl implements PublisherDAO {
             cstmt.setString(1, publisher.getName());
             cstmt.setString(2, publisher.getAddress());
             cstmt.setString(3, publisher.getEmail());
-            cstmt.setString(4, publisher.getWebSite());
-            cstmt.setString(5, publisher.getPhone());
-            cstmt.setString(6, publisher.getCellphone());
+            cstmt.setString(4, publisher.getPhone());
+            cstmt.setString(5, publisher.getCellphone());
+            cstmt.setString(6, publisher.getWebSite());
             cstmt.setBoolean(7, publisher.isActive());
             cstmt.setInt(8, publisher.getPublisherId());
             rowsUpdated = cstmt.executeUpdate() > 0;
@@ -66,9 +67,9 @@ public class PublisherDAOImpl implements PublisherDAO {
                 publisher.setName(rs.getString("name"));
                 publisher.setAddress(rs.getString("address"));
                 publisher.setEmail(rs.getString("email"));
-                publisher.setWebSite(rs.getString("web_site"));
                 publisher.setPhone(rs.getString("phone"));
                 publisher.setCellphone(rs.getString("cellphone"));
+                publisher.setWebSite(rs.getString("web_site"));
                 publisher.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
@@ -81,8 +82,10 @@ public class PublisherDAOImpl implements PublisherDAO {
     public List<Publisher> findAll() throws DAOException {
         List<Publisher> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_FIND_ALL_PUBLISHERS);
-             ResultSet rs = cstmt.executeQuery()) {
+             CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_FIND_ALL_PUBLISHERS)) {
+            cstmt.setString(1, Constants.DEFAULT_STRING);
+            cstmt.setInt(2, Constants.DEFAULT_INTEGER);
+            ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
                 Publisher publisher = new Publisher();
@@ -90,9 +93,9 @@ public class PublisherDAOImpl implements PublisherDAO {
                 publisher.setName(rs.getString("name"));
                 publisher.setAddress(rs.getString("address"));
                 publisher.setEmail(rs.getString("email"));
-                publisher.setWebSite(rs.getString("web_site"));
                 publisher.setPhone(rs.getString("phone"));
                 publisher.setCellphone(rs.getString("cellphone"));
+                publisher.setWebSite(rs.getString("web_site"));
                 publisher.setActive(rs.getBoolean("is_active"));
                 result.add(publisher);
             }

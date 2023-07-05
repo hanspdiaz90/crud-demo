@@ -40,8 +40,9 @@ public class MenuPermissionDAOImpl implements MenuPermissionDAO {
                 MenuPermission permission = new MenuPermission();
                 permission.setMenu(menu);
                 permission.setLevel(rs.getInt("level"));
+                permission.setCreate(rs.getBoolean("can_create"));
                 permission.setRead(rs.getBoolean("can_read"));
-                permission.setWrite(rs.getBoolean("can_write"));
+                permission.setUpdate(rs.getBoolean("can_update"));
                 permission.setDelete(rs.getBoolean("can_delete"));
                 result.add(permission);
             }

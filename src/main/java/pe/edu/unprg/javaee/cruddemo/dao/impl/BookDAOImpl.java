@@ -7,6 +7,7 @@ import pe.edu.unprg.javaee.cruddemo.model.Book;
 import pe.edu.unprg.javaee.cruddemo.model.Genre;
 import pe.edu.unprg.javaee.cruddemo.model.Publisher;
 import pe.edu.unprg.javaee.cruddemo.exception.DAOException;
+import pe.edu.unprg.javaee.cruddemo.utils.Constants;
 import pe.edu.unprg.javaee.cruddemo.utils.DatabaseHandler;
 
 import java.sql.CallableStatement;
@@ -131,8 +132,9 @@ public class BookDAOImpl implements BookDAO {
     public List<Author> findActiveAuthors(String filter) throws DAOException {
         List<Author> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_SEARCH_ACTIVE_AUTHORS)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_AUTHORS)) {
             cstmt.setString(1, filter);
+            cstmt.setInt(2, Constants.ACTIVE_INTEGER);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
@@ -144,7 +146,7 @@ public class BookDAOImpl implements BookDAO {
                 result.add(author);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_SEARCH_ACTIVE_AUTHORS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_AUTHORS, ex);
         }
         return result;
     }
@@ -153,8 +155,9 @@ public class BookDAOImpl implements BookDAO {
     public List<Publisher> findActivePublishers(String filter) throws DAOException {
         List<Publisher> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_SEARCH_ACTIVE_PUBLISHERS)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_PUBLISHERS)) {
             cstmt.setString(1, filter);
+            cstmt.setInt(2, Constants.ACTIVE_INTEGER);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
@@ -165,7 +168,7 @@ public class BookDAOImpl implements BookDAO {
                 result.add(publisher);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_SEARCH_ACTIVE_PUBLISHERS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_PUBLISHERS, ex);
         }
         return result;
     }
@@ -174,8 +177,9 @@ public class BookDAOImpl implements BookDAO {
     public List<Genre> findActiveGenres(String filter) throws DAOException {
         List<Genre> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_SEARCH_ACTIVE_GENRES)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_GENRES)) {
             cstmt.setString(1, filter);
+            cstmt.setInt(2, Constants.ACTIVE_INTEGER);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
@@ -186,7 +190,7 @@ public class BookDAOImpl implements BookDAO {
                 result.add(genre);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_SEARCH_ACTIVE_GENRES, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_GENRES, ex);
         }
         return result;
     }

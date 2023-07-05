@@ -4,6 +4,7 @@ import pe.edu.unprg.javaee.cruddemo.dao.AuthorDAO;
 import pe.edu.unprg.javaee.cruddemo.dao.query.AuthorQuery;
 import pe.edu.unprg.javaee.cruddemo.model.Author;
 import pe.edu.unprg.javaee.cruddemo.exception.DAOException;
+import pe.edu.unprg.javaee.cruddemo.utils.Constants;
 import pe.edu.unprg.javaee.cruddemo.utils.DatabaseHandler;
 import pe.edu.unprg.javaee.cruddemo.utils.JdbcUtils;
 
@@ -73,8 +74,10 @@ public class AuthorDAOImpl implements AuthorDAO {
     public List<Author> findAll() throws DAOException {
         List<Author> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_FIND_ALL_AUTHORS);
-             ResultSet rs = cstmt.executeQuery()) {
+             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_FIND_ALL_AUTHORS)) {
+            cstmt.setString(1, Constants.DEFAULT_STRING);
+            cstmt.setInt(2, Constants.DEFAULT_INTEGER);
+            ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
                 Author author = new Author();
