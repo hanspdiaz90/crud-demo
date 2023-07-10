@@ -89,7 +89,7 @@
         <!-- CustomJS -->
         <script src="${contextPath}/assets/js/default-datatable.js"></script>
         <script src="${contextPath}/assets/js/default-validation-bs4.js"></script>
-        <script src="${contextPath}/assets/js/menu/menu-recursive.js"></script>
+        <script src="${contextPath}/assets/js/nav-menu/recursive-menu.js"></script>
         <script src="${contextPath}/assets/js/books/app.js"></script>
     </jsp:attribute>
 </mt:template>

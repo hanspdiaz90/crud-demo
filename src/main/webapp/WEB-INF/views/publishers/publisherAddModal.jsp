@@ -18,7 +18,7 @@
                     </div>
                     <div class="form-group">
                         <label for="txtEmail">E-mail (*)</label>
-                        <input type="text" class="form-control" id="txtEmail" placeholder="e-mail" name="email">
+                        <input type="email" class="form-control" id="txtEmail" placeholder="e-mail" name="email">
                     </div>
                     <div class="form-group">
                         <label for="txtAddress">Dirección (*)</label>
@@ -27,7 +27,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtPhone">Teléfono</label>
-                            <input type="email" class="form-control" id="txtPhone" placeholder="Télefono" name="phone">
+                            <input type="text" class="form-control" id="txtPhone" placeholder="Télefono" name="phone">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtCellphone">Celular</label>

@@ -23,7 +23,7 @@ public class BookDAOImpl implements BookDAO {
     public boolean createBook(Book book) throws DAOException {
         boolean rowsInserted;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_CREATE_BOOK)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.INSERT_BOOK)) {
             cstmt.setString(1, book.getIsbn());
             cstmt.setString(2, book.getTitle());
             cstmt.setString(3, book.getCoverImage());
@@ -36,7 +36,7 @@ public class BookDAOImpl implements BookDAO {
             cstmt.setInt(10, book.getGenre().getGenreId());
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_CREATE_BOOK, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.INSERT_BOOK, ex);
         }
         return rowsInserted;
     }
@@ -45,7 +45,7 @@ public class BookDAOImpl implements BookDAO {
     public boolean editBook(Book book) throws DAOException {
         boolean rowsUpdated;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_EDIT_BOOK)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.UPDATE_BOOK)) {
             cstmt.setString(1, book.getIsbn());
             cstmt.setString(2, book.getTitle());
             cstmt.setString(3, book.getCoverImage());
@@ -60,7 +60,7 @@ public class BookDAOImpl implements BookDAO {
             cstmt.setInt(12, book.getBookId());
             rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_EDIT_BOOK, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.UPDATE_BOOK, ex);
         }
         return rowsUpdated;
     }
@@ -69,7 +69,7 @@ public class BookDAOImpl implements BookDAO {
     public Book findByBookId(int bookId) throws DAOException {
         Book book = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_BOOK_BY_ID)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_BOOK_BY_ID)) {
             cstmt.setInt(1, bookId);
             ResultSet rs = cstmt.executeQuery();
             if (rs.next()) {
@@ -92,7 +92,7 @@ public class BookDAOImpl implements BookDAO {
                 book.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_BOOK_BY_ID, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.FIND_BOOK_BY_ID, ex);
         }
         return book;
     }
@@ -101,7 +101,7 @@ public class BookDAOImpl implements BookDAO {
     public List<Book> findAll() throws DAOException {
         List<Book> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ALL_BOOKS);
+             CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_ALL_BOOKS);
              ResultSet rs = cstmt.executeQuery()) {
             result = new ArrayList<>();
             while (rs.next()) {
@@ -123,7 +123,7 @@ public class BookDAOImpl implements BookDAO {
                 result.add(book);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ALL_BOOKS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.FIND_ALL_BOOKS, ex);
         }
         return result;
     }
@@ -132,9 +132,9 @@ public class BookDAOImpl implements BookDAO {
     public List<Author> findActiveAuthors(String filter) throws DAOException {
         List<Author> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_AUTHORS)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_ACTIVE_AUTHORS)) {
             cstmt.setString(1, filter);
-            cstmt.setInt(2, Constants.ACTIVE_INTEGER);
+            cstmt.setBoolean(2, Constants.ACTIVE_BOOLEAN_PARAMETER);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
@@ -146,7 +146,7 @@ public class BookDAOImpl implements BookDAO {
                 result.add(author);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_AUTHORS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.FIND_ACTIVE_AUTHORS, ex);
         }
         return result;
     }
@@ -155,9 +155,9 @@ public class BookDAOImpl implements BookDAO {
     public List<Publisher> findActivePublishers(String filter) throws DAOException {
         List<Publisher> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_PUBLISHERS)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_ACTIVE_PUBLISHERS)) {
             cstmt.setString(1, filter);
-            cstmt.setInt(2, Constants.ACTIVE_INTEGER);
+            cstmt.setBoolean(2, Constants.ACTIVE_BOOLEAN_PARAMETER);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
@@ -168,7 +168,7 @@ public class BookDAOImpl implements BookDAO {
                 result.add(publisher);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_PUBLISHERS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.FIND_ACTIVE_PUBLISHERS, ex);
         }
         return result;
     }
@@ -177,9 +177,9 @@ public class BookDAOImpl implements BookDAO {
     public List<Genre> findActiveGenres(String filter) throws DAOException {
         List<Genre> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_FIND_ACTIVE_GENRES)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_ACTIVE_GENRES)) {
             cstmt.setString(1, filter);
-            cstmt.setInt(2, Constants.ACTIVE_INTEGER);
+            cstmt.setBoolean(2, Constants.ACTIVE_BOOLEAN_PARAMETER);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
@@ -190,7 +190,7 @@ public class BookDAOImpl implements BookDAO {
                 result.add(genre);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_FIND_ACTIVE_GENRES, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.FIND_ACTIVE_GENRES, ex);
         }
         return result;
     }
@@ -199,11 +199,11 @@ public class BookDAOImpl implements BookDAO {
     public boolean disableByBookId(int bookId) throws DAOException {
         boolean rowsAffected;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.SP_DISABLE_BOOK_BY_ID)) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.DISABLE_BOOK_BY_ID)) {
             cstmt.setInt(1, bookId);
             rowsAffected = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.SP_DISABLE_BOOK_BY_ID, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + BookQuery.DISABLE_BOOK_BY_ID, ex);
         }
         return rowsAffected;
     }

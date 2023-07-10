@@ -1,12 +1,18 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib prefix="tm" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <c:set var="loggedUser" value="${sessionScope.loggedUser}"/>
-<c:if test="${empty loggedUser}">
-    <c:redirect url="/"></c:redirect>
-</c:if>
-<mt:template tittle="DemoCRUD | Editoriales">
+<%
+    response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Cache-Control", "no-store");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+    if(session.getAttribute("loggedUser") == null) {
+        response.sendRedirect(request.getContextPath() + "/");
+    }
+%>
+<tm:template tittle="DemoCRUD | Módulos">
     <jsp:attribute name="head">
         <jsp:include page="/WEB-INF/partials/_head.jsp"/>
         <!-- SweetAlert2 -->
@@ -19,12 +25,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Editoriales</h1>
+                    <h1>Módulos</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="${contextPath}/admincrud/dashboard">Inicio</a></li>
-                        <li class="breadcrumb-item active">Editoriales</li>
+                        <li class="breadcrumb-item active">Módulos</li>
                     </ol>
                 </div>
             </div>
@@ -44,8 +50,7 @@
                                     <i class="fas fa-clipboard-list"></i> ${cardTitle}
                                 </h3>
                                 <button type="button" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#publisherAddModal"
-                                        data-tooltip="tooltip" data-placement="left" title="Añadir nueva editorial">
+                                        data-toggle="modal" data-target="#moduleAddModal" data-tooltip="tooltip" data-placement="left" title="Añadir módulo">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -53,7 +58,7 @@
                         <!-- /.card-header -->
                         <!-- Card Body -->
                         <div class="card-body">
-                            <jsp:include page="publishersDataTable.jsp"/>
+                            <jsp:include page="modulesDataTable.jsp"/>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -62,11 +67,14 @@
             </div>
         </div>
         <!-- /.container-fluid -->
-        <!-- #addNewAuthorModal -->
-        <jsp:include page="publisherAddModal.jsp"/>
-        <!-- /.modal (Add New Modal)-->
-        <!-- #viewDetailsAuthorModal -->
-        <jsp:include page="publisherViewModal.jsp"/>
+        <!-- #authorAddModal -->
+        <jsp:include page="moduleAddModal.jsp"/>
+        <!-- /.modal (Add Modal)-->
+        <!-- #authorEditModal -->
+<%--        <jsp:include page="authorEditModal.jsp"/>--%>
+        <!-- /.modal (Edit Modal)-->
+        <!-- #authorViewModal -->
+        <jsp:include page="moduleViewModal.jsp"/>
         <!-- /.modal (View Details Modal)-->
     </jsp:attribute>
     <jsp:attribute name="javascript">
@@ -85,6 +93,6 @@
         <script src="${contextPath}/assets/js/default-datatable.js"></script>
         <script src="${contextPath}/assets/js/default-validation-bs4.js"></script>
         <script src="${contextPath}/assets/js/nav-menu/recursive-menu.js"></script>
-        <script src="${contextPath}/assets/js/publishers/app.js"></script>
+        <script src="${contextPath}/assets/js/modules/app.js"></script>
     </jsp:attribute>
-</mt:template>
+</tm:template>

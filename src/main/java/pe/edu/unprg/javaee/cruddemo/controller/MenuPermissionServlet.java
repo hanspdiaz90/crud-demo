@@ -27,20 +27,20 @@ public class MenuPermissionServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.doPost(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("accion") == null ? "index" : request.getParameter("accion");
+        String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
-            case "listarMenuNavegacion":
-                listNavigationMenuByRoleAction(request, response);
+            case "getNavigationMenuByRole":
+                getNavigationMenuByRoleAction(request, response);
                 break;
         }
     }
 
-    private void listNavigationMenuByRoleAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doGet(request, response);
+    }
+
+    private void getNavigationMenuByRoleAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("roleId") != null) {
             Integer roleId = Integer.parseInt(request.getParameter("roleId"));
             List<MenuPermission> menus = menuPermissionService.findAllMenuPermissionByRole(roleId);

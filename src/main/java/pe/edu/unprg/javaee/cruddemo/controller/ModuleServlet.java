@@ -2,9 +2,9 @@ package pe.edu.unprg.javaee.cruddemo.controller;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import pe.edu.unprg.javaee.cruddemo.model.Publisher;
-import pe.edu.unprg.javaee.cruddemo.service.PublisherService;
-import pe.edu.unprg.javaee.cruddemo.service.impl.PublisherServiceImpl;
+import pe.edu.unprg.javaee.cruddemo.model.Module;
+import pe.edu.unprg.javaee.cruddemo.service.ModuleService;
+import pe.edu.unprg.javaee.cruddemo.service.impl.ModuleServiceImpl;
 import pe.edu.unprg.javaee.cruddemo.utils.JSONResponse;
 
 import javax.servlet.RequestDispatcher;
@@ -17,12 +17,15 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-@WebServlet(name = "publisherServlet", urlPatterns = "/admincrud/editoriales")
-public class PublisherServlet extends HttpServlet {
+@WebServlet(name = "moduleServlet", urlPatterns = "/admincrud/modulos")
+public class ModuleServlet extends HttpServlet {
 
-    private final PublisherService publisherService = new PublisherServiceImpl();
-    private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/publishers/index.jsp";
-    private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+    private final ModuleService moduleService = new ModuleServiceImpl();
+    private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/modules/index.jsp";
+    private final Gson gson = new GsonBuilder()
+            .serializeNulls()
+            .setPrettyPrinting()
+            .create();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,34 +62,24 @@ public class PublisherServlet extends HttpServlet {
         }
     }
 
-    private void mainAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("cardTitle", "Listado de editoriales");
+    private void mainAction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.setAttribute("cardTitle", "Listado de módulos");
         RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_TEMPLATE_PATH);
         dispatcher.forward(request, response);
     }
 
     private void createAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("name") != null &&
-                request.getParameter("email") != null &&
-                request.getParameter("address") != null) {
-            String name = request.getParameter("name");
-            String email = request.getParameter("email");
-            String address = request.getParameter("address");
-            String phone = !request.getParameter("phone").isEmpty() ? request.getParameter("phone") : null;
-            String cellphone = !request.getParameter("cellphone").isEmpty() ? request.getParameter("cellphone") : null;
-            String webSite = !request.getParameter("webSite").isEmpty() ? request.getParameter("webSite") : null;
-            Publisher savedPublisher = new Publisher();
-            savedPublisher.setName(name);
-            savedPublisher.setEmail(email);
-            savedPublisher.setAddress(address);
-            savedPublisher.setPhone(phone);
-            savedPublisher.setCellphone(cellphone);
-            savedPublisher.setWebSite(webSite);
-            boolean created = publisherService.createPublisher(savedPublisher);
+        if (request.getParameter("title") != null) {
+            String title = request.getParameter("title");
+            String description = !request.getParameter("description").isEmpty() ? request.getParameter("description") : null;
+            Module savedModule = new Module();
+            savedModule.setTitle(title);
+            savedModule.setDescription(description);
+            boolean created = moduleService.createModule(savedModule);
             JsonObject json = new JsonObject();
             String message = null;
             if (created) {
-                message = "La editorial ha sido registrado con éxito";
+                message = "El módulo ha sido registrado con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
@@ -99,33 +92,23 @@ public class PublisherServlet extends HttpServlet {
     }
 
     private void updateAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("publisherId") != null &&
-                request.getParameter("name") != null &&
-                request.getParameter("email") != null &&
-                request.getParameter("address") != null &&
+        if (request.getParameter("moduleId") != null &&
+                request.getParameter("title") != null &&
                 request.getParameter("active") != null) {
-            Integer publisherId = Integer.parseInt(request.getParameter("publisherId"));
-            String name = request.getParameter("name");
-            String email = request.getParameter("email");
-            String address = request.getParameter("address");
-            String phone = !request.getParameter("phone").isEmpty() ? request.getParameter("phone") : null;
-            String cellphone = !request.getParameter("cellphone").isEmpty() ? request.getParameter("cellphone") : null;
-            String webSite = !request.getParameter("webSite").isEmpty() ? request.getParameter("webSite") : null;
+            Integer moduleId = Integer.parseInt(request.getParameter("moduleId"));
+            String title = request.getParameter("title");
+            String description = !request.getParameter("description").isEmpty() ? request.getParameter("description") : null;
             boolean active = !request.getParameter("active").isEmpty();
-            Publisher updatePublisher = new Publisher();
-            updatePublisher.setPublisherId(publisherId);
-            updatePublisher.setName(name);
-            updatePublisher.setEmail(email);
-            updatePublisher.setAddress(address);
-            updatePublisher.setPhone(phone);
-            updatePublisher.setCellphone(cellphone);
-            updatePublisher.setWebSite(webSite);
-            updatePublisher.setActive(active);
-            boolean updated = publisherService.editPublisher(updatePublisher);
+            Module updatedModule = new Module();
+            updatedModule.setModuleId(moduleId);
+            updatedModule.setTitle(title);
+            updatedModule.setDescription(description);
+            updatedModule.setActive(active);
+            boolean created = moduleService.editModule(updatedModule);
             JsonObject json = new JsonObject();
             String message = null;
-            if (updated) {
-                message = "Se actualizaron los datos de la editorial con éxito";
+            if (created) {
+                message = "Se actualizaron los datos del módulo con éxit";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
@@ -138,14 +121,14 @@ public class PublisherServlet extends HttpServlet {
     }
 
     private void findByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("publisherId") != null) {
-            int publisherId = Integer.parseInt(request.getParameter("publisherId"));
-            Publisher foundPublisher = publisherService.findByPublisherId(publisherId);
+        if (request.getParameter("moduleId") != null) {
+            int moduleId = Integer.parseInt(request.getParameter("moduleId"));
+            Module foundModule = moduleService.findByModuleId(moduleId);
             JsonObject json = new JsonObject();
             JsonElement result = null;
-            if (foundPublisher != null) {
-                Type publisherType = new TypeToken<Publisher>(){}.getType();
-                result = this.gson.toJsonTree(foundPublisher, publisherType);
+            if (foundModule != null) {
+                Type moduleType = new TypeToken<Module>(){}.getType();
+                result = this.gson.toJsonTree(foundModule, moduleType);
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
@@ -160,10 +143,10 @@ public class PublisherServlet extends HttpServlet {
     private void findAllAction(HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
-        List<Publisher> publishersList = publisherService.findAll();
-        if (publishersList != null) {
-            Type publisherType = new TypeToken<List<Publisher>>(){}.getType();
-            JsonElement result = this.gson.toJsonTree(publishersList, publisherType);
+        List<Module> modulesList = moduleService.findAll();
+        if (modulesList != null) {
+            Type moduleType = new TypeToken<List<Module>>(){}.getType();
+            JsonElement result = this.gson.toJsonTree(modulesList, moduleType);
             data = result.getAsJsonArray();
             json.addProperty("success", true);
             json.addProperty("status", "success");
@@ -176,13 +159,13 @@ public class PublisherServlet extends HttpServlet {
     }
 
     private void disableByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("publisherId") != null) {
-            int publisherId = Integer.parseInt(request.getParameter("publisherId"));
-            boolean disabled = publisherService.disableByPublisherId(publisherId);
+        if (request.getParameter("moduleId") != null) {
+            int moduleId = Integer.parseInt(request.getParameter("moduleId"));
+            boolean disabled = moduleService.disableByModuleId(moduleId);
             JsonObject json = new JsonObject();
             String message = null;
             if (disabled) {
-                message = "La editorial ha sido deshabilitado con éxito";
+                message = "El módulo ha sido deshabilitado con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {

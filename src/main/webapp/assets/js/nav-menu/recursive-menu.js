@@ -3,7 +3,7 @@ $(function () {
 });
 
 function getNavigationMenu(roleId) {
-    let url = contextPath + "/admincrud/menu-permisos?accion=listarMenuNavegacion";
+    let url = contextPath + "/admincrud/menu-permisos?action=getNavigationMenuByRole";
     $.ajax({
         url: url,
         method: "GET",

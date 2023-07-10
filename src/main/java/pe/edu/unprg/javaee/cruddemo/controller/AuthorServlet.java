@@ -33,27 +33,32 @@ public class AuthorServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.doPost(request, response);
+        String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
+        switch (action) {
+            case "findById":
+                findByIdAction(request, response);
+                break;
+            case "findAll":
+                findAllAction(response);
+                break;
+            default:
+                mainAction(request, response);
+                break;
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("accion") == null ? "index" : request.getParameter("accion");
+        String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
-            case "crear":
-                createAuthorAction(request, response);
+            case "create":
+                createAction(request, response);
                 break;
-            case "editar":
-                System.out.println("Próximo a implementarse =)");
+            case "update":
+                updateAction(request, response);
                 break;
-            case "verDetalles":
-                moreDetailsAuthorAction(request, response);
-                break;
-            case "deshabilitar":
-                disableAuthorAction(request, response);
-                break;
-            case "listar":
-                listAuthorsAction(response);
+            case "disableById":
+                disableByIdAction(request, response);
                 break;
             default:
                 mainAction(request, response);
@@ -67,7 +72,7 @@ public class AuthorServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void createAuthorAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void createAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("firstName") != null &&
                 request.getParameter("lastName") != null &&
                 request.getParameter("city") != null &&
@@ -97,7 +102,43 @@ public class AuthorServlet extends HttpServlet {
         }
     }
 
-    private void moreDetailsAuthorAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void updateAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (request.getParameter("authorId") != null &&
+                request.getParameter("firstName") != null &&
+                request.getParameter("lastName") != null &&
+                request.getParameter("city") != null &&
+                request.getParameter("dob") != null &&
+                request.getParameter("active") != null) {
+            Integer authorId = Integer.parseInt(request.getParameter("authorId"));
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String city = request.getParameter("city");
+            String dob = request.getParameter("dob");
+            boolean active = !request.getParameter("active").isEmpty();
+            Author updatedAuthor = new Author();
+            updatedAuthor.setAuthorId(authorId);
+            updatedAuthor.setFirstName(firstName);
+            updatedAuthor.setLastName(lastName);
+            updatedAuthor.setCity(city);
+            updatedAuthor.setDob(LocalDate.parse(dob, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            updatedAuthor.setActive(active);
+            boolean updated = authorService.editAuthor(updatedAuthor);
+            JsonObject json = new JsonObject();
+            String message = null;
+            if (updated) {
+                message = "Se actualizaron los datos del autor con éxito";
+                json.addProperty("success", true);
+                json.addProperty("status", "success");
+            } else {
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
+            }
+            json.addProperty("message", message);
+            JSONResponse.writeFromServlet(response, json);
+        }
+    }
+
+    private void findByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("authorId") != null) {
             int authorId = Integer.parseInt(request.getParameter("authorId"));
             Author foundAuthor = authorService.findByAuthorId(authorId);
@@ -117,7 +158,7 @@ public class AuthorServlet extends HttpServlet {
         }
     }
 
-    private void listAuthorsAction(HttpServletResponse response) throws IOException {
+    private void findAllAction(HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
         List<Author> authorsList = authorService.findAll();
@@ -135,7 +176,7 @@ public class AuthorServlet extends HttpServlet {
         JSONResponse.writeFromServlet(response, json);
     }
 
-    private void disableAuthorAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void disableByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("authorId") != null) {
             int authorId = Integer.parseInt(request.getParameter("authorId"));
             boolean disabled = authorService.disableByAuthorId(authorId);

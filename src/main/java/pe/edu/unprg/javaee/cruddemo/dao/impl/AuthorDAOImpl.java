@@ -18,14 +18,14 @@ public class AuthorDAOImpl implements AuthorDAO {
     public boolean createAuthor(Author author) throws DAOException {
         boolean rowsInserted;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_CREATE_AUTHOR)) {
+             CallableStatement cstmt = conn.prepareCall(AuthorQuery.INSERT_AUTHOR)) {
             cstmt.setString(1, author.getFirstName());
             cstmt.setString(2, author.getLastName());
             cstmt.setString(3, author.getCity());
             cstmt.setDate(4, JdbcUtils.toSQLDate(author.getDob()));
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_CREATE_AUTHOR, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.INSERT_AUTHOR, ex);
         }
         return rowsInserted;
     }
@@ -34,7 +34,7 @@ public class AuthorDAOImpl implements AuthorDAO {
     public boolean editAuthor(Author author) throws DAOException {
         boolean rowsUpdated;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_EDIT_AUTHOR)) {
+             CallableStatement cstmt = conn.prepareCall(AuthorQuery.UPDATE_AUTHOR)) {
             cstmt.setString(1, author.getFirstName());
             cstmt.setString(2, author.getLastName());
             cstmt.setString(3, author.getCity());
@@ -43,7 +43,7 @@ public class AuthorDAOImpl implements AuthorDAO {
             cstmt.setInt(6, author.getAuthorId());
             rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_EDIT_AUTHOR, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.UPDATE_AUTHOR, ex);
         }
         return rowsUpdated;
     }
@@ -52,7 +52,7 @@ public class AuthorDAOImpl implements AuthorDAO {
     public Author findByAuthorId(int authorId) throws DAOException {
         Author author = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_FIND_AUTHOR_BY_ID)) {
+             CallableStatement cstmt = conn.prepareCall(AuthorQuery.FIND_AUTHOR_BY_ID)) {
             cstmt.setInt(1, authorId);
             ResultSet rs = cstmt.executeQuery();
             if (rs.next()) {
@@ -65,7 +65,7 @@ public class AuthorDAOImpl implements AuthorDAO {
                 author.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_FIND_AUTHOR_BY_ID, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.FIND_AUTHOR_BY_ID, ex);
         }
         return author;
     }
@@ -74,9 +74,9 @@ public class AuthorDAOImpl implements AuthorDAO {
     public List<Author> findAll() throws DAOException {
         List<Author> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_FIND_ALL_AUTHORS)) {
-            cstmt.setString(1, Constants.DEFAULT_STRING);
-            cstmt.setInt(2, Constants.DEFAULT_INTEGER);
+             CallableStatement cstmt = conn.prepareCall(AuthorQuery.FIND_ALL_AUTHORS)) {
+            cstmt.setString(1, Constants.NULL_STRING_PARAMETER);
+            cstmt.setInt(2, Constants.NOT_INTEGER_PARAMETER);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
@@ -90,7 +90,7 @@ public class AuthorDAOImpl implements AuthorDAO {
                 result.add(author);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_FIND_ALL_AUTHORS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.FIND_ALL_AUTHORS, ex);
         }
         return result;
     }
@@ -99,11 +99,11 @@ public class AuthorDAOImpl implements AuthorDAO {
     public boolean disableByAuthorId(int authorId) throws DAOException {
         boolean rowsAffected;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_DISABLE_AUTHOR_BY_ID)) {
+             CallableStatement cstmt = conn.prepareCall(AuthorQuery.DISABLE_AUTHOR_BY_ID)) {
             cstmt.setInt(1, authorId);
             rowsAffected = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_DISABLE_AUTHOR_BY_ID, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.DISABLE_AUTHOR_BY_ID, ex);
         }
         return rowsAffected;
     }

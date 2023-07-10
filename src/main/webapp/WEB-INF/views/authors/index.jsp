@@ -3,9 +3,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <c:set var="loggedUser" value="${sessionScope.loggedUser}"/>
-<c:if test="${empty loggedUser}">
-    <c:redirect url="/"></c:redirect>
-</c:if>
+<%
+    response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Cache-Control", "no-store");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+    if (session.getAttribute("loggedUser") == null) {
+        response.sendRedirect(request.getContextPath() + "/");
+    }
+%>
 <tm:template tittle="DemoCRUD | Autores">
     <jsp:attribute name="head">
         <jsp:include page="/WEB-INF/partials/_head.jsp"/>
@@ -16,8 +22,7 @@
               href="${contextPath}/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
         <!-- DataTables -->
         <link rel="stylesheet" href="${contextPath}/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-        <link rel="stylesheet"
-              href="${contextPath}/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+        <link rel="stylesheet" href="${contextPath}/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     </jsp:attribute>
     <jsp:attribute name="breadcrumb">
         <div class="container-fluid">
@@ -48,8 +53,8 @@
                                     <i class="fas fa-clipboard-list"></i> ${cardTitle}
                                 </h3>
                                 <button type="button" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#authorAddModal"
-                                        data-tooltip="tooltip" data-placement="left" title="Añadir author">
+                                        data-toggle="modal" data-target="#authorAddEditModal"
+                                        data-tooltip="tooltip" data-placement="left" title="Añadir author" id="btnFlagNew">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -66,10 +71,10 @@
             </div>
         </div>
         <!-- /.container-fluid -->
-        <!-- #addAuthorModal -->
-        <jsp:include page="authorAddModal.jsp"/>
+        <!-- #authorAddModal -->
+        <jsp:include page="authorAddEditModal.jsp"/>
         <!-- /.modal (Add Modal)-->
-        <!-- #viewAuthorModal -->
+        <!-- #authorViewModal -->
         <jsp:include page="authorViewModal.jsp"/>
         <!-- /.modal (View Details Modal)-->
     </jsp:attribute>
@@ -92,6 +97,8 @@
         <!-- CustomJS -->
         <script src="${contextPath}/assets/js/default-datatable.js"></script>
         <script src="${contextPath}/assets/js/default-validation-bs4.js"></script>
+        <!-- Bootstrap Switch -->
+        <script src="${contextPath}/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
         <script>
             $(function () {
                 $("#dtDob").datetimepicker({
@@ -99,9 +106,12 @@
                     format: "DD/MM/YYYY"
                     // defaultDate: moment()
                 });
+                $("input[data-bootstrap-switch]").each(function(){
+                    $(this).bootstrapSwitch('state', $(this).prop('checked'));
+                });
             });
         </script>
-        <script src="${contextPath}/assets/js/menu/menu-recursive.js"></script>
+        <script src="${contextPath}/assets/js/nav-menu/recursive-menu.js"></script>
         <script src="${contextPath}/assets/js/authors/app.js"></script>
     </jsp:attribute>
 </tm:template>

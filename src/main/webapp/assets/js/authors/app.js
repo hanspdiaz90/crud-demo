@@ -1,13 +1,14 @@
+let isNew = false;
 $(function () {
 
-    getAllAuthors();
+    findAllAuthors();
 
-    $("#authorAddForm").submit(function (event) {
+    $("#authorAddEditForm").submit(function (event) {
         event.preventDefault();
     });
 
-    $("#btnAdd").click(function () {
-        $("#authorAddForm").validate({
+    $("#btnSave").click(function () {
+        $("#authorAddEditForm").validate({
             rules: {
                 firstName: {required: true, minlength: 3},
                 lastName: {required: true, minlength: 3},
@@ -15,7 +16,12 @@ $(function () {
                 dob: {required: true}
             },
             submitHandler: function (form) {
-                let url = contextPath + "/admincrud/autores?accion=crear";
+                let url = contextPath + "/admincrud/autores?action=create";
+                let labelModal = "Registrado!";
+                if (!isNew) {
+                    url = contextPath + "/admincrud/autores?action=update";
+                    labelModal = "Actualizado!";
+                }
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -25,9 +31,10 @@ $(function () {
                     success: function (response) {
                         if (response.success) {
                             $(form).trigger("reset");
-                            $("#authorAddModal").modal("hide");
+                            $("#authorAddEditModal").modal("hide");
                             $("#authorsDataTable").DataTable().ajax.reload(null, false);
-                            Swal.fire("Registrado!", response.message, response.status);
+                            Swal.fire(labelModal, response.message, response.status);
+                            isNew = false;
                         }
                     },
                     processData: false,
@@ -37,8 +44,19 @@ $(function () {
         });
     });
 
-    $("#btnResetAdd").click(function () {
-        resetInvalidForm(this, "#authorAddForm");
+    $("#btnReset").click(function () {
+        resetInvalidForm(this, "#authorAddEditForm");
+        isNew = false;
+        let modalBody = $("#authorAddEditModal .modal-body")
+        modalBody.find(".form-group #txtAuthorId").parent().addClass("d-none");
+        modalBody.find(".form-group .bootstrap-switch-id-chkActive").parent().addClass("d-none");
+    });
+
+    $("#btnFlagNew").click(function () {
+        isNew = true;
+        let modalBody = $("#authorAddEditModal .modal-body")
+        modalBody.find(".form-group #txtAuthorId").parent().addClass("d-none");
+        modalBody.find(".form-group .bootstrap-switch-id-chkActive").parent().addClass("d-none");
     });
 
 });
@@ -51,8 +69,8 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function viewDetailsAuthor(button) {
-    let url = contextPath + "/admincrud/autores?accion=verDetalles";
+function updateAndViewDetailsAuthor(button, isEditable) {
+    let url = contextPath + "/admincrud/autores?action=findById";
     let authorId = $(button).data("authorId");
     $.ajax({
         url: url,
@@ -62,21 +80,32 @@ function viewDetailsAuthor(button) {
         success: function (response) {
             if (response.success) {
                 let authorObj = response.result;
-                let classNameBadge = authorObj.active ? "success" : "danger";
-                let classNameIcon = authorObj.active ? "check" : "times";
-                let statusText = authorObj.active ? "ACTIVO" : "INACTIVO";
-                let modalBody = $("#authorViewModal .modal-body");
-                modalBody.empty();
-                let elementHTML = "<dl>";
-                elementHTML += "<dt>Autor</dt>";
-                elementHTML += "<dd>" + authorObj.firstName + " " + authorObj.lastName + "</dd>";
-                elementHTML += "<dt>Ciudad, Año de Nacimiento</dt>";
-                elementHTML += "<dd>" + authorObj.city + ", " + new Date(authorObj.dob).getFullYear() + "</dd>";
-                elementHTML += "<dt>Activo?</dt>";
-                elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText + "</span></dd>";
-                elementHTML += "</dl>";
-                modalBody.append(elementHTML);
-                $("#authorViewModal").modal("show");
+                if (isEditable) {
+                    $("#authorAddEditModal .modal-body > .form-group.d-none").removeClass("d-none");
+                    let modalBody = $("#authorAddEditModal .modal-body");
+                    modalBody.find(".form-group #txtAuthorId").val(authorObj.authorId);
+                    modalBody.find(".form-group #txtFirstname").val(authorObj.firstName);
+                    modalBody.find(".form-group #txtLastname").val(authorObj.lastName);
+                    modalBody.find(".form-group #txtCity").val(authorObj.city);
+                    $("#authorAddEditModal").modal("show");
+                } else {
+                    let classNameBadge = authorObj.active ? "success" : "danger";
+                    let classNameIcon = authorObj.active ? "check" : "times";
+                    let statusText = authorObj.active ? "ACTIVO" : "INACTIVO";
+                    let modalBody = $("#authorViewModal .modal-body");
+                    modalBody.empty();
+                    let elementHTML = "<dl>";
+                    elementHTML += "<dt>Autor</dt>";
+                    elementHTML += "<dd>" + authorObj.firstName + " " + authorObj.lastName + "</dd>";
+                    elementHTML += "<dt>Ciudad, Año de Nacimiento</dt>";
+                    elementHTML += "<dd>" + authorObj.city + ", " + new Date(authorObj.dob).getFullYear() + "</dd>";
+                    elementHTML += "<dt>Activo?</dt>";
+                    elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText + "</span></dd>";
+                    elementHTML += "</dl>";
+                    modalBody.append(elementHTML);
+                    $("#authorViewModal").modal("show");
+                    // isNew = false;
+                }
             }
         }
     });
@@ -94,11 +123,11 @@ function disableAuthor(button) {
         confirmButtonText: "Si, realizar operación"
     }).then((result) => {
         if (result.isConfirmed) {
-            let url = contextPath + "/admincrud/autores?accion=deshabilitar";
+            let url = contextPath + "/admincrud/autores?action=disableById";
             let authorId = $(button).data("authorId");
             $.ajax({
                 url: url,
-                method: "GET",
+                method: "POST",
                 data: {authorId: authorId},
                 dataType: "JSON",
                 success: function (response) {
@@ -112,8 +141,8 @@ function disableAuthor(button) {
     });
 }
 
-function getAllAuthors() {
-    let url = contextPath + "/admincrud/autores?accion=listar";
+function findAllAuthors() {
+    let url = contextPath + "/admincrud/autores?action=findAll";
     let table = $("#authorsDataTable").DataTable({
         destroy: true,
         ajax: {
@@ -151,9 +180,9 @@ function getAllAuthors() {
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='viewDetailsAuthor(this)' class='btn btn-info' data-toggle='modal' data-target='#authorViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + row.authorId + "'><i class='fas fa-eye'></i></button>";
+                    elementHTML += "<button type='button' onclick='updateAndViewDetailsAuthor(this, false)' class='btn btn-info' data-toggle='modal' data-target='#authorViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + row.authorId + "'><i class='fas fa-eye'></i></button>";
                     if (row.active) {
-                        elementHTML += "<button type='button' onclick='editAuthor(this)' class='btn btn-warning' data-toggle='modal' data-target='#authorEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.authorId + "'><i class='fas fa-pen'></i></button>"
+                        elementHTML += "<button type='button' onclick='updateAndViewDetailsAuthor(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#authorAddEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.authorId + "'><i class='fas fa-pen'></i></button>"
                         elementHTML += "<button type='button' onclick='disableAuthor(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-author-id='" + row.authorId + "' data-author-fullname='" + row.firstName + " " + row.lastName + "'><i class='fas fa-flag'></i></button>"
                     }
                     elementHTML += "</div>"

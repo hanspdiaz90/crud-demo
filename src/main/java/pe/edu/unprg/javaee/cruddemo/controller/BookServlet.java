@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @WebServlet(name = "bookServlet", urlPatterns = "/admincrud/libros")
@@ -29,36 +31,41 @@ public class BookServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.doPost(request, response);
+        String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
+        switch (action) {
+            case "findById":
+                findByIdAction(request, response);
+                break;
+            case "findAll":
+                findAllAction(response);
+                break;
+            case "findActiveAuthors":
+                findActiveAuthorsAction(request, response);
+                break;
+            case "findActivePublishers":
+                findActivePublishersAction(request, response);
+                break;
+            case "findActiveGenres":
+                findActiveGenresAction(request, response);
+                break;
+            default:
+                mainAction(request, response);
+                break;
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("accion") == null ? "index" : request.getParameter("accion");
+        String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
-            case "crear":
-                createBookAction(request, response);
+            case "create":
+                createAction(request, response);
                 break;
-            case "editar":
-                System.out.println("Próximo a implementarse...");
+            case "update":
+                updateAction(request, response);
                 break;
-            case "verDetalles":
-                moreDetailsBookAction(request, response);
-                break;
-            case "deshabilitar":
-                disableBookAction(request, response);
-                break;
-            case "listar":
-                bookListAction(response);
-                break;
-            case "listarAutoresActivos":
-                listActiveAuthorsAction(request, response);
-                break;
-            case "listarEditorialesActivos":
-                listActivePublisherAction(request, response);
-                break;
-            case "listarGenerosActivos":
-                listActiveGenresAction(request, response);
+            case "disableById":
+                disableByIdAction(request, response);
                 break;
             default:
                 mainAction(request, response);
@@ -72,11 +79,10 @@ public class BookServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void createBookAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void createAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("isbn") != null &&
                 request.getParameter("title") != null &&
                 request.getParameter("coverImage") != null &&
-                request.getParameter("review") != null &&
                 request.getParameter("yearEdition") != null &&
                 request.getParameter("numberPages") != null &&
                 request.getParameter("price") != null &&
@@ -86,7 +92,7 @@ public class BookServlet extends HttpServlet {
             String isbn = request.getParameter("isbn");
             String title = request.getParameter("title");
             String coverImage = request.getParameter("coverImage");
-            String review = request.getParameter("review");
+            String review = !request.getParameter("review").isEmpty() ? request.getParameter("review") : null;
             int yearEdition = Integer.parseInt(request.getParameter("yearEdition"));
             int numberPages = Integer.parseInt(request.getParameter("numberPages"));
             double price = Double.parseDouble(request.getParameter("price"));
@@ -123,7 +129,63 @@ public class BookServlet extends HttpServlet {
         }
     }
 
-    private void moreDetailsBookAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void updateAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (request.getParameter("bookId") != null &&
+                request.getParameter("isbn") != null &&
+                request.getParameter("title") != null &&
+                request.getParameter("coverImage") != null &&
+                request.getParameter("yearEdition") != null &&
+                request.getParameter("numberPages") != null &&
+                request.getParameter("price") != null &&
+                request.getParameter("author") != null &&
+                request.getParameter("publisher") != null &&
+                request.getParameter("genre") != null &&
+                request.getParameter("active") != null) {
+            Integer bookId = Integer.parseInt(request.getParameter("bookId"));
+            String isbn = request.getParameter("isbn");
+            String title = request.getParameter("title");
+            String coverImage = request.getParameter("coverImage");
+            String review = !request.getParameter("review").isEmpty() ? request.getParameter("review") : null;
+            int yearEdition = Integer.parseInt(request.getParameter("yearEdition"));
+            int numberPages = Integer.parseInt(request.getParameter("numberPages"));
+            double price = Double.parseDouble(request.getParameter("price"));
+            int authorId = Integer.parseInt(request.getParameter("author"));
+            int publisherId = Integer.parseInt(request.getParameter("publisher"));
+            int genreId = Integer.parseInt(request.getParameter("genre"));
+            boolean active = !request.getParameter("active").isEmpty();
+            Book updatedBook = new Book();
+            updatedBook.setBookId(bookId);
+            updatedBook.setIsbn(isbn);
+            updatedBook.setTitle(title);
+            updatedBook.setCoverImage(coverImage);
+            updatedBook.setReview(review);
+            updatedBook.setYearEdition(yearEdition);
+            updatedBook.setNumberPages(numberPages);
+            updatedBook.setPrice(price);
+            updatedBook.setAuthor(new Author());
+            updatedBook.getAuthor().setAuthorId(authorId);
+            updatedBook.setPublisher(new Publisher());
+            updatedBook.getPublisher().setPublisherId(publisherId);
+            updatedBook.setGenre(new Genre());
+            updatedBook.getGenre().setGenreId(genreId);
+            updatedBook.setActive(active);
+            boolean updated = bookService.editBook(updatedBook);
+            JsonObject json = new JsonObject();
+            String message = null;
+            if (updated) {
+                message = "Se actualizaron los datos del libro con éxito";
+                json.addProperty("success", true);
+                json.addProperty("status", "success");
+            } else {
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
+            }
+            json.addProperty("message", message);
+            JSONResponse.writeFromServlet(response, json);
+        }
+    }
+
+    private void findByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("bookId") != null) {
             int bookId = Integer.parseInt(request.getParameter("bookId"));
             Book foundBook = bookService.findByBookId(bookId);
@@ -143,7 +205,7 @@ public class BookServlet extends HttpServlet {
         }
     }
 
-    private void bookListAction(HttpServletResponse response) throws IOException {
+    private void findAllAction(HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
         List<Book> bookList = bookService.findAll();
@@ -161,7 +223,7 @@ public class BookServlet extends HttpServlet {
         JSONResponse.writeFromServlet(response, json);
     }
 
-    private void listActiveAuthorsAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void findActiveAuthorsAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
         String filter = request.getParameter("filter");
@@ -180,7 +242,7 @@ public class BookServlet extends HttpServlet {
         JSONResponse.writeFromServlet(response, json);
     }
 
-    private void listActivePublisherAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void findActivePublishersAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
         String filter = request.getParameter("filter");
@@ -199,7 +261,7 @@ public class BookServlet extends HttpServlet {
         JSONResponse.writeFromServlet(response, json);
     }
 
-    private void listActiveGenresAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void findActiveGenresAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
         String filter = request.getParameter("filter");
@@ -218,7 +280,7 @@ public class BookServlet extends HttpServlet {
         JSONResponse.writeFromServlet(response, json);
     }
 
-    private void disableBookAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void disableByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("bookId") != null) {
             int bookId = Integer.parseInt(request.getParameter("bookId"));
             boolean disabled = bookService.disableByBookId(bookId);

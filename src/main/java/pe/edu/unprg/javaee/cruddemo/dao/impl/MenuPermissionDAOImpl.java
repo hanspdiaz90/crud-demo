@@ -21,7 +21,7 @@ public class MenuPermissionDAOImpl implements MenuPermissionDAO {
     public List<MenuPermission> findAllMenuPermissionByRole(Integer roleId) throws DAOException {
         List<MenuPermission> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(MenuPermissionQuery.SP_FIND_ALL_MENU_BY_ROLE)) {
+             CallableStatement cstmt = conn.prepareCall(MenuPermissionQuery.FIND_ALL_MENU_BY_ROLE)) {
             cstmt.setInt(1, roleId);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
@@ -47,7 +47,7 @@ public class MenuPermissionDAOImpl implements MenuPermissionDAO {
                 result.add(permission);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + MenuPermissionQuery.SP_FIND_ALL_MENU_BY_ROLE, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + MenuPermissionQuery.FIND_ALL_MENU_BY_ROLE, ex);
         }
         return result;
     }

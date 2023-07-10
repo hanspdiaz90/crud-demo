@@ -22,8 +22,8 @@ public class PublisherDAOImpl implements PublisherDAO {
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_CREATE_PUBLISHER)) {
             cstmt.setString(1, publisher.getName());
-            cstmt.setString(2, publisher.getAddress());
-            cstmt.setString(3, publisher.getEmail());
+            cstmt.setString(2, publisher.getEmail());
+            cstmt.setString(3, publisher.getAddress());
             cstmt.setString(4, publisher.getPhone());
             cstmt.setString(5, publisher.getCellphone());
             cstmt.setString(6, publisher.getWebSite());
@@ -40,8 +40,8 @@ public class PublisherDAOImpl implements PublisherDAO {
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_EDIT_PUBLISHER)) {
             cstmt.setString(1, publisher.getName());
-            cstmt.setString(2, publisher.getAddress());
-            cstmt.setString(3, publisher.getEmail());
+            cstmt.setString(2, publisher.getEmail());
+            cstmt.setString(3, publisher.getAddress());
             cstmt.setString(4, publisher.getPhone());
             cstmt.setString(5, publisher.getCellphone());
             cstmt.setString(6, publisher.getWebSite());
@@ -65,8 +65,8 @@ public class PublisherDAOImpl implements PublisherDAO {
                 publisher = new Publisher();
                 publisher.setPublisherId(rs.getInt("publisher_id"));
                 publisher.setName(rs.getString("name"));
-                publisher.setAddress(rs.getString("address"));
                 publisher.setEmail(rs.getString("email"));
+                publisher.setAddress(rs.getString("address"));
                 publisher.setPhone(rs.getString("phone"));
                 publisher.setCellphone(rs.getString("cellphone"));
                 publisher.setWebSite(rs.getString("web_site"));
@@ -83,16 +83,16 @@ public class PublisherDAOImpl implements PublisherDAO {
         List<Publisher> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(PublisherQuery.SP_FIND_ALL_PUBLISHERS)) {
-            cstmt.setString(1, Constants.DEFAULT_STRING);
-            cstmt.setInt(2, Constants.DEFAULT_INTEGER);
+            cstmt.setString(1, Constants.NULL_STRING_PARAMETER);
+            cstmt.setInt(2, Constants.NOT_INTEGER_PARAMETER);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
                 Publisher publisher = new Publisher();
                 publisher.setPublisherId(rs.getInt("publisher_id"));
                 publisher.setName(rs.getString("name"));
-                publisher.setAddress(rs.getString("address"));
                 publisher.setEmail(rs.getString("email"));
+                publisher.setAddress(rs.getString("address"));
                 publisher.setPhone(rs.getString("phone"));
                 publisher.setCellphone(rs.getString("cellphone"));
                 publisher.setWebSite(rs.getString("web_site"));

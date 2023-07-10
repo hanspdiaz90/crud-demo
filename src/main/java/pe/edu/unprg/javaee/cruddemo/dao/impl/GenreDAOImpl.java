@@ -20,11 +20,11 @@ public class GenreDAOImpl implements GenreDAO {
     public boolean createGenre(Genre genre) throws DAOException {
         boolean rowsInserted;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(GenreQuery.SP_CREATE_GENRE)) {
+             CallableStatement cstmt = conn.prepareCall(GenreQuery.INSERT_GENRE)) {
             cstmt.setString(1, genre.getName());
             rowsInserted = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.SP_CREATE_GENRE, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.INSERT_GENRE, ex);
         }
         return rowsInserted;
     }
@@ -33,13 +33,13 @@ public class GenreDAOImpl implements GenreDAO {
     public boolean editGenre(Genre genre) throws DAOException {
         boolean rowsUpdated;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(GenreQuery.SP_EDIT_GENRE)) {
+             CallableStatement cstmt = conn.prepareCall(GenreQuery.UPDATE_GENRE)) {
             cstmt.setString(1, genre.getName());
             cstmt.setBoolean(4, genre.isActive());
             cstmt.setInt(5, genre.getGenreId());
             rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.SP_EDIT_GENRE, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.UPDATE_GENRE, ex);
         }
         return rowsUpdated;
     }
@@ -48,7 +48,7 @@ public class GenreDAOImpl implements GenreDAO {
     public Genre findByGenreId(int genreId) throws DAOException {
         Genre genre = null;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(GenreQuery.SP_FIND_GENRE_BY_ID)) {
+             CallableStatement cstmt = conn.prepareCall(GenreQuery.FIND_GENRE_BY_ID)) {
             cstmt.setInt(1, genreId);
             ResultSet rs = cstmt.executeQuery();
             if (rs.next()) {
@@ -58,7 +58,7 @@ public class GenreDAOImpl implements GenreDAO {
                 genre.setActive(rs.getBoolean("is_active"));
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.SP_FIND_GENRE_BY_ID, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.FIND_GENRE_BY_ID, ex);
         }
         return genre;
     }
@@ -67,9 +67,9 @@ public class GenreDAOImpl implements GenreDAO {
     public List<Genre> findAll() throws DAOException {
         List<Genre> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(GenreQuery.SP_FIND_ALL_GENRES)) {
-            cstmt.setString(1, Constants.DEFAULT_STRING);
-            cstmt.setInt(2, Constants.DEFAULT_INTEGER);
+             CallableStatement cstmt = conn.prepareCall(GenreQuery.FIND_ALL_GENRES)) {
+            cstmt.setString(1, Constants.NULL_STRING_PARAMETER);
+            cstmt.setInt(2, Constants.NOT_INTEGER_PARAMETER);
             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
@@ -80,7 +80,7 @@ public class GenreDAOImpl implements GenreDAO {
                 result.add(genre);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.SP_FIND_ALL_GENRES, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.FIND_ALL_GENRES, ex);
         }
         return result;
     }
@@ -89,11 +89,11 @@ public class GenreDAOImpl implements GenreDAO {
     public boolean disableByGenreId(int genreId) throws DAOException {
         boolean rowsAffected;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(GenreQuery.SP_DISABLE_GENRE_BY_ID)) {
+             CallableStatement cstmt = conn.prepareCall(GenreQuery.DISABLE_GENRE_BY_ID)) {
             cstmt.setInt(1, genreId);
             rowsAffected = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.SP_DISABLE_GENRE_BY_ID, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.DISABLE_GENRE_BY_ID, ex);
         }
         return rowsAffected;
     }

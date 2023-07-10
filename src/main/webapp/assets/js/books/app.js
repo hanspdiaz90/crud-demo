@@ -4,7 +4,7 @@ $(function () {
 
     $("#cbxAuthors").select2({
         ajax: {
-            url: contextPath + "/admincrud/libros?accion=listarAutoresActivos",
+            url: contextPath + "/admincrud/libros?action=findActiveAuthors",
             dataType: "JSON",
             delay: 250,
             data: function (params) {
@@ -32,7 +32,7 @@ $(function () {
     });
     $("#cbxPublishers").select2({
         ajax: {
-            url: contextPath + "/admincrud/libros?accion=listarEditorialesActivos",
+            url: contextPath + "/admincrud/libros?action=findActivePublishers",
             dataType: "JSON",
             delay: 250,
             data: function (params) {
@@ -61,7 +61,7 @@ $(function () {
     });
     $("#cbxGenres").select2({
         ajax: {
-            url: contextPath + "/admincrud/libros?accion=listarGenerosActivos",
+            url: contextPath + "/admincrud/libros?action=findActiveGenres",
             dataType: "JSON",
             delay: 250,
             data: function (params) {
@@ -107,7 +107,7 @@ $(function () {
                 review: { required: true }
             },
             submitHandler: function (form) {
-                let url = contextPath + "/admincrud/libros?accion=crear";
+                let url = contextPath + "/admincrud/libros?action=create";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -144,7 +144,7 @@ function resetInvalidForm(button, validatedForm) {
 }
 
 function viewDetailsBook(button) {
-    let url = contextPath + "/admincrud/libros?accion=verDetalles";
+    let url = contextPath + "/admincrud/libros?action=findById";
     let bookId = $(button).data("bookId");
     $.ajax({
         url: url,
@@ -195,11 +195,11 @@ function disableBook(button) {
         confirmButtonText: "Si, realizar operación"
     }).then((result) => {
         if (result.isConfirmed) {
-            let url = contextPath + "/admincrud/libros?accion=deshabilitar";
+            let url = contextPath + "/admincrud/libros?action=disableById";
             let bookId = $(button).data("bookId");
             $.ajax({
                 url: url,
-                method: "GET",
+                method: "POST",
                 data: { bookId: bookId },
                 dataType: "JSON",
                 success: function (response) {
@@ -235,7 +235,7 @@ function disableBook(button) {
 // }
 
 function getAllBooks() {
-    let url = contextPath + "/admincrud/libros?accion=listar";
+    let url = contextPath + "/admincrud/libros?action=findAll";
     let table = $("#booksDataTable").DataTable({
         destroy: true,
         ajax: {

@@ -3,6 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <c:set var="loggedUser" value="${sessionScope.loggedUser}"/>
+<%
+    response.setHeader("Cache-Control","no-cache");
+    response.setHeader("Cache-Control","no-store");
+    response.setHeader("Pragma","no-cache");
+    response.setDateHeader ("Expires", 0);
+%>
 <c:if test="${empty loggedUser}">
     <c:redirect url="/"></c:redirect>
 </c:if>
@@ -51,6 +57,6 @@
     </jsp:attribute>
     <jsp:attribute name="javascript">
         <jsp:include page="/WEB-INF/partials/_javascript.jsp"/>
-        <script src="${contextPath}/assets/js/menu/menu-recursive.js"></script>
+        <script src="${contextPath}/assets/js/nav-menu/recursive-menu.js"></script>
     </jsp:attribute>
 </tm:template>

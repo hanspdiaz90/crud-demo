@@ -16,13 +16,13 @@ public class DashboardDAOImpl implements DashboardDAO {
     public int countAllAuthors() throws DAOException {
         int count = 0;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(DashboardQuery.SP_COUNT_ALL_AUTHORS)) {
+             CallableStatement cstmt = conn.prepareCall(DashboardQuery.COUNT_ALL_AUTHORS)) {
             cstmt.registerOutParameter(1, Types.INTEGER);
             if (cstmt.executeUpdate() > 0) {
                 count = cstmt.getInt(1);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + DashboardQuery.SP_COUNT_ALL_AUTHORS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + DashboardQuery.COUNT_ALL_AUTHORS, ex);
         }
         return count;
     }
@@ -31,13 +31,13 @@ public class DashboardDAOImpl implements DashboardDAO {
     public int countAllBooks() throws DAOException {
         int count = 0;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(DashboardQuery.SP_COUNT_ALL_BOOKS)) {
+             CallableStatement cstmt = conn.prepareCall(DashboardQuery.COUNT_ALL_BOOKS)) {
             cstmt.registerOutParameter(1, Types.INTEGER);
             if (cstmt.executeUpdate() > 0) {
                 count = cstmt.getInt(1);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + DashboardQuery.SP_COUNT_ALL_BOOKS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + DashboardQuery.COUNT_ALL_BOOKS, ex);
         }
         return count;
     }
@@ -46,13 +46,13 @@ public class DashboardDAOImpl implements DashboardDAO {
     public int countAllGenres() throws DAOException {
         int count = 0;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(DashboardQuery.SP_COUNT_ALL_GENRES)) {
+             CallableStatement cstmt = conn.prepareCall(DashboardQuery.COUNT_ALL_GENRES)) {
             cstmt.registerOutParameter(1, Types.INTEGER);
             if (cstmt.executeUpdate() > 0) {
                 count = cstmt.getInt(1);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + DashboardQuery.SP_COUNT_ALL_GENRES, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + DashboardQuery.COUNT_ALL_GENRES, ex);
         }
         return count;
     }
@@ -61,13 +61,13 @@ public class DashboardDAOImpl implements DashboardDAO {
     public int countAllPublishers() throws DAOException {
         int count = 0;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(DashboardQuery.SP_COUNT_ALL_PUBLISHERS)) {
+             CallableStatement cstmt = conn.prepareCall(DashboardQuery.COUNT_ALL_PUBLISHERS)) {
             cstmt.registerOutParameter(1, Types.INTEGER);
             if (cstmt.executeUpdate() > 0) {
                 count = cstmt.getInt(1);
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error al ejecutar la consulta: " + DashboardQuery.SP_COUNT_ALL_PUBLISHERS, ex);
+            throw new DAOException("Error al ejecutar la consulta: " + DashboardQuery.COUNT_ALL_PUBLISHERS, ex);
         }
         return count;
     }

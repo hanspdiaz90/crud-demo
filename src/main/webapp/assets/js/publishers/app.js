@@ -10,14 +10,13 @@ $(function () {
         $("#publisherAddForm").validate({
             rules: {
                 name: { required: true, minlength: 5 },
-                address: { required: true },
                 email: { required: true, email: true  },
-                phone: { required: true, digits: true },
-                cellphone: { required: true, digits: true },
-                webSite: { required: true }
+                address: { required: true },
+                phone: { digits: true },
+                cellphone: { digits: true }
             },
             submitHandler: function (form) {
-                let url = contextPath + "/admincrud/editoriales?accion=crear";
+                let url = contextPath + "/admincrud/editoriales?action=create";
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -56,7 +55,7 @@ function resetInvalidForm(button, validatedForm) {
 
 function viewDetailsPublisher(button) {
     let publisherId = $(button).data("publisherId");
-    let url = contextPath + "/admincrud/editoriales?accion=verDetalles";
+    let url = contextPath + "/admincrud/editoriales?action=findById";
     $.ajax({
         url: url,
         method: "GET",
@@ -75,14 +74,14 @@ function viewDetailsPublisher(button) {
                     elementHTML += "<dd>" + publisherObj.name + "</dd>";
                     elementHTML += "<dt>Dirección</dt>";
                     elementHTML += "<dd>" + publisherObj.address + "</dd>";
-                    elementHTML += "<dt>Página Web</dt>";
-                    elementHTML += "<dd><a href='https://" + publisherObj.webSite + "' target='_blank'>" + publisherObj.webSite + "</a></dd>";
                     elementHTML += "<dt>E-mail</dt>";
                     elementHTML += "<dd>" + publisherObj.email + "</dd>";
                     elementHTML += "<dt>Teléfono</dt>";
-                    elementHTML += "<dd>" + publisherObj.phone + "</dd>";
+                    elementHTML += "<dd>" + (publisherObj.phone ?? "-") + "</dd>";
                     elementHTML += "<dt>Celular</dt>";
-                    elementHTML += "<dd>" + publisherObj.cellphone + "</dd>";
+                    elementHTML += "<dd>" + (publisherObj.cellphone ?? "-") + "</dd>";
+                    elementHTML += "<dt>Página Web</dt>";
+                    elementHTML += "<dd><a href='https://" + publisherObj.webSite + "' target='_blank'>" + publisherObj.webSite + "</a></dd>";
                     elementHTML += "<dt>Activo?</dt>";
                     elementHTML += "<dd><span class='badge badge-"+ classNameBadge + "'><i class='fas fa-"+ classNameIcon + "'></i> " + statusText+ "</span></dd>";
                     elementHTML += "</dl>";
@@ -105,11 +104,11 @@ function disablePublisher(button) {
         confirmButtonText: "Si, realizar operación"
     }).then((result) => {
         if (result.isConfirmed) {
-            let url = contextPath + "/admincrud/editoriales?accion=deshabilitar";
+            let url = contextPath + "/admincrud/editoriales?action=disableById";
             let publisherId = $(button).data("publisherId");
             $.ajax({
                 url: url,
-                method: "GET",
+                method: "POST",
                 data: { publisherId: publisherId },
                 dataType: "JSON",
                 success: function (response) {
@@ -124,7 +123,7 @@ function disablePublisher(button) {
 }
 
 function getAllPublishers() {
-    let url = contextPath + "/admincrud/editoriales?accion=listar";
+    let url = contextPath + "/admincrud/editoriales?action=findAll";
     let table = $("#publishersDataTable").DataTable({
         destroy: true,
         ajax: {

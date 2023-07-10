@@ -20,15 +20,15 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        this.loginUserAction(request, response);
+        this.loginAction(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        this.loginUserAction(request, response);
+        this.loginAction(request, response);
     }
 
-    private void loginUserAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void loginAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         if ((request.getParameter("email") != null && !request.getParameter("email").isEmpty()) &&
                 (request.getParameter("password") != null && !request.getParameter("password").isEmpty())) {

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<div class="modal fade" id="authorAddModal">
+<div class="modal fade" id="authorAddEditModal">
     <!-- Modal Dialog -->
     <div class="modal-dialog">
         <!-- Modal Content -->
@@ -10,8 +10,12 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="authorAddForm" role="form">
+            <form id="authorAddEditForm" role="form">
                 <div class="modal-body">
+                    <div class="form-group d-none">
+                        <label for="txtAuthorId">ID Autor</label>
+                        <input type="text" class="form-control" id="txtAuthorId" name="authorId" disabled>
+                    </div>
                     <div class="form-group">
                         <label for="txtFirstname">Nombres (*)</label>
                         <input type="text" class="form-control" id="txtFirstname" placeholder="Nombres" name="firstName">
@@ -35,10 +39,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group d-none">
+                        <input type="checkbox" id="chkActive" name="chkActive" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
-                    <button type="reset" id="btnResetAdd" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" id="btnAdd" class="btn btn-primary">Guardar</button>
+                    <button type="reset" id="btnReset" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" id="btnSave" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>
