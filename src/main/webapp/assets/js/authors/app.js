@@ -70,10 +70,10 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function onlyDateFormatLocale(param) {
-    let d = new Date(param);
-    let strDate = d.getDay() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
-    return strDate;
+function formatDateLocale(param, format) {
+    let date = new Date(param);
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+    return moment(date, "YYYY-MM-DD").format(format);
 }
 
 function updateAndViewDetailsAuthor(button, isEditable) {
@@ -95,7 +95,7 @@ function updateAndViewDetailsAuthor(button, isEditable) {
                     modalBody.find(".form-group #txtFirstname").val(foundAuthor.firstName);
                     modalBody.find(".form-group #txtLastname").val(foundAuthor.lastName);
                     modalBody.find(".form-group #txtCity").val(foundAuthor.city);
-                    modalBody.find(".form-group #dtDob").val(onlyDateFormatLocale(foundAuthor.dob));
+                    modalBody.find(".form-group #dtDob").val(formatDateLocale(foundAuthor.dob, "DD/MM/YYYY"));
                     modalBody.find(".form-group #chkActive").attr("checked", foundAuthor.active);
                     $("#addEditModal").modal("show");
                 } else {
