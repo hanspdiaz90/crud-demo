@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="txtReview">Reseña (Opcional)</label>
+                        <label for="txtReview">Reseña</label>
                         <textarea class="form-control" id="txtReview" rows="5" placeholder="Descripción" name="review"></textarea>
                     </div>
                 </div>

@@ -22,10 +22,7 @@ public class ModuleServlet extends HttpServlet {
 
     private final ModuleService moduleService = new ModuleServiceImpl();
     private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/modules/index.jsp";
-    private final Gson gson = new GsonBuilder()
-            .serializeNulls()
-            .setPrettyPrinting()
-            .create();
+    private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -108,7 +105,7 @@ public class ModuleServlet extends HttpServlet {
             JsonObject json = new JsonObject();
             String message = null;
             if (created) {
-                message = "Se actualizaron los datos del módulo con éxit";
+                message = "Se actualizaron los datos del módulo con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {

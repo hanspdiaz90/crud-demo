@@ -2,7 +2,6 @@
 <%@ taglib prefix="tm" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<c:set var="loggedUser" value="${sessionScope.loggedUser}"/>
 <%
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Cache-Control", "no-store");
@@ -53,8 +52,8 @@
                                     <i class="fas fa-clipboard-list"></i> ${cardTitle}
                                 </h3>
                                 <button type="button" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#authorAddEditModal"
-                                        data-tooltip="tooltip" data-placement="left" title="Añadir author" id="btnFlagNew">
+                                        data-toggle="modal" data-target="#addEditModal"
+                                        data-tooltip="tooltip" data-placement="left" title="Añadir autor" id="btnNew">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -62,7 +61,7 @@
                         <!-- /.card-header -->
                         <!-- Card Body -->
                         <div class="card-body">
-                            <jsp:include page="authorsDataTable.jsp"/>
+                            <jsp:include page="dataTable.jsp"/>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -71,12 +70,12 @@
             </div>
         </div>
         <!-- /.container-fluid -->
-        <!-- #authorAddModal -->
-        <jsp:include page="authorAddEditModal.jsp"/>
+        <!-- #addModal -->
+        <jsp:include page="addEditModal.jsp"/>
         <!-- /.modal (Add Modal)-->
-        <!-- #authorViewModal -->
-        <jsp:include page="authorViewModal.jsp"/>
-        <!-- /.modal (View Details Modal)-->
+        <!-- #detailModal -->
+        <jsp:include page="viewDetailModal.jsp"/>
+        <!-- /.modal (Details Modal)-->
     </jsp:attribute>
     <jsp:attribute name="javascript">
         <jsp:include page="/WEB-INF/partials/_javascript.jsp"/>
@@ -101,13 +100,10 @@
         <script src="${contextPath}/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
         <script>
             $(function () {
-                $("#dtDob").datetimepicker({
+                $("#dateTimeDob").datetimepicker({
                     locale: "es",
                     format: "DD/MM/YYYY"
                     // defaultDate: moment()
-                });
-                $("input[data-bootstrap-switch]").each(function(){
-                    $(this).bootstrapSwitch('state', $(this).prop('checked'));
                 });
             });
         </script>

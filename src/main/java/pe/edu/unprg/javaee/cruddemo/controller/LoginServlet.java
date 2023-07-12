@@ -32,7 +32,6 @@ public class LoginServlet extends HttpServlet {
         JsonObject json = new JsonObject();
         if ((request.getParameter("email") != null && !request.getParameter("email").isEmpty()) &&
                 (request.getParameter("password") != null && !request.getParameter("password").isEmpty())) {
-
             String email = request.getParameter("email");
             String password = request.getParameter("password");
             User foundUser = userService.authenticateUser(email, password);

@@ -20,10 +20,7 @@ import java.util.List;
 public class MenuPermissionServlet extends HttpServlet {
 
     private final MenuPermissionService menuPermissionService = new MenuPermissionServiceImpl();
-    private final Gson gson = new GsonBuilder()
-            .serializeNulls()
-            .setPrettyPrinting()
-            .create();
+    private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

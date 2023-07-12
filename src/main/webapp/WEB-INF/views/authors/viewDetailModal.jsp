@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<div class="modal fade" id="authorViewModal">
+<div class="modal fade" id="viewDetailModal">
     <!-- Modal Dialog -->
     <div class="modal-dialog">
         <!-- Modal Content -->
@@ -10,8 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-            </div>
+            <div class="modal-body"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
