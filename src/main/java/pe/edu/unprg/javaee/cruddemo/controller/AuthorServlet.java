@@ -113,7 +113,7 @@ public class AuthorServlet extends HttpServlet {
             String lastName = request.getParameter("lastName");
             String city = request.getParameter("city");
             String dob = request.getParameter("dob");
-            boolean active = request.getParameter("isActive") != null && request.getParameter("isActive").equals("on") ? true : false;
+            boolean active = request.getParameter("isActive") != null && request.getParameter("isActive").equals("on");
             Author updatedAuthor = new Author();
             updatedAuthor.setAuthorId(authorId);
             updatedAuthor.setFirstName(firstName);

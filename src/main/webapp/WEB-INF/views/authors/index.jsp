@@ -70,12 +70,12 @@
             </div>
         </div>
         <!-- /.container-fluid -->
-        <!-- #addModal -->
+        <!-- #addEditModal -->
         <jsp:include page="addEditModal.jsp"/>
-        <!-- /.modal (Add Modal)-->
-        <!-- #detailModal -->
+        <!-- /.modal (Add Edit Modal)-->
+        <!-- #viewDetailModal -->
         <jsp:include page="viewDetailModal.jsp"/>
-        <!-- /.modal (Details Modal)-->
+        <!-- /.modal (View Details Modal)-->
     </jsp:attribute>
     <jsp:attribute name="javascript">
         <jsp:include page="/WEB-INF/partials/_javascript.jsp"/>
@@ -96,8 +96,6 @@
         <!-- CustomJS -->
         <script src="${contextPath}/assets/js/default-datatable.js"></script>
         <script src="${contextPath}/assets/js/default-validation-bs4.js"></script>
-        <!-- Bootstrap Switch -->
-        <script src="${contextPath}/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
         <script>
             $(function () {
                 $("#dateTimeDob").datetimepicker({

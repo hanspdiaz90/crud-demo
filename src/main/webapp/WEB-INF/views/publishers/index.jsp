@@ -2,10 +2,15 @@
 <%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<c:set var="loggedUser" value="${sessionScope.loggedUser}"/>
-<c:if test="${empty loggedUser}">
-    <c:redirect url="/"></c:redirect>
-</c:if>
+<%
+    response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Cache-Control", "no-store");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+    if (session.getAttribute("loggedUser") == null) {
+        response.sendRedirect(request.getContextPath() + "/");
+    }
+%>
 <mt:template tittle="DemoCRUD | Editoriales">
     <jsp:attribute name="head">
         <jsp:include page="/WEB-INF/partials/_head.jsp"/>
@@ -44,8 +49,8 @@
                                     <i class="fas fa-clipboard-list"></i> ${cardTitle}
                                 </h3>
                                 <button type="button" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#publisherAddModal"
-                                        data-tooltip="tooltip" data-placement="left" title="Añadir nueva editorial">
+                                        data-toggle="modal" data-target="#addEditModal"
+                                        data-tooltip="tooltip" data-placement="left" title="Añadir nueva editorial" id="btnNew">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -53,7 +58,7 @@
                         <!-- /.card-header -->
                         <!-- Card Body -->
                         <div class="card-body">
-                            <jsp:include page="publishersDataTable.jsp"/>
+                            <jsp:include page="dataTable.jsp"/>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -62,11 +67,11 @@
             </div>
         </div>
         <!-- /.container-fluid -->
-        <!-- #addNewAuthorModal -->
-        <jsp:include page="publisherAddModal.jsp"/>
-        <!-- /.modal (Add New Modal)-->
-        <!-- #viewDetailsAuthorModal -->
-        <jsp:include page="publisherViewModal.jsp"/>
+        <!-- #addEditModal -->
+        <jsp:include page="addEditModal.jsp"/>
+        <!-- /.modal (Add Edit Modal)-->
+        <!-- #viewDetailModal -->
+        <jsp:include page="viewDetailModal.jsp"/>
         <!-- /.modal (View Details Modal)-->
     </jsp:attribute>
     <jsp:attribute name="javascript">

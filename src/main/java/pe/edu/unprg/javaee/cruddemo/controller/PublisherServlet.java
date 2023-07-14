@@ -102,8 +102,7 @@ public class PublisherServlet extends HttpServlet {
         if (request.getParameter("publisherId") != null &&
                 request.getParameter("name") != null &&
                 request.getParameter("email") != null &&
-                request.getParameter("address") != null &&
-                request.getParameter("active") != null) {
+                request.getParameter("address") != null) {
             Integer publisherId = Integer.parseInt(request.getParameter("publisherId"));
             String name = request.getParameter("name");
             String email = request.getParameter("email");
@@ -111,7 +110,7 @@ public class PublisherServlet extends HttpServlet {
             String phone = !request.getParameter("phone").isEmpty() ? request.getParameter("phone") : null;
             String cellphone = !request.getParameter("cellphone").isEmpty() ? request.getParameter("cellphone") : null;
             String webSite = !request.getParameter("webSite").isEmpty() ? request.getParameter("webSite") : null;
-            boolean active = !request.getParameter("active").isEmpty();
+            boolean active = request.getParameter("isActive") != null && request.getParameter("isActive").equals("on");
             Publisher updatePublisher = new Publisher();
             updatePublisher.setPublisherId(publisherId);
             updatePublisher.setName(name);

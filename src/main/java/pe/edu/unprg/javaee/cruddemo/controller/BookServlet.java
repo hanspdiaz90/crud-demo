@@ -137,8 +137,7 @@ public class BookServlet extends HttpServlet {
                 request.getParameter("price") != null &&
                 request.getParameter("author") != null &&
                 request.getParameter("publisher") != null &&
-                request.getParameter("genre") != null &&
-                request.getParameter("active") != null) {
+                request.getParameter("genre") != null) {
             Integer bookId = Integer.parseInt(request.getParameter("bookId"));
             String isbn = request.getParameter("isbn");
             String title = request.getParameter("title");
@@ -150,7 +149,7 @@ public class BookServlet extends HttpServlet {
             int authorId = Integer.parseInt(request.getParameter("author"));
             int publisherId = Integer.parseInt(request.getParameter("publisher"));
             int genreId = Integer.parseInt(request.getParameter("genre"));
-            boolean active = !request.getParameter("active").isEmpty();
+            boolean active = request.getParameter("isActive") != null && request.getParameter("isActive").equals("on");
             Book updatedBook = new Book();
             updatedBook.setBookId(bookId);
             updatedBook.setIsbn(isbn);

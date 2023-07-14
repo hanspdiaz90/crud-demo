@@ -90,12 +90,11 @@ public class ModuleServlet extends HttpServlet {
 
     private void updateAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("moduleId") != null &&
-                request.getParameter("title") != null &&
-                request.getParameter("active") != null) {
+                request.getParameter("title") != null) {
             Integer moduleId = Integer.parseInt(request.getParameter("moduleId"));
             String title = request.getParameter("title");
             String description = !request.getParameter("description").isEmpty() ? request.getParameter("description") : null;
-            boolean active = !request.getParameter("active").isEmpty();
+            boolean active = request.getParameter("isActive") != null && request.getParameter("isActive").equals("on");
             Module updatedModule = new Module();
             updatedModule.setModuleId(moduleId);
             updatedModule.setTitle(title);

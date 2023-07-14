@@ -46,21 +46,31 @@ $(function () {
 
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
-        addClassFormGroup(false);
+        isNew = false;
+        addPropertyToButtonId("#addEditModal .modal-body", ".form-group #txtAuthorId", true);
+        addClassToHiddenButtonsForm("#addEditModal .modal-body", ".form-group #txtAuthorId", ".form-group .custom-switch");
     });
 
     $("#btnNew").click(function () {
-        addClassFormGroup(true);
+        isNew = true;
+        addPropertyToButtonId("#addEditModal .modal-body", ".form-group #txtAuthorId", true);
+        addClassToHiddenButtonsForm("#addEditModal .modal-body", ".form-group #txtAuthorId", ".form-group .custom-switch");
     });
 
 });
 
-function addClassFormGroup(flag) {
-    isNew = flag;
-    let modalBody = $("#addEditModal .modal-body")
-    modalBody.find(".form-group #txtAuthorId").parent().addClass("d-none");
-    modalBody.find(".form-group .custom-switch").parent().addClass("d-none");
+function addPropertyToButtonId(modal, buttonId, flag) {
+    let modalBody = $(modal);
+    modalBody.find(buttonId).prop("disabled", flag);
+    modalBody.find(buttonId).prop("readonly", !flag);
 }
+
+function addClassToHiddenButtonsForm(modal, buttonId, buttonActive) {
+    let modalBody = $(modal);
+    modalBody.find(buttonId).parent().addClass("d-none");
+    modalBody.find(buttonActive).parent().addClass("d-none");
+}
+
 
 function resetInvalidForm(button, validatedForm) {
     let form = $(button).closest(validatedForm);
@@ -70,10 +80,14 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function formatDateLocale(param, format) {
+function formatDateToLocale(param, format) {
     let date = new Date(param);
     date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
     return moment(date, "YYYY-MM-DD").format(format);
+}
+
+function showFullName(firstname, lastname) {
+    return firstname.concat(" ", lastname);
 }
 
 function updateAndViewDetailsAuthor(button, isEditable) {
@@ -88,14 +102,15 @@ function updateAndViewDetailsAuthor(button, isEditable) {
             if (response.success) {
                 let foundAuthor = response.result;
                 if (isEditable) {
-                    isNew = false;
                     $("#addEditModal .modal-body > .form-group.d-none").removeClass("d-none");
                     let modalBody = $("#addEditModal .modal-body");
+                    modalBody.find(".form-group #txtAuthorId").prop("disabled", false);
+                    modalBody.find(".form-group #txtAuthorId").prop("readonly", true);
                     modalBody.find(".form-group #txtAuthorId").val(foundAuthor.authorId);
                     modalBody.find(".form-group #txtFirstname").val(foundAuthor.firstName);
                     modalBody.find(".form-group #txtLastname").val(foundAuthor.lastName);
                     modalBody.find(".form-group #txtCity").val(foundAuthor.city);
-                    modalBody.find(".form-group #dtDob").val(formatDateLocale(foundAuthor.dob, "DD/MM/YYYY"));
+                    modalBody.find(".form-group #dtDob").val(formatDateToLocale(foundAuthor.dob, "DD/MM/YYYY"));
                     modalBody.find(".form-group #chkActive").attr("checked", foundAuthor.active);
                     $("#addEditModal").modal("show");
                 } else {
@@ -106,16 +121,15 @@ function updateAndViewDetailsAuthor(button, isEditable) {
                     modalBody.empty();
                     let elementHTML = "<dl>";
                     elementHTML += "<dt>Autor</dt>";
-                    elementHTML += "<dd>" + foundAuthor.firstName + " " + foundAuthor.lastName + "</dd>";
+                    elementHTML += "<dd>" + showFullName(foundAuthor.firstName, foundAuthor.lastName) + "</dd>";
                     elementHTML += "<dt>Ciudad, Año de Nacimiento</dt>";
                     elementHTML += "<dd>" + foundAuthor.city + ", " + new Date(foundAuthor.dob).getFullYear() + "</dd>";
-                    elementHTML += "<dt>Activo?</dt>";
-                    elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText + "</span></dd>";
+                    elementHTML += "<dt><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText + "</span></dt>";
                     elementHTML += "</dl>";
                     modalBody.append(elementHTML);
                     $("#viewDetailModal").modal("show");
-                    isNew = false;
                 }
+                isNew = false;
             }
         }
     });
@@ -163,7 +177,7 @@ function findAllAuthors() {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.firstName + " " + row.lastName;
+                    return showFullName(row.firstName, row.lastName);
                 }
             },
             {
@@ -191,9 +205,9 @@ function findAllAuthors() {
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
                     elementHTML += "<button type='button' onclick='updateAndViewDetailsAuthor(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + row.authorId + "'><i class='fas fa-eye'></i></button>";
-                    elementHTML += "<button type='button' onclick='updateAndViewDetailsAuthor(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.authorId + "'><i class='fas fa-pen'></i></button>"
-                    elementHTML += "<button type='button' onclick='disableAuthor(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar' data-author-id='" + row.authorId + "' data-author-fullname='" + row.firstName + " " + row.lastName + "'><i class='fas fa-flag'></i></button>"
-                    elementHTML += "</div>"
+                    elementHTML += "<button type='button' onclick='updateAndViewDetailsAuthor(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.authorId + "'><i class='fas fa-pen'></i></button>";
+                    elementHTML += "<button type='button' onclick='disableAuthor(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar' data-author-id='" + row.authorId + "' data-author-fullname='" + showFullName(row.firstName, row.lastName) + "'><i class='fas fa-flag'></i></button>";
+                    elementHTML += "</div>";
                     return elementHTML;
                 }
             }

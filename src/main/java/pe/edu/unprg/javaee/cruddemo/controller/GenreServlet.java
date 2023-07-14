@@ -88,11 +88,10 @@ public class GenreServlet extends HttpServlet {
 
     private void updateAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("genreId") != null &&
-                request.getParameter("name") != null &&
-                request.getParameter("active") != null) {
+                request.getParameter("name") != null) {
             Integer genreId = Integer.parseInt(request.getParameter("genreId"));
             String name = request.getParameter("name");
-            boolean active = !request.getParameter("active").isEmpty();
+            boolean active = request.getParameter("isActive") != null && request.getParameter("isActive").equals("on");
             Genre updatedGenre = new Genre();
             updatedGenre.setGenreId(genreId);
             updatedGenre.setName(name);

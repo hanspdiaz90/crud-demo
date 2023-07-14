@@ -1,18 +1,24 @@
+let isNew = false;
 $(function () {
 
-    getAllGenres();
+    findAllGenres();
 
-    $("#genreAddForm").submit(function (event) {
+    $("#addEditForm").submit(function (event) {
         event.preventDefault();
     });
 
-    $("#btnAdd").click(function () {
-        $("#genreAddForm").validate({
+    $("#btnSave").click(function () {
+        $("#addEditForm").validate({
             rules: {
-                name: { required: true, minlength: 5 }
+                name: { required: true, minlength: 3 }
             },
             submitHandler: function (form) {
                 let url = contextPath + "/admincrud/generos?action=create";
+                let labelModal = "Registrado!";
+                if (!isNew) {
+                    url = contextPath + "/admincrud/generos?action=update";
+                    labelModal = "Actualizado!";
+                }
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -22,9 +28,10 @@ $(function () {
                     success: function (response) {
                         if (response.success) {
                             $(form).trigger("reset");
-                            $("#genreAddModal").modal("hide");
-                            $("#genresDataTable").DataTable().ajax.reload(null, false);
-                            Swal.fire("Registrado!", response.message, response.status);
+                            $("#addEditModal").modal("hide");
+                            $("#tblGenres").DataTable().ajax.reload(null, false);
+                            Swal.fire(labelModal, response.message, response.status);
+                            if (isNew) isNew = false;
                         }
                     },
                     processData: false,
@@ -34,11 +41,23 @@ $(function () {
         });
     });
 
-    $("#btnResetAdd").click(function () {
-        resetInvalidForm(this, "#genreAddForm");
+    $("#btnReset").click(function () {
+        resetInvalidForm(this, "#addEditForm");
+        addClassFormGroup(false);
+    });
+
+    $("#btnNew").click(function () {
+        addClassFormGroup(true);
     });
 
 });
+
+function addClassFormGroup(flag) {
+    isNew = flag;
+    let modalBody = $("#addEditModal .modal-body")
+    modalBody.find(".form-group #txtGenreId").parent().addClass("d-none");
+    modalBody.find(".form-group .custom-switch").parent().addClass("d-none");
+}
 
 function resetInvalidForm(button, validatedForm) {
     let form = $(button).closest(validatedForm);
@@ -48,7 +67,7 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function viewDetailsGenre(button) {
+function updateAndViewDetailsAuthor(button, isEditable) {
     let url = contextPath + "/admincrud/generos?action=findById";
     let genreId = $(button).data("genreId");
     $.ajax({
@@ -58,20 +77,30 @@ function viewDetailsGenre(button) {
         dataType: "JSON",
         success: function (response) {
             if (response.success) {
-                let genreObj = response.result;
-                let classNameBadge = genreObj.active ? "success" : "danger";
-                let classNameIcon = genreObj.active ? "check" : "times";
-                let statusText = genreObj.active ? "ACTIVO" : "INACTIVO";
-                let modalBody = $("#genreViewModal .modal-body");
-                modalBody.empty();
-                let elementHTML = "<dl>";
+                let foundGenre = response.result;
+                if (isEditable) {
+                    isNew = false;
+                    $("#addEditModal .modal-body > .form-group.d-none").removeClass("d-none");
+                    let modalBody = $("#addEditModal .modal-body");
+                    modalBody.find(".form-group #txtGenreId").val(foundGenre.genreId);
+                    modalBody.find(".form-group #txtGenre").val(foundGenre.name);
+                    modalBody.find(".form-group #chkActive").attr("checked", foundGenre.active);
+                    $("#addEditModal").modal("show");
+                } else {
+                    let classNameBadge = foundGenre.active ? "success" : "danger";
+                    let classNameIcon = foundGenre.active ? "check" : "times";
+                    let statusText = foundGenre.active ? "ACTIVO" : "INACTIVO";
+                    let modalBody = $("#viewDetailModal .modal-body");
+                    modalBody.empty();
+                    let elementHTML = "<dl>";
                     elementHTML += "<dt>Género Literario</dt>";
-                    elementHTML += "<dd>" + genreObj.name + "</dd>";
-                    elementHTML += "<dt>Activo?</dt>";
-                    elementHTML += "<dd><span class='badge badge-"+ classNameBadge + "'><i class='fas fa-"+ classNameIcon + "'></i> " + statusText+ "</span></dd>";
+                    elementHTML += "<dd>" + foundGenre.name + "</dd>";
+                    elementHTML += "<dt><span class='badge badge-"+ classNameBadge + "'><i class='fas fa-"+ classNameIcon + "'></i> " + statusText+ "</span></dt>";
                     elementHTML += "</dl>";
-                modalBody.append(elementHTML);
-                $("#genreViewModal").modal("show");
+                    modalBody.append(elementHTML);
+                    $("#viewDetailModal").modal("show");
+                    isNew = false;
+                }
             }
         }
     });
@@ -98,7 +127,7 @@ function disableGenre(button) {
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        $("#genresDataTable").DataTable().ajax.reload(null, false);
+                        $("#tblGenres").DataTable().ajax.reload(null, false);
                         Swal.fire("Deshabilitado!", response.message, response.status);
                     }
                 }
@@ -107,9 +136,9 @@ function disableGenre(button) {
     });
 }
 
-function getAllGenres() {
+function findAllGenres() {
     let url = contextPath + "/admincrud/generos?action=findAll";
-    let table = $("#genresDataTable").DataTable({
+    let table = $("#tblGenres").DataTable({
         destroy: true,
         ajax: {
             url: url,
@@ -125,8 +154,8 @@ function getAllGenres() {
                     let classNameIcon = row.active ? "check" : "times";
                     let statusText = row.active ? "ACTIVO" : "INACTIVO";
                     let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
-                        elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
-                        elementHTML += "</span>";
+                    elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
+                    elementHTML += "</span>";
                     return elementHTML;
                 }
             },
@@ -135,12 +164,10 @@ function getAllGenres() {
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='viewDetailsGenre(this)' class='btn btn-info' data-toggle='modal' data-target='#genreViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-genre-id='" + row.genreId + "'><i class='fas fa-eye'></i></button>";
-                    if (row.active) {
-                        elementHTML += "<button type='button' onclick='editGenre(this)' class='btn btn-warning' data-toggle='modal' data-target='#genreEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-genre-id='" + row.genreId + "'><i class='fas fa-pen'></i></button>"
-                        elementHTML += "<button type='button' onclick='disableGenre(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-genre-id='" + row.genreId + "' data-genre-name='" + row.name + "'><i class='fas fa-flag'></i></button>"
-                    }
-                    elementHTML += "</div>"
+                    elementHTML += "<button type='button' onclick='updateAndViewDetailsAuthor(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-genre-id='" + row.genreId + "'><i class='fas fa-eye'></i></button>";
+                    elementHTML += "<button type='button' onclick='updateAndViewDetailsAuthor(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-genre-id='" + row.genreId + "'><i class='fas fa-pen'></i></button>";
+                    elementHTML += "<button type='button' onclick='disableGenre(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-genre-id='" + row.genreId + "' data-genre-name='" + row.name + "'><i class='fas fa-flag'></i></button>";
+                    elementHTML += "</div>";
                     return elementHTML;
                 }
             }

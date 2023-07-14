@@ -1,6 +1,6 @@
 $(function () {
 
-    getAllBooks();
+    findAllBooks();
 
     $("#cbxAuthors").select2({
         ajax: {
@@ -234,7 +234,7 @@ function disableBook(button) {
 //     });
 // }
 
-function getAllBooks() {
+function findAllBooks() {
     let url = contextPath + "/admincrud/libros?action=findAll";
     let table = $("#booksDataTable").DataTable({
         destroy: true,

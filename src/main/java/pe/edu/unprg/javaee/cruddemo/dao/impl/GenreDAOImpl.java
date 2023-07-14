@@ -35,8 +35,8 @@ public class GenreDAOImpl implements GenreDAO {
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(GenreQuery.UPDATE_GENRE)) {
             cstmt.setString(1, genre.getName());
-            cstmt.setBoolean(4, genre.isActive());
-            cstmt.setInt(5, genre.getGenreId());
+            cstmt.setBoolean(2, genre.isActive());
+            cstmt.setInt(3, genre.getGenreId());
             rowsUpdated = cstmt.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new DAOException("Error al ejecutar la consulta: " + GenreQuery.UPDATE_GENRE, ex);

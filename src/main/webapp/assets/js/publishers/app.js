@@ -1,13 +1,14 @@
+let isNew = false;
 $(function () {
 
-    getAllPublishers();
+    findAllPublishers();
 
-    $("#publisherAddForm").submit(function (event) {
+    $("#addEditForm").submit(function (event) {
         event.preventDefault();
     });
 
-    $("#btnAdd").click(function () {
-        $("#publisherAddForm").validate({
+    $("#btnSave").click(function () {
+        $("#addEditForm").validate({
             rules: {
                 name: { required: true, minlength: 5 },
                 email: { required: true, email: true  },
@@ -17,6 +18,11 @@ $(function () {
             },
             submitHandler: function (form) {
                 let url = contextPath + "/admincrud/editoriales?action=create";
+                let labelModal = "Registrado!";
+                if (!isNew) {
+                    url = contextPath + "/admincrud/editoriales?action=update";
+                    labelModal = "Actualizado!";
+                }
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -26,9 +32,10 @@ $(function () {
                     success: function (response) {
                         if (response.success) {
                             $(form).trigger("reset");
-                            $("#publisherAddModal").modal("hide");
-                            $("#publishersDataTable").DataTable().ajax.reload(null, false);
-                            Swal.fire("Registrado!", response.message, response.status);
+                            $("#addEditModal").modal("hide");
+                            $("#tblPublishers").DataTable().ajax.reload(null, false);
+                            Swal.fire(labelModal, response.message, response.status);
+                            if (isNew) isNew = false;
                         }
                     },
                     processData: false,
@@ -39,11 +46,23 @@ $(function () {
 
     });
 
-    $("#btnResetAdd").click(function () {
-        resetInvalidForm(this, "#publisherAddForm");
+    $("#btnReset").click(function () {
+        resetInvalidForm(this, "#addEditForm");
+        addClassFormGroup(false);
+    });
+
+    $("#btnNew").click(function () {
+        addClassFormGroup(true);
     });
 
 });
+
+function addClassFormGroup(flag) {
+    isNew = flag;
+    let modalBody = $("#addEditModal .modal-body")
+    modalBody.find(".form-group #txtPublisherId").parent().addClass("d-none");
+    modalBody.find(".form-group .custom-switch").parent().addClass("d-none");
+}
 
 function resetInvalidForm(button, validatedForm) {
     let form = $(button).closest(validatedForm);
@@ -53,7 +72,7 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function viewDetailsPublisher(button) {
+function updateAndViewDetailsAuthor(button, isEditable) {
     let publisherId = $(button).data("publisherId");
     let url = contextPath + "/admincrud/editoriales?action=findById";
     $.ajax({
@@ -63,30 +82,45 @@ function viewDetailsPublisher(button) {
         dataType: "JSON",
         success: function (response) {
             if (response.success) {
-                let publisherObj = response.result;
-                let classNameBadge = publisherObj.active ? "success" : "danger";
-                let classNameIcon = publisherObj.active ? "check" : "times";
-                let statusText = publisherObj.active ? "ACTIVO" : "INACTIVO";
-                let modalBody = $("#publisherViewModal .modal-body");
-                modalBody.empty();
-                let elementHTML = "<dl>";
+                let foundPublisher = response.result;
+                if (isEditable) {
+                    isNew = false;
+                    $("#addEditModal .modal-body > .form-group.d-none").removeClass("d-none");
+                    let modalBody = $("#addEditModal .modal-body");
+                    modalBody.find(".form-group #txtPublisherId").val(foundPublisher.publisherId);
+                    modalBody.find(".form-group #txtName").val(foundPublisher.name);
+                    modalBody.find(".form-group #txtEmail").val(foundPublisher.email);
+                    modalBody.find(".form-group #txtAddress").val(foundPublisher.address);
+                    modalBody.find(".form-group #txtPhone").val(foundPublisher.phone);
+                    modalBody.find(".form-group #txtCellphone").val(foundPublisher.cellphone);
+                    modalBody.find(".form-group #txtWebSite").val(foundPublisher.webSite);
+                    modalBody.find(".form-group #chkActive").attr("checked", foundPublisher.active);
+                    $("#addEditModal").modal("show");
+                } else {
+                    let classNameBadge = foundPublisher.active ? "success" : "danger";
+                    let classNameIcon = foundPublisher.active ? "check" : "times";
+                    let statusText = foundPublisher.active ? "ACTIVO" : "INACTIVO";
+                    let modalBody = $("#viewDetailModal .modal-body");
+                    modalBody.empty();
+                    let elementHTML = "<dl>";
                     elementHTML += "<dt>Editorial</dt>";
-                    elementHTML += "<dd>" + publisherObj.name + "</dd>";
+                    elementHTML += "<dd>" + foundPublisher.name + "</dd>";
                     elementHTML += "<dt>Dirección</dt>";
-                    elementHTML += "<dd>" + publisherObj.address + "</dd>";
+                    elementHTML += "<dd>" + foundPublisher.address + "</dd>";
                     elementHTML += "<dt>E-mail</dt>";
-                    elementHTML += "<dd>" + publisherObj.email + "</dd>";
+                    elementHTML += "<dd>" + foundPublisher.email + "</dd>";
                     elementHTML += "<dt>Teléfono</dt>";
-                    elementHTML += "<dd>" + (publisherObj.phone ?? "-") + "</dd>";
+                    elementHTML += "<dd>" + (foundPublisher.phone ?? "-") + "</dd>";
                     elementHTML += "<dt>Celular</dt>";
-                    elementHTML += "<dd>" + (publisherObj.cellphone ?? "-") + "</dd>";
+                    elementHTML += "<dd>" + (foundPublisher.cellphone ?? "-") + "</dd>";
                     elementHTML += "<dt>Página Web</dt>";
-                    elementHTML += "<dd><a href='https://" + publisherObj.webSite + "' target='_blank'>" + publisherObj.webSite + "</a></dd>";
-                    elementHTML += "<dt>Activo?</dt>";
-                    elementHTML += "<dd><span class='badge badge-"+ classNameBadge + "'><i class='fas fa-"+ classNameIcon + "'></i> " + statusText+ "</span></dd>";
+                    elementHTML += "<dd><a href='https://" + foundPublisher.webSite + "' target='_blank'>" + foundPublisher.webSite + "</a></dd>";
+                    elementHTML += "<dt><span class='badge badge-"+ classNameBadge + "'><i class='fas fa-"+ classNameIcon + "'></i> " + statusText+ "</span></dt>";
                     elementHTML += "</dl>";
-                modalBody.append(elementHTML);
-                $("#publisherViewModal").modal("show");
+                    modalBody.append(elementHTML);
+                    $("#viewDetailModal").modal("show");
+                    isNew = false;
+                }
             }
         }
     });
@@ -113,7 +147,7 @@ function disablePublisher(button) {
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        $("#publishersDataTable").DataTable().ajax.reload(null, false);
+                        $("#tblPublishers").DataTable().ajax.reload(null, false);
                         Swal.fire("Deshabilitado!", response.message, response.status);
                     }
                 }
@@ -122,9 +156,9 @@ function disablePublisher(button) {
     });
 }
 
-function getAllPublishers() {
+function findAllPublishers() {
     let url = contextPath + "/admincrud/editoriales?action=findAll";
-    let table = $("#publishersDataTable").DataTable({
+    let table = $("#tblPublishers").DataTable({
         destroy: true,
         ajax: {
             url: url,
@@ -159,8 +193,8 @@ function getAllPublishers() {
                     let classNameIcon = row.active ? "check" : "times";
                     let statusText = row.active ? "ACTIVO" : "INACTIVO";
                     let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
-                        elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
-                        elementHTML += "</span>";
+                    elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
+                    elementHTML += "</span>";
                     return elementHTML;
                 }
             },
@@ -169,9 +203,9 @@ function getAllPublishers() {
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='viewDetailsPublisher(this)' class='btn btn-info' data-toggle='modal' data-target='#publisherViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-publisher-id='" + row.publisherId + "'><i class='fas fa-eye'></i></button>";
+                    elementHTML += "<button type='button' onclick='updateAndViewDetailsAuthor(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-publisher-id='" + row.publisherId + "'><i class='fas fa-eye'></i></button>";
                     if (row.active) {
-                        elementHTML += "<button type='button' onclick='editPublisher(this)' class='btn btn-warning' data-toggle='modal' data-target='#publisherEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-publisher-id='" + row.publisherId + "'><i class='fas fa-pen'></i></button>"
+                        elementHTML += "<button type='button' onclick='updateAndViewDetailsAuthor(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-publisher-id='" + row.publisherId + "'><i class='fas fa-pen'></i></button>"
                         elementHTML += "<button type='button' onclick='disablePublisher(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-publisher-id='" + row.publisherId + "' data-publisher-name='" + row.name + "'><i class='fas fa-flag'></i></button>"
                     }
                     elementHTML += "</div>"

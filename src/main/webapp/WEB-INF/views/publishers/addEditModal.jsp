@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<div class="modal fade" id="publisherAddModal">
+<div class="modal fade" id="addEditModal">
     <!-- Modal Dialog -->
     <div class="modal-dialog">
         <!-- Modal Content -->
@@ -10,8 +10,12 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="publisherAddForm" role="form">
+            <form id="addEditForm" role="form">
                 <div class="modal-body">
+                    <div class="form-group d-none">
+                        <label for="txtPublisherId">ID Editorial</label>
+                        <input type="text" class="form-control" id="txtPublisherId" name="publisherId" readonly>
+                    </div>
                     <div class="form-group">
                         <label for="txtName">Editorial (*)</label>
                         <input type="text" class="form-control" id="txtName" placeholder="Editorial" name="name">
@@ -38,10 +42,16 @@
                         <label for="txtWebSite">Página Web</label>
                         <input type="text" class="form-control" id="txtWebSite" placeholder="Página Web" name="webSite">
                     </div>
+                    <div class="form-group d-none">
+                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                            <input type="checkbox" class="custom-control-input" id="chkActive" name="isActive">
+                            <label class="custom-control-label" for="chkActive"></label>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
-                    <button type="reset" id="btnResetAdd" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" id="btnAdd" class="btn btn-primary">Guardar</button>
+                    <button type="reset" id="btnReset" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" id="btnSave" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>

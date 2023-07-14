@@ -14,7 +14,7 @@
                 <div class="modal-body">
                     <div class="form-group d-none">
                         <label for="txtAuthorId">ID Autor</label>
-                        <input type="text" class="form-control" id="txtAuthorId" name="authorId" readonly>
+                        <input type="text" class="form-control" id="txtAuthorId" name="authorId">
                     </div>
                     <div class="form-group">
                         <label for="txtFirstname">Nombres (*)</label>
