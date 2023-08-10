@@ -61,6 +61,7 @@ public class ModuleServlet extends HttpServlet {
 
     private void mainAction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("cardTitle", "Listado de módulos");
+        request.setAttribute("formTitle", "Añadir nuevo módulo");
         RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_TEMPLATE_PATH);
         dispatcher.forward(request, response);
     }

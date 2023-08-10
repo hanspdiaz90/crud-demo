@@ -1,18 +1,24 @@
+let isNew = true;
 $(function () {
 
-    getAllModules();
+    findAllModules();
 
-    $("#moduleAddForm").submit(function (event) {
+    $("#addEditForm").submit(function (event) {
         event.preventDefault();
     });
 
-    $("#btnAdd").click(function () {
-        $("#moduleAddForm").validate({
+    $("#btnSave").click(function () {
+        $("#addEditForm").validate({
             rules: {
                 title: {required: true, minlength: 3}
             },
             submitHandler: function (form) {
                 let url = contextPath + "/admincrud/modulos?action=create";
+                let title = "Registrado!";
+                if (!isNew) {
+                    url = contextPath + "/admincrud/modulos?action=update";
+                    title = "Actualizado!";
+                }
                 let formData = $(form).serialize();
                 $.ajax({
                     url: url,
@@ -22,9 +28,15 @@ $(function () {
                     success: function (response) {
                         if (response.success) {
                             $(form).trigger("reset");
-                            $("#moduleAddModal").modal("hide");
-                            $("#modulesDataTable").DataTable().ajax.reload(null, false);
-                            Swal.fire("Registrado!", response.message, response.status);
+                            let formBody = $("#addEditForm");
+                            setDisplayNoneToInputs(formBody, ".form-group #txtModuleId");
+                            setDisplayNoneToInputs(formBody, ".form-group .custom-switch");
+                            setDisabledAndReadOnlyToInputId(formBody, ".form-group #txtModuleId", true);
+                            let collapseCard = $("#collapseCard");
+                            setCollapseOnCard(collapseCard, false);
+                            $("#tblModules").DataTable().ajax.reload(null, false);
+                            Swal.fire(title, response.message, response.status);
+                            if (!isNew) isNew = true;
                         }
                     },
                     processData: false,
@@ -34,11 +46,37 @@ $(function () {
         });
     });
 
-    $("#btnResetAdd").click(function () {
-        resetInvalidForm(this, "#moduleAddForm");
+    $("#btnReset").click(function () {
+        resetInvalidForm(this, "#addEditForm");
+        isNew = true;
+        let formBody = $("#addEditForm");
+        setDisplayNoneToInputs(formBody, ".form-group #txtModuleId");
+        setDisplayNoneToInputs(formBody, ".form-group .custom-switch");
+        setDisabledAndReadOnlyToInputId(formBody, ".form-group #txtModuleId", true);
+        let collapseCard = $("#collapseCard");
+        setCollapseOnCard(collapseCard, false);
     });
 
 });
+
+function setDisabledAndReadOnlyToInputId(formBody, inputId, flag) {
+    formBody.find(inputId).prop("disabled", flag);
+    formBody.find(inputId).prop("readonly", !flag);
+}
+
+function setDisplayNoneToInputs(formBody, input) {
+    formBody.find(input).parent().addClass("d-none");
+}
+
+function setCollapseOnCard(formBody, flag) {
+    if (flag) {
+        formBody.find("button .fas").toggleClass("fa-plus fa-minus");
+    } else {
+        formBody.find("button .fas").toggleClass("fa-minus fa-plus");
+    }
+    formBody.find(".card-body").slideToggle("slow");
+    formBody.toggleClass("collapsed-card");
+}
 
 function resetInvalidForm(button, validatedForm) {
     let form = $(button).closest(validatedForm);
@@ -48,32 +86,56 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function viewDetailsModule(button) {
+function displayStatus(status) {
+    let classNameBadge = status ? "success" : "danger";
+    let classNameIcon = status ? "check" : "times";
+    let statusText = status ? "ACTIVO" : "INACTIVO";
+    let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
+    elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
+    elementHTML += "</span>";
+    return elementHTML;
+}
+
+function showFormEditAndViewDetailModule(button, isEditable) {
     let url = contextPath + "/admincrud/modulos?action=findById";
     let moduleId = $(button).data("moduleId");
     $.ajax({
         url: url,
-        method: "GET",
+        type: "GET",
         data: {moduleId: moduleId},
         dataType: "JSON",
         success: function (response) {
             if (response.success) {
-                let moduleObj = response.result;
-                let classNameBadge = moduleObj.active ? "success" : "danger";
-                let classNameIcon = moduleObj.active ? "check" : "times";
-                let statusText = moduleObj.active ? "ACTIVO" : "INACTIVO";
-                let modalBody = $("#moduleViewModal .modal-body");
-                modalBody.empty();
-                let elementHTML = "<dl>";
-                elementHTML += "<dt>Título</dt>";
-                elementHTML += "<dd>" + moduleObj.title + "</dd>";
-                elementHTML += "<dt>Descripción</dt>";
-                elementHTML += "<dd>" + (moduleObj.description ?? "N/A") + "</dd>";
-                elementHTML += "<dt>Activo?</dt>";
-                elementHTML += "<dd><span class='badge badge-" + classNameBadge + "'><i class='fas fa-" + classNameIcon + "'></i> " + statusText + "</span></dd>";
-                elementHTML += "</dl>";
-                modalBody.append(elementHTML);
-                $("#moduleViewModal").modal("show");
+                let foundModule = response.result;
+                if (isEditable) {
+                    let formBody = $("#addEditForm");
+                    formBody.find(".form-group.d-none").removeClass("d-none");
+                    setDisabledAndReadOnlyToInputId(formBody, ".form-group #txtModuleId", false);
+                    formBody.find(".form-group #txtModuleId").val(foundModule.moduleId);
+                    formBody.find(".form-group #txtTitle").val(foundModule.title);
+                    formBody.find(".form-group #txtDescription").val(foundModule.description);
+                    formBody.find(".form-group #chkActive").attr("checked", foundModule.active);
+                    let collapseCard = $("#collapseCard");
+                    let exists = collapseCard.hasClass("collapsed-card");
+                    if (exists) {
+                        setCollapseOnCard(collapseCard, true);
+                    }
+                    formBody.find(".form-group #txtTitle").focus();
+                    formBody.find(".form-group #txtTitle").select();
+                    isNew = false;
+                } else {
+                    let modalBody = $("#viewDetailModal .modal-body");
+                    modalBody.empty();
+                    let elementHTML = "<dl>";
+                    elementHTML += "<dt>Título</dt>";
+                    elementHTML += "<dd>" + foundModule.title + "</dd>";
+                    elementHTML += "<dt>Descripción</dt>";
+                    elementHTML += "<dd>" + (foundModule.description ?? "-") + "</dd>";
+                    elementHTML += "<dt>" + displayStatus(foundModule.active) + "</dt>";
+                    elementHTML += "</dl>";
+                    modalBody.append(elementHTML);
+                    $("#viewDetailModal").modal("show");
+                }
             }
         }
     });
@@ -82,7 +144,7 @@ function viewDetailsModule(button) {
 function disableModule(button) {
     let title = $(button).data("title");
     Swal.fire({
-        title: "¿Estás seguro que quieres deshabilitar el autor: " + title + " ?",
+        title: "¿Estás seguro que quieres desactivar el módulo: " + title + " ?",
         text: "¡No podrás revertir esta operación!",
         icon: "warning",
         showCancelButton: true,
@@ -95,13 +157,13 @@ function disableModule(button) {
             let moduleId = $(button).data("moduleId");
             $.ajax({
                 url: url,
-                method: "POST",
+                type: "POST",
                 data: {moduleId: moduleId},
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        $("#modulesDataTable").DataTable().ajax.reload(null, false);
-                        Swal.fire("Deshabilitado!", response.message, response.status);
+                        $("#tblModules").DataTable().ajax.reload(null, false);
+                        Swal.fire("Desactivado!", response.message, response.status);
                     }
                 }
             });
@@ -109,9 +171,9 @@ function disableModule(button) {
     });
 }
 
-function getAllModules() {
+function findAllModules() {
     let url = contextPath + "/admincrud/modulos?action=findAll";
-    let table = $("#modulesDataTable").DataTable({
+    let table = $("#tblModules").DataTable({
         destroy: true,
         ajax: {
             url: url,
@@ -123,13 +185,7 @@ function getAllModules() {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
-                    let classNameBadge = row.active ? "success" : "danger";
-                    let classNameIcon = row.active ? "check" : "times";
-                    let statusText = row.active ? "ACTIVO" : "INACTIVO";
-                    let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
-                    elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
-                    elementHTML += "</span>";
-                    return elementHTML;
+                    return displayStatus(row.active);
                 }
             },
             {
@@ -137,11 +193,9 @@ function getAllModules() {
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='viewDetailsModule(this)' class='btn btn-info' data-toggle='modal' data-target='#moduleViewModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-module-id='" + row.moduleId + "'><i class='fas fa-eye'></i></button>";
-                    if (row.active) {
-                        elementHTML += "<button type='button' onclick='editModule(this)' class='btn btn-warning' data-toggle='modal' data-target='#modalEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-module-id='" + row.moduleId + "'><i class='fas fa-pen'></i></button>"
-                        elementHTML += "<button type='button' onclick='disableModule(this)' class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-module-id='" + row.moduleId + "' data-title='" + row.title + "'><i class='fas fa-flag'></i></button>"
-                    }
+                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailModule(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-module-id='" + row.moduleId + "'><i class='fas fa-eye'></i></button>";
+                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailModule(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-module-id='" + row.moduleId + "'><i class='fas fa-pen'></i></button>"
+                    elementHTML += "<button type='button' onclick='disableModule(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-module-id='" + row.moduleId + "' data-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
                     elementHTML += "</div>"
                     return elementHTML;
                 }

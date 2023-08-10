@@ -6,14 +6,14 @@ function getNavigationMenu(roleId) {
     let url = contextPath + "/admincrud/menu-permisos?action=getNavigationMenuByRole";
     $.ajax({
         url: url,
-        method: "GET",
+        type: "GET",
         data: {roleId: roleId},
         dataType: "JSON",
         success: function (response) {
             if (response.success) {
-                let menuData = response.result;
-                let menuView = $(".main-sidebar .sidebar ul");
-                createRecursiveMenu(menuView, menuData);
+                let menu = response.result;
+                let container = $(".main-sidebar .sidebar ul");
+                createRecursiveMenu(container, menu);
                 // Alternar la barra lateral de navegación
                 $("ul.nav-sidebar a").filter(toggleNavSidebar);
                 // Alternar vista de árbol de navegación
@@ -23,10 +23,11 @@ function getNavigationMenu(roleId) {
     });
 }
 
-function createRecursiveMenu(ul, menu) {
+function createRecursiveMenu(container, menu) {
     for (let i = 0; i < menu.length; i++) {
         if (menu[i].children.length > 0) {
-            let li = $(ul).append("<li class='nav-item'>" +
+            let ul = $(container);
+            let li = "<li class='nav-item'>" +
                 "<a href='#' class='nav-link'>" +
                 "<i class='nav-icon " + menu[i].menu.icon + "'></i>" +
                 "<p>" + menu[i].menu.title +
@@ -36,16 +37,19 @@ function createRecursiveMenu(ul, menu) {
                 "</a>" +
                 "<ul class='nav nav-treeview' id='submenu-" + menu[i].menu.title.toLowerCase() + "'>" +
                 "</ul>" +
-                "</li>");
-            let subMenuView = $("#submenu-" + menu[i].menu.title.toLowerCase());
-            createRecursiveMenu(subMenuView, menu[i].children);
+                "</li>";
+            ul.append(li);
+            let subContainer = $("#submenu-" + menu[i].menu.title.toLowerCase());
+            createRecursiveMenu(subContainer, menu[i].children);
         } else {
-            let li = $(ul).append("<li class='nav-item'>" +
+            let ul = $(container);
+            let li = "<li class='nav-item'>" +
                 "<a href='" + (menu[i].menu.route != null ? contextPath.concat(menu[i].menu.route) : '#') + "' class='nav-link'>" +
                 "<i class='" + menu[i].menu.icon + " nav-icon'></i>" +
                 "<p>" + menu[i].menu.title + "</p>" +
                 "</a>" +
-                "</li>");
+                "</li>";
+            ul.append(li);
         }
     }
 }

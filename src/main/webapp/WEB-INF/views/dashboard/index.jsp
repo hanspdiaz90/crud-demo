@@ -1,18 +1,18 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="tm" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <c:set var="loggedUser" value="${sessionScope.loggedUser}"/>
 <%
-    response.setHeader("Cache-Control","no-cache");
-    response.setHeader("Cache-Control","no-store");
-    response.setHeader("Pragma","no-cache");
+    response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Cache-Control", "no-store");
+    response.setHeader("Pragma", "no-cache");
     response.setDateHeader ("Expires", 0);
     if(session.getAttribute("loggedUser") == null){
         response.sendRedirect(request.getContextPath() + "/");
     }
 %>
-<mt:template tittle="DemoCRUD | Dashboard">
+<tm:template tittle="DemoCRUD | Dashboard">
     <jsp:attribute name="head">
         <jsp:include page="/WEB-INF/partials/_head.jsp"/>
     </jsp:attribute>
@@ -110,4 +110,4 @@
         <jsp:include page="/WEB-INF/partials/_javascript.jsp"/>
         <script src="${contextPath}/assets/js/nav-menu/recursive-menu.js"></script>
     </jsp:attribute>
-</mt:template>
+</tm:template>

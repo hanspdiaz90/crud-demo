@@ -4,9 +4,9 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <c:set var="loggedUser" value="${sessionScope.loggedUser}"/>
 <%
-    response.setHeader("Cache-Control","no-cache");
-    response.setHeader("Cache-Control","no-store");
-    response.setHeader("Pragma","no-cache");
+    response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Cache-Control", "no-store");
+    response.setHeader("Pragma", "no-cache");
     response.setDateHeader ("Expires", 0);
 %>
 <c:if test="${empty loggedUser}">

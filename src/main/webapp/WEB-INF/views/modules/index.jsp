@@ -2,7 +2,6 @@
 <%@ taglib prefix="tm" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<c:set var="loggedUser" value="${sessionScope.loggedUser}"/>
 <%
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Cache-Control", "no-store");
@@ -41,24 +40,36 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <!-- Card -->
-                    <div class="card card-outline card-primary">
-                        <!-- Card Header -->
+                    <!-- Line chart -->
+                    <div class="card card-primary card-outline collapsed-card" id="collapseCard">
                         <div class="card-header">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h3 class="card-title">
-                                    <i class="fas fa-clipboard-list"></i> ${cardTitle}
-                                </h3>
-                                <button type="button" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#moduleAddModal" data-tooltip="tooltip" data-placement="left" title="Añadir módulo">
+                            <h3 class="card-title"><i class="fas fa-clipboard-list"></i> ${formTitle}</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
                         </div>
+                        <div class="card-body">
+                            <jsp:include page="addEditModal.jsp"/>
+                        </div>
+                        <!-- /.card-body-->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <!-- Card -->
+                    <div class="card card-primary card-outline">
+                        <!-- Card Header -->
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-clipboard-list"></i> ${cardTitle}</h3>
+                        </div>
                         <!-- /.card-header -->
                         <!-- Card Body -->
                         <div class="card-body">
-                            <jsp:include page="modulesDataTable.jsp"/>
+                            <jsp:include page="dataTable.jsp"/>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -67,14 +78,8 @@
             </div>
         </div>
         <!-- /.container-fluid -->
-        <!-- #authorAddModal -->
-        <jsp:include page="moduleAddModal.jsp"/>
-        <!-- /.modal (Add Modal)-->
-        <!-- #authorEditModal -->
-<%--        <jsp:include page="authorEditModal.jsp"/>--%>
-        <!-- /.modal (Edit Modal)-->
-        <!-- #authorViewModal -->
-        <jsp:include page="moduleViewModal.jsp"/>
+        <!-- #viewDetailModal -->
+        <jsp:include page="viewDetailModal.jsp"/>
         <!-- /.modal (View Details Modal)-->
     </jsp:attribute>
     <jsp:attribute name="javascript">

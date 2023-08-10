@@ -132,6 +132,7 @@ public class BookServlet extends HttpServlet {
                 request.getParameter("isbn") != null &&
                 request.getParameter("title") != null &&
                 request.getParameter("coverImage") != null &&
+                request.getParameter("review") != null &&
                 request.getParameter("yearEdition") != null &&
                 request.getParameter("numberPages") != null &&
                 request.getParameter("price") != null &&
@@ -142,7 +143,7 @@ public class BookServlet extends HttpServlet {
             String isbn = request.getParameter("isbn");
             String title = request.getParameter("title");
             String coverImage = request.getParameter("coverImage");
-            String review = !request.getParameter("review").isEmpty() ? request.getParameter("review") : null;
+            String review = request.getParameter("review");
             int yearEdition = Integer.parseInt(request.getParameter("yearEdition"));
             int numberPages = Integer.parseInt(request.getParameter("numberPages"));
             double price = Double.parseDouble(request.getParameter("price"));

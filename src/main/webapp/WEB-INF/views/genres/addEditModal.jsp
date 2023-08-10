@@ -1,11 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<div class="modal fade" id="addEditModal">
+<div class="modal fade" id="addEditModal" tabindex="-1" aria-labelledby="addEditModalLabel" aria-hidden="true">
     <!-- Modal Dialog -->
     <div class="modal-dialog">
         <!-- Modal Content -->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Añadir Nuevo Género Literario</h4>
+                <h4 class="modal-title" id="addEditModalLabel">Añadir Nuevo Género Literario</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-end">
+                <div class="modal-footer">
                     <button type="reset" id="btnReset" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     <button type="submit" id="btnSave" class="btn btn-primary">Guardar</button>
                 </div>

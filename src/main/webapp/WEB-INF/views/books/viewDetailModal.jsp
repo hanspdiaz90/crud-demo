@@ -1,11 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<div class="modal fade" id="bookViewModal">
+<div class="modal fade" id="viewDetailModal" tabindex="-1" aria-labelledby="viewDetailModalLabel" aria-hidden="true">
     <!-- Modal Dialog -->
     <div class="modal-dialog">
         <!-- Modal Content -->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Información del Libro</h4>
+                <h4 class="modal-title" id="viewDetailModalLabel">Información del Libro</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

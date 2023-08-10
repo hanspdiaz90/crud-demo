@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<div class="modal fade" id="moduleViewModal">
+<div class="modal fade" id="viewDetailModal">
     <!-- Modal Dialog -->
     <div class="modal-dialog">
         <!-- Modal Content -->
