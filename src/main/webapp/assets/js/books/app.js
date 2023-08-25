@@ -298,15 +298,6 @@ function disableBook(button) {
 //         data: { accion: "cargarAutores" },
 //         dataType: "JSON",
 //         success: function (response) {
-//             if (response.ok) {
-//                 let objAuthors = response.result;
-//                 let select = $("#cbxAutores");
-//                 // select.find("option").remove();
-//                 $.each(objAuthors, function (key, value) {
-//                     select.append("<option value='" + value.id + "'>" + value.nombres + " " + value.apellidos + " </option>");
-//                     // $("<option>").val(value.id).text(value.nombres + " " + value.apellidos).appendTo(select);
-//                 })
-//             }
 //         }
 //     });
 // }

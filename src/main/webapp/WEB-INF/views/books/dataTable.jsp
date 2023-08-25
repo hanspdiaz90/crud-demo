@@ -7,7 +7,7 @@
             <th class="text-uppercase" scope="col">Autor</th>
             <th class="text-uppercase" scope="col">Editorial</th>
             <th class="text-uppercase" scope="col">Género</th>
-            <th class="text-uppercase" scope="col">Activado?</th>
+            <th class="text-uppercase" scope="col">Estado</th>
             <th class="text-uppercase" scope="col">Acciones</th>
         </tr>
     </thead>
@@ -19,7 +19,7 @@
             <th scope="col">Autor</th>
             <th scope="col">Editorial</th>
             <th scope="col">Género</th>
-            <th scope="col">Activado?</th>
+            <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
         </tr>
     </tfoot>

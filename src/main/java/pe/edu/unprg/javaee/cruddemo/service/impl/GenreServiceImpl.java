@@ -16,7 +16,7 @@ public class GenreServiceImpl implements GenreService {
     public boolean createGenre(Genre genre) {
         boolean result;
         try {
-            result =  genreDAO.createGenre(genre);
+            result =  this.genreDAO.createGenre(genre);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -27,7 +27,7 @@ public class GenreServiceImpl implements GenreService {
     public boolean editGenre(Genre genre) {
         boolean result;
         try {
-            result =  genreDAO.editGenre(genre);
+            result =  this.genreDAO.editGenre(genre);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +38,7 @@ public class GenreServiceImpl implements GenreService {
     public Genre findByGenreId(int genreId) {
         Genre result;
         try {
-            result = genreDAO.findByGenreId(genreId);
+            result = this.genreDAO.findByGenreId(genreId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -49,7 +49,7 @@ public class GenreServiceImpl implements GenreService {
     public List<Genre> findAll() {
         List<Genre> result;
         try {
-            result = genreDAO.findAll();
+            result = this.genreDAO.findAll();
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +60,7 @@ public class GenreServiceImpl implements GenreService {
     public boolean disableByGenreId(int genreId) {
         boolean result;
         try {
-            result = genreDAO.disableByGenreId(genreId);
+            result = this.genreDAO.disableByGenreId(genreId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }

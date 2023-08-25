@@ -29,13 +29,13 @@ public class PublisherServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "findById":
-                findByIdAction(request, response);
+                this.findByIdAction(request, response);
                 break;
             case "findAll":
-                findAllAction(response);
+                this.findAllAction(response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
@@ -45,16 +45,16 @@ public class PublisherServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "create":
-                createAction(request, response);
+                this.createAction(request, response);
                 break;
             case "update":
-                updateAction(request, response);
+                this.updateAction(request, response);
                 break;
             case "disableById":
-                disableByIdAction(request, response);
+                this.disableByIdAction(request, response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
@@ -82,7 +82,7 @@ public class PublisherServlet extends HttpServlet {
             savedPublisher.setPhone(phone);
             savedPublisher.setCellphone(cellphone);
             savedPublisher.setWebSite(webSite);
-            boolean created = publisherService.createPublisher(savedPublisher);
+            boolean created = this.publisherService.createPublisher(savedPublisher);
             JsonObject json = new JsonObject();
             String message = null;
             if (created) {
@@ -120,7 +120,7 @@ public class PublisherServlet extends HttpServlet {
             updatePublisher.setCellphone(cellphone);
             updatePublisher.setWebSite(webSite);
             updatePublisher.setActive(active);
-            boolean updated = publisherService.editPublisher(updatePublisher);
+            boolean updated = this.publisherService.editPublisher(updatePublisher);
             JsonObject json = new JsonObject();
             String message = null;
             if (updated) {
@@ -138,8 +138,8 @@ public class PublisherServlet extends HttpServlet {
 
     private void findByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("publisherId") != null) {
-            int publisherId = Integer.parseInt(request.getParameter("publisherId"));
-            Publisher foundPublisher = publisherService.findByPublisherId(publisherId);
+            Integer publisherId = Integer.parseInt(request.getParameter("publisherId"));
+            Publisher foundPublisher = this.publisherService.findByPublisherId(publisherId);
             JsonObject json = new JsonObject();
             JsonElement result = null;
             if (foundPublisher != null) {
@@ -159,7 +159,7 @@ public class PublisherServlet extends HttpServlet {
     private void findAllAction(HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
-        List<Publisher> publishersList = publisherService.findAll();
+        List<Publisher> publishersList = this.publisherService.findAll();
         if (publishersList != null) {
             Type publisherType = new TypeToken<List<Publisher>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(publishersList, publisherType);
@@ -176,12 +176,12 @@ public class PublisherServlet extends HttpServlet {
 
     private void disableByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("publisherId") != null) {
-            int publisherId = Integer.parseInt(request.getParameter("publisherId"));
-            boolean disabled = publisherService.disableByPublisherId(publisherId);
+            Integer publisherId = Integer.parseInt(request.getParameter("publisherId"));
+            boolean disabled = this.publisherService.disableByPublisherId(publisherId);
             JsonObject json = new JsonObject();
             String message = null;
             if (disabled) {
-                message = "La editorial ha sido deshabilitado con éxito";
+                message = "La editorial ha sido desactivado con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {

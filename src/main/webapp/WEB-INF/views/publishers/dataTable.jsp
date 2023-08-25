@@ -6,7 +6,7 @@
             <th class="text-uppercase" scope="col">E-mail</th>
             <th class="text-uppercase" scope="col">N° Teléfono</th>
             <th class="text-uppercase" scope="col">N° Celular</th>
-            <th class="text-uppercase" scope="col">Activado?</th>
+            <th class="text-uppercase" scope="col">Estado</th>
             <th class="text-uppercase" scope="col"></th>
         </tr>
     </thead>
@@ -17,7 +17,7 @@
             <th scope="col">E-mail</th>
             <th scope="col">N° Telefono</th>
             <th scope="col">N° Celular</th>
-            <th scope="col">Activado?</th>
+            <th scope="col">Estado</th>
             <th scope="col"></th>
         </tr>
     </tfoot>

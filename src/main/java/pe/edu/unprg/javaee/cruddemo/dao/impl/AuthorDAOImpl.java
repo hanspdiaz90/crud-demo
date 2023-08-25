@@ -108,17 +108,19 @@ public class AuthorDAOImpl implements AuthorDAO {
         return rowsAffected;
     }
 
-//    @Override
-//    public boolean changeStatusById(int id) throws DAOException {
-//        boolean rowsAffected = false;
-//        try (Connection conn = DatabaseHandler.getInstance().getConnection();
-//             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_CHANGE_AUTHOR_STATUS_BY_ID)) {
-//            cstmt.setInt(1, id);
-//            rowsAffected = cstmt.executeUpdate() > 0;
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_CHANGE_AUTHOR_STATUS_BY_ID, ex);
-//        }
-//        return rowsAffected;
-//    }
+    /*
+    @Override
+    public boolean changeStatusById(int id) throws DAOException {
+        boolean rowsAffected = false;
+        try (Connection conn = DatabaseHandler.getInstance().getConnection();
+             CallableStatement cstmt = conn.prepareCall(AuthorQuery.SP_CHANGE_AUTHOR_STATUS_BY_ID)) {
+            cstmt.setInt(1, id);
+            rowsAffected = cstmt.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            throw new DAOException("Error al ejecutar la consulta: " + AuthorQuery.SP_CHANGE_AUTHOR_STATUS_BY_ID, ex);
+        }
+        return rowsAffected;
+    }
+     */
 
 }

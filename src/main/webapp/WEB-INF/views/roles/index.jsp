@@ -11,7 +11,7 @@
         response.sendRedirect(request.getContextPath() + "/");
     }
 %>
-<tm:template tittle="DemoCRUD | Menú">
+<tm:template tittle="DemoCRUD | Módulos">
     <jsp:attribute name="head">
         <jsp:include page="/WEB-INF/partials/_head.jsp"/>
         <!-- SweetAlert2 -->
@@ -24,12 +24,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Menú de Navegación</h1>
+                    <h1>Módulos</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="${contextPath}/admincrud/dashboard">Inicio</a></li>
-                        <li class="breadcrumb-item active">Menú de Navegación</li>
+                        <li class="breadcrumb-item active">Módulos</li>
                     </ol>
                 </div>
             </div>
@@ -98,13 +98,6 @@
         <script src="${contextPath}/assets/js/default-datatable.js"></script>
         <script src="${contextPath}/assets/js/default-validation-bs4.js"></script>
         <script src="${contextPath}/assets/js/nav-menu/recursive-menu.js"></script>
-        <script>
-            $(function () {
-                $.validator.addMethod("selectModule",
-                    function (value, el, param) { return (value != "0"); },
-                    "Este campo es obligatorio.");
-            });
-        </script>
-        <script src="${contextPath}/assets/js/nav-menu/app.js"></script>
+        <script src="${contextPath}/assets/js/modules/app.js"></script>
     </jsp:attribute>
 </tm:template>

@@ -80,10 +80,17 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function displayLocalDate(date, format) {
-    let objDate = new Date(date);
-    objDate.setMinutes(objDate.getMinutes() + objDate.getTimezoneOffset());
-    return new moment(objDate, "YYYY-MM-DD").format(format);
+// function displayLocalDate(date, format) {
+//     return moment(date).format(format);
+// }
+
+function displayLocalDate (date) {
+    let options = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    };
+    return new Date(date + "T00:00:00").toLocaleString("es-ES", options);
 }
 
 function displayFullName(firstname, lastname) {
@@ -123,7 +130,8 @@ function showModalEditAndViewAuthor(button, isEditable) {
                     modalBody.find(".form-group #txtFirstname").val(foundAuthor.firstName);
                     modalBody.find(".form-group #txtLastname").val(foundAuthor.lastName);
                     modalBody.find(".form-group #txtCity").val(foundAuthor.city);
-                    modalBody.find(".form-group #dtDob").val(displayLocalDate(foundAuthor.dob, "DD/MM/YYYY"));
+                    modalBody.find(".form-group #dtDob").val(displayLocalDate(foundAuthor.dob));
+                    // modalBody.find(".form-group #dtDob").val(displayLocalDate(foundAuthor.dob, "DD/MM/YYYY"));
                     modalBody.find(".form-group #chkActive").attr("checked", foundAuthor.active);
                     $("#addEditModal").modal("show");
                     isNew = false;

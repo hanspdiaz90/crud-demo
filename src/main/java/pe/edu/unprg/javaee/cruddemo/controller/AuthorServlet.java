@@ -36,13 +36,13 @@ public class AuthorServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "findById":
-                findByIdAction(request, response);
+                this.findByIdAction(request, response);
                 break;
             case "findAll":
-                findAllAction(response);
+                this.findAllAction(response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
@@ -52,16 +52,16 @@ public class AuthorServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "create":
-                createAction(request, response);
+                this.createAction(request, response);
                 break;
             case "update":
-                updateAction(request, response);
+                this.updateAction(request, response);
                 break;
             case "disableById":
-                disableByIdAction(request, response);
+                this.disableByIdAction(request, response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
@@ -86,7 +86,7 @@ public class AuthorServlet extends HttpServlet {
             savedAuthor.setLastName(lastName);
             savedAuthor.setCity(city);
             savedAuthor.setDob(LocalDate.parse(dob, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            boolean created = authorService.createAuthor(savedAuthor);
+            boolean created = this.authorService.createAuthor(savedAuthor);
             JsonObject json = new JsonObject();
             String message = null;
             if (created) {
@@ -121,7 +121,7 @@ public class AuthorServlet extends HttpServlet {
             updatedAuthor.setCity(city);
             updatedAuthor.setDob(LocalDate.parse(dob, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             updatedAuthor.setActive(active);
-            boolean updated = authorService.editAuthor(updatedAuthor);
+            boolean updated = this.authorService.editAuthor(updatedAuthor);
             JsonObject json = new JsonObject();
             String message = null;
             if (updated) {
@@ -139,8 +139,8 @@ public class AuthorServlet extends HttpServlet {
 
     private void findByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("authorId") != null) {
-            int authorId = Integer.parseInt(request.getParameter("authorId"));
-            Author foundAuthor = authorService.findByAuthorId(authorId);
+            Integer authorId = Integer.parseInt(request.getParameter("authorId"));
+            Author foundAuthor = this.authorService.findByAuthorId(authorId);
             JsonObject json = new JsonObject();
             JsonElement result = null;
             if (foundAuthor != null) {
@@ -160,7 +160,7 @@ public class AuthorServlet extends HttpServlet {
     private void findAllAction(HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
-        List<Author> authorsList = authorService.findAll();
+        List<Author> authorsList = this.authorService.findAll();
         if (authorsList != null) {
             Type authorType = new TypeToken<List<Author>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(authorsList, authorType);
@@ -177,12 +177,12 @@ public class AuthorServlet extends HttpServlet {
 
     private void disableByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("authorId") != null) {
-            int authorId = Integer.parseInt(request.getParameter("authorId"));
-            boolean disabled = authorService.disableByAuthorId(authorId);
+            Integer authorId = Integer.parseInt(request.getParameter("authorId"));
+            boolean disabled = this.authorService.disableByAuthorId(authorId);
             JsonObject json = new JsonObject();
             String message = null;
             if (disabled) {
-                message = "El autor ha sido deshabilitado con éxito";
+                message = "El autor ha sido desactivado con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
@@ -194,28 +194,30 @@ public class AuthorServlet extends HttpServlet {
         }
     }
 
-//    private void changeAuthorStatusAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        boolean ok = false;
-//        String message = null;
-//        JsonObject jsonResponse = new JsonObject();
-//        try {
-//            if (request.getParameter("id") != null) {
-//                int id = Integer.parseInt(request.getParameter("id"));
-//                boolean success = authorService.changeStatusById(id);
-//                if (success) {
-//                    ok = true;
-//                    message = "La operación se realizó con éxito";
-//                }
-//            }
-//            jsonResponse.addProperty("status", ok ? "success" : "error");
-//            jsonResponse.addProperty("message", message);
-//            response.setContentType("application/json");
-//            response.setCharacterEncoding("UTF-8");
-//            response.getWriter().print(jsonResponse.toString());
-//        } catch (ServiceException ex) {
-//            response.setContentType("text/html");
-//            response.getWriter().print(ex.getMessage());
-//        }
-//    }
+    /*
+    private void changeAuthorStatusAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        boolean ok = false;
+        String message = null;
+        JsonObject jsonResponse = new JsonObject();
+        try {
+            if (request.getParameter("id") != null) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                boolean success = authorService.changeStatusById(id);
+                if (success) {
+                    ok = true;
+                    message = "La operación se realizó con éxito";
+                }
+            }
+            jsonResponse.addProperty("status", ok ? "success" : "error");
+            jsonResponse.addProperty("message", message);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().print(jsonResponse.toString());
+        } catch (ServiceException ex) {
+            response.setContentType("text/html");
+            response.getWriter().print(ex.getMessage());
+        }
+    }
+     */
 
 }

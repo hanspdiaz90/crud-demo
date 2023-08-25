@@ -29,13 +29,13 @@ public class ModuleServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "findById":
-                findByIdAction(request, response);
+                this.findByIdAction(request, response);
                 break;
             case "findAll":
-                findAllAction(response);
+                this.findAllAction(response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
@@ -45,16 +45,16 @@ public class ModuleServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "create":
-                createAction(request, response);
+                this.createAction(request, response);
                 break;
             case "update":
-                updateAction(request, response);
+                this.updateAction(request, response);
                 break;
             case "disableById":
-                disableByIdAction(request, response);
+                this.disableByIdAction(request, response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
@@ -73,7 +73,7 @@ public class ModuleServlet extends HttpServlet {
             Module savedModule = new Module();
             savedModule.setTitle(title);
             savedModule.setDescription(description);
-            boolean created = moduleService.createModule(savedModule);
+            boolean created = this.moduleService.createModule(savedModule);
             JsonObject json = new JsonObject();
             String message = null;
             if (created) {
@@ -101,7 +101,7 @@ public class ModuleServlet extends HttpServlet {
             updatedModule.setTitle(title);
             updatedModule.setDescription(description);
             updatedModule.setActive(active);
-            boolean created = moduleService.editModule(updatedModule);
+            boolean created = this.moduleService.editModule(updatedModule);
             JsonObject json = new JsonObject();
             String message = null;
             if (created) {
@@ -119,8 +119,8 @@ public class ModuleServlet extends HttpServlet {
 
     private void findByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("moduleId") != null) {
-            int moduleId = Integer.parseInt(request.getParameter("moduleId"));
-            Module foundModule = moduleService.findByModuleId(moduleId);
+            Integer moduleId = Integer.parseInt(request.getParameter("moduleId"));
+            Module foundModule = this.moduleService.findByModuleId(moduleId);
             JsonObject json = new JsonObject();
             JsonElement result = null;
             if (foundModule != null) {
@@ -140,7 +140,7 @@ public class ModuleServlet extends HttpServlet {
     private void findAllAction(HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
-        List<Module> modulesList = moduleService.findAll();
+        List<Module> modulesList = this.moduleService.findAll();
         if (modulesList != null) {
             Type moduleType = new TypeToken<List<Module>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(modulesList, moduleType);
@@ -157,12 +157,12 @@ public class ModuleServlet extends HttpServlet {
 
     private void disableByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("moduleId") != null) {
-            int moduleId = Integer.parseInt(request.getParameter("moduleId"));
-            boolean disabled = moduleService.disableByModuleId(moduleId);
+            Integer moduleId = Integer.parseInt(request.getParameter("moduleId"));
+            boolean disabled = this.moduleService.disableByModuleId(moduleId);
             JsonObject json = new JsonObject();
             String message = null;
             if (disabled) {
-                message = "El módulo ha sido deshabilitado con éxito";
+                message = "El módulo ha sido desactivado con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {

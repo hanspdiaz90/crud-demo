@@ -27,7 +27,7 @@ public class MenuPermissionServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "getNavigationMenuByRole":
-                getNavigationMenuByRoleAction(request, response);
+                this.getNavigationMenuByRoleAction(request, response);
                 break;
         }
     }
@@ -40,7 +40,7 @@ public class MenuPermissionServlet extends HttpServlet {
     private void getNavigationMenuByRoleAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("roleId") != null) {
             Integer roleId = Integer.parseInt(request.getParameter("roleId"));
-            List<MenuPermission> menus = menuPermissionService.findAllMenuPermissionByRole(roleId);
+            List<MenuPermission> menus = this.menuPermissionService.findAllMenuPermissionByRole(roleId);
             JsonObject json = new JsonObject();
             JsonArray data = null;
             if (menus != null) {

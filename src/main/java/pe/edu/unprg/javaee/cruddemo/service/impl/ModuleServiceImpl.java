@@ -16,7 +16,7 @@ public class ModuleServiceImpl implements ModuleService {
     public boolean createModule(Module module) {
         boolean result;
         try {
-            result =  moduleDAO.createModule(module);
+            result =  this.moduleDAO.createModule(module);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -27,7 +27,7 @@ public class ModuleServiceImpl implements ModuleService {
     public boolean editModule(Module module) {
         boolean result;
         try {
-            result =  moduleDAO.editModule(module);
+            result =  this.moduleDAO.editModule(module);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +38,7 @@ public class ModuleServiceImpl implements ModuleService {
     public Module findByModuleId(int moduleId) {
         Module result;
         try {
-            result = moduleDAO.findByModuleId(moduleId);
+            result = this.moduleDAO.findByModuleId(moduleId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -49,7 +49,7 @@ public class ModuleServiceImpl implements ModuleService {
     public List<Module> findAll() {
         List<Module> result;
         try {
-            result = moduleDAO.findAll();
+            result = this.moduleDAO.findAll();
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +60,7 @@ public class ModuleServiceImpl implements ModuleService {
     public boolean disableByModuleId(int moduleId) {
         boolean result;
         try {
-            result = moduleDAO.disableByModuleId(moduleId);
+            result = this.moduleDAO.disableByModuleId(moduleId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }

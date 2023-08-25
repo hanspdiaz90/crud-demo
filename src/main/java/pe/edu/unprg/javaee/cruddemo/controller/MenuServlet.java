@@ -2,11 +2,11 @@ package pe.edu.unprg.javaee.cruddemo.controller;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import pe.edu.unprg.javaee.cruddemo.model.Author;
-import pe.edu.unprg.javaee.cruddemo.service.AuthorService;
-import pe.edu.unprg.javaee.cruddemo.service.impl.AuthorServiceImpl;
+import pe.edu.unprg.javaee.cruddemo.model.Menu;
+import pe.edu.unprg.javaee.cruddemo.model.Module;
+import pe.edu.unprg.javaee.cruddemo.service.MenuService;
+import pe.edu.unprg.javaee.cruddemo.service.impl.MenuServiceImpl;
 import pe.edu.unprg.javaee.cruddemo.utils.JSONResponse;
-import pe.edu.unprg.javaee.cruddemo.utils.LocalDateTypeAdapter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,33 +16,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @WebServlet(name = "menuServlet", urlPatterns = "/admincrud/menu-navegacion")
 public class MenuServlet extends HttpServlet {
 
-    private final AuthorService authorService = new AuthorServiceImpl();
+    private final MenuService menuService = new MenuServiceImpl();
     private static final String VIEW_TEMPLATE_PATH = "/WEB-INF/views/nav-menu/index.jsp";
-    private final Gson gson = new GsonBuilder()
-            .serializeNulls()
-            .setPrettyPrinting()
-            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-            .create();
+    private final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "findById":
-                findByIdAction(request, response);
+                this.findByIdAction(request, response);
                 break;
             case "findAll":
-                findAllAction(response);
+                this.findAllAction(response);
+                break;
+            case "findActiveModules":
+                this.findActiveModulesAction(request, response);
+                break;
+            case "findMenusWithRoute":
+                this.findActiveModulesAction(request, response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
@@ -52,45 +52,48 @@ public class MenuServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "create":
-                createAction(request, response);
+                this.createAction(request, response);
                 break;
             case "update":
-                System.out.println("Próximo a implementarse =)");
+                this.updateAction(request, response);
                 break;
             case "disableById":
-                disableByIdAction(request, response);
+                this.disableByIdAction(request, response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
 
     private void mainAction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("cardTitle", "Listado de autores");
+        request.setAttribute("cardTitle", "Listado de menú");
+        request.setAttribute("formTitle", "Añadir nuevo menú");
         RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_TEMPLATE_PATH);
         dispatcher.forward(request, response);
     }
 
     private void createAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("firstName") != null &&
-                request.getParameter("lastName") != null &&
-                request.getParameter("city") != null &&
-                request.getParameter("dob") != null) {
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String city = request.getParameter("city");
-            String dob = request.getParameter("dob");
-            Author savedAuthor = new Author();
-            savedAuthor.setFirstName(firstName);
-            savedAuthor.setLastName(lastName);
-            savedAuthor.setCity(city);
-            savedAuthor.setDob(LocalDate.parse(dob, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            boolean created = authorService.createAuthor(savedAuthor);
+        if (request.getParameter("title") != null &&
+                request.getParameter("icon") != null &&
+                request.getParameter("module") != null) {
+            String title = request.getParameter("title");
+            String icon = request.getParameter("icon");
+            String route = !request.getParameter("route").isEmpty() ? request.getParameter("route") : null;
+            Integer moduleId = Integer.parseInt(request.getParameter("module"));
+            Integer parentId = request.getParameter("parent") != null ? Integer.parseInt(request.getParameter("parent")) : null;
+            Menu savedMenu = new Menu();
+            savedMenu.setTitle(title);
+            savedMenu.setIcon(icon);
+            savedMenu.setRoute(route);
+            savedMenu.setModule(new Module());
+            savedMenu.getModule().setModuleId(moduleId);
+            savedMenu.setParentId(parentId);
+            boolean created = this.menuService.createMenu(savedMenu);
             JsonObject json = new JsonObject();
             String message = null;
             if (created) {
-                message = "El autor ha sido registrado con éxito";
+                message = "El menú ha sido registrado con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
@@ -102,15 +105,46 @@ public class MenuServlet extends HttpServlet {
         }
     }
 
+    private void updateAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        /*
+        if (request.getParameter("moduleId") != null &&
+                request.getParameter("title") != null) {
+            Integer moduleId = Integer.parseInt(request.getParameter("moduleId"));
+            String title = request.getParameter("title");
+            String description = !request.getParameter("description").isEmpty() ? request.getParameter("description") : null;
+            boolean active = request.getParameter("isActive") != null && request.getParameter("isActive").equals("on");
+            Module updatedModule = new Module();
+            updatedModule.setModuleId(moduleId);
+            updatedModule.setTitle(title);
+            updatedModule.setDescription(description);
+            updatedModule.setActive(active);
+            boolean created = moduleService.editModule(updatedModule);
+            JsonObject json = new JsonObject();
+            String message = null;
+            if (created) {
+                message = "Se actualizaron los datos del módulo con éxito";
+                json.addProperty("success", true);
+                json.addProperty("status", "success");
+            } else {
+                json.addProperty("success", false);
+                json.addProperty("status", "failure");
+            }
+            json.addProperty("message", message);
+            JSONResponse.writeFromServlet(response, json);
+        }
+         */
+    }
+
     private void findByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("authorId") != null) {
-            int authorId = Integer.parseInt(request.getParameter("authorId"));
-            Author foundAuthor = authorService.findByAuthorId(authorId);
+        /*
+        if (request.getParameter("moduleId") != null) {
+            int moduleId = Integer.parseInt(request.getParameter("moduleId"));
+            Module foundModule = moduleService.findByModuleId(moduleId);
             JsonObject json = new JsonObject();
             JsonElement result = null;
-            if (foundAuthor != null) {
-                Type authorType = new TypeToken<Author>(){}.getType();
-                result = this.gson.toJsonTree(foundAuthor, authorType);
+            if (foundModule != null) {
+                Type moduleType = new TypeToken<Module>(){}.getType();
+                result = this.gson.toJsonTree(foundModule, moduleType);
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
@@ -120,15 +154,34 @@ public class MenuServlet extends HttpServlet {
             json.add("result", result);
             JSONResponse.writeFromServlet(response, json);
         }
+         */
     }
 
     private void findAllAction(HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
-        List<Author> authorsList = authorService.findAll();
-        if (authorsList != null) {
-            Type authorType = new TypeToken<List<Author>>(){}.getType();
-            JsonElement result = this.gson.toJsonTree(authorsList, authorType);
+        List<Menu> menuList = this.menuService.findAll();
+        if (menuList != null) {
+            Type menuType = new TypeToken<List<Menu>>(){}.getType();
+            JsonElement result = this.gson.toJsonTree(menuList, menuType);
+            data = result.getAsJsonArray();
+            json.addProperty("success", true);
+            json.addProperty("status", "success");
+        } else {
+            json.addProperty("success", false);
+            json.addProperty("status", "failure");
+        }
+        json.add("result", data);
+        JSONResponse.writeFromServlet(response, json);
+    }
+
+    private void findActiveModulesAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        JsonObject json = new JsonObject();
+        JsonArray data = null;
+        List<Module> activeModules = this.menuService.findActiveModules();
+        if (activeModules != null) {
+            Type moduleType = new TypeToken<List<Module>>(){}.getType();
+            JsonElement result = this.gson.toJsonTree(activeModules, moduleType);
             data = result.getAsJsonArray();
             json.addProperty("success", true);
             json.addProperty("status", "success");
@@ -141,13 +194,14 @@ public class MenuServlet extends HttpServlet {
     }
 
     private void disableByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("authorId") != null) {
-            int authorId = Integer.parseInt(request.getParameter("authorId"));
-            boolean disabled = authorService.disableByAuthorId(authorId);
+        /*
+        if (request.getParameter("moduleId") != null) {
+            int moduleId = Integer.parseInt(request.getParameter("moduleId"));
+            boolean disabled = moduleService.disableByModuleId(moduleId);
             JsonObject json = new JsonObject();
             String message = null;
             if (disabled) {
-                message = "El autor ha sido deshabilitado con éxito";
+                message = "El módulo ha sido desactivado con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
@@ -157,30 +211,7 @@ public class MenuServlet extends HttpServlet {
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);
         }
+         */
     }
-
-//    private void changeAuthorStatusAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        boolean ok = false;
-//        String message = null;
-//        JsonObject jsonResponse = new JsonObject();
-//        try {
-//            if (request.getParameter("id") != null) {
-//                int id = Integer.parseInt(request.getParameter("id"));
-//                boolean success = authorService.changeStatusById(id);
-//                if (success) {
-//                    ok = true;
-//                    message = "La operación se realizó con éxito";
-//                }
-//            }
-//            jsonResponse.addProperty("status", ok ? "success" : "error");
-//            jsonResponse.addProperty("message", message);
-//            response.setContentType("application/json");
-//            response.setCharacterEncoding("UTF-8");
-//            response.getWriter().print(jsonResponse.toString());
-//        } catch (ServiceException ex) {
-//            response.setContentType("text/html");
-//            response.getWriter().print(ex.getMessage());
-//        }
-//    }
 
 }

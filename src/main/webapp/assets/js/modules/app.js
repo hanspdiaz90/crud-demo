@@ -87,11 +87,20 @@ function resetInvalidForm(button, validatedForm) {
 }
 
 function displayStatus(status) {
-    let classNameBadge = status ? "success" : "danger";
-    let classNameIcon = status ? "check" : "times";
-    let statusText = status ? "ACTIVO" : "INACTIVO";
-    let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
-    elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
+    let badge = {
+        false: {
+            class: "danger",
+            icon: "times",
+            text: "INACTIVO"
+        },
+        true: {
+            class: "success",
+            icon: "check",
+            text: "ACTIVO"
+        }
+    };
+    let elementHTML = "<span class='badge badge-" + badge[status].class + "'>";
+    elementHTML += "<i class='fas fa-" + badge[status].icon + "'></i> <span>" + badge[status].text + "</span>";
     elementHTML += "</span>";
     return elementHTML;
 }
@@ -182,20 +191,20 @@ function findAllModules() {
         columns: [
             { data: "title" },
             {
-                data: null,
+                data: "active",
                 className: "text-center",
                 render: function (data, type, row) {
-                    return displayStatus(row.active);
+                    return displayStatus(data);
                 }
             },
             {
-                data: null,
+                data: "moduleId",
                 className: "text-center",
                 render: function (data, type, row) {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailModule(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-module-id='" + row.moduleId + "'><i class='fas fa-eye'></i></button>";
-                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailModule(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-module-id='" + row.moduleId + "'><i class='fas fa-pen'></i></button>"
-                    elementHTML += "<button type='button' onclick='disableModule(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-module-id='" + row.moduleId + "' data-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
+                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailModule(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-module-id='" + data + "'><i class='fas fa-eye'></i></button>";
+                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailModule(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-module-id='" + data + "'><i class='fas fa-pen'></i></button>"
+                    elementHTML += "<button type='button' onclick='disableModule(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-module-id='" + data + "' data-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
                     elementHTML += "</div>"
                     return elementHTML;
                 }

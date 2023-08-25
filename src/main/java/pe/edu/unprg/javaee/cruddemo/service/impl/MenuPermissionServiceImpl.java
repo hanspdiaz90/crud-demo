@@ -17,7 +17,7 @@ public class MenuPermissionServiceImpl implements MenuPermissionService {
     public List<MenuPermission> findAllMenuPermissionByRole(Integer roleId) {
         List<MenuPermission> result;
         try {
-            List<MenuPermission> menuPermissions = menuPermissionDAO.findAllMenuPermissionByRole(roleId);
+            List<MenuPermission> menuPermissions = this.menuPermissionDAO.findAllMenuPermissionByRole(roleId);
             result = this.findAllParents(menuPermissions);
         } catch (DAOException e) {
             throw new RuntimeException(e);

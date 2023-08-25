@@ -29,13 +29,13 @@ public class GenreServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "findById":
-                findByIdAction(request, response);
+                this.findByIdAction(request, response);
                 break;
             case "findAll":
-                findAllAction(response);
+                this.findAllAction(response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
@@ -45,16 +45,16 @@ public class GenreServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "index" : request.getParameter("action");
         switch (action) {
             case "create":
-                createAction(request, response);
+                this.createAction(request, response);
                 break;
             case "update":
-                updateAction(request, response);
+                this.updateAction(request, response);
                 break;
             case "disableById":
-                disableByIdAction(request, response);
+                this.disableByIdAction(request, response);
                 break;
             default:
-                mainAction(request, response);
+                this.mainAction(request, response);
                 break;
         }
     }
@@ -70,7 +70,7 @@ public class GenreServlet extends HttpServlet {
             String name = request.getParameter("name");
             Genre savedGenre = new Genre();
             savedGenre.setName(name);
-            boolean created = genreService.createGenre(savedGenre);
+            boolean created = this.genreService.createGenre(savedGenre);
             JsonObject json = new JsonObject();
             String message = null;
             if (created) {
@@ -96,7 +96,7 @@ public class GenreServlet extends HttpServlet {
             updatedGenre.setGenreId(genreId);
             updatedGenre.setName(name);
             updatedGenre.setActive(active);
-            boolean updated = genreService.editGenre(updatedGenre);
+            boolean updated = this.genreService.editGenre(updatedGenre);
             JsonObject json = new JsonObject();
             String message = null;
             if (updated) {
@@ -114,8 +114,8 @@ public class GenreServlet extends HttpServlet {
 
     private void findByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("genreId") != null) {
-            int genreId = Integer.parseInt(request.getParameter("genreId"));
-            Genre foundGenre = genreService.findByGenreId(genreId);
+            Integer genreId = Integer.parseInt(request.getParameter("genreId"));
+            Genre foundGenre = this.genreService.findByGenreId(genreId);
             JsonObject json = new JsonObject();
             JsonElement result = null;
             if (foundGenre != null) {
@@ -135,7 +135,7 @@ public class GenreServlet extends HttpServlet {
     private void findAllAction(HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
-        List<Genre> genreList = genreService.findAll();
+        List<Genre> genreList = this.genreService.findAll();
         if (genreList != null) {
             Type genreType = new TypeToken<List<Genre>>(){}.getType();
             JsonElement result = this.gson.toJsonTree(genreList, genreType);
@@ -152,12 +152,12 @@ public class GenreServlet extends HttpServlet {
 
     private void disableByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("genreId") != null) {
-            int genreId = Integer.parseInt(request.getParameter("genreId"));
-            boolean disabled = genreService.disableByGenreId(genreId);
+            Integer genreId = Integer.parseInt(request.getParameter("genreId"));
+            boolean disabled = this.genreService.disableByGenreId(genreId);
             JsonObject json = new JsonObject();
             String message = null;
             if (disabled) {
-                message = "El género literario ha sido deshabilitado con éxito";
+                message = "El género literario ha sido desactivado con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {

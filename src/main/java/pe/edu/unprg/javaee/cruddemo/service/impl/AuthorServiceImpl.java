@@ -15,7 +15,7 @@ public class AuthorServiceImpl implements AuthorService {
     public boolean createAuthor(Author author) {
         boolean result;
         try {
-            result =  authorDAO.createAuthor(author);
+            result =  this.authorDAO.createAuthor(author);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -26,7 +26,7 @@ public class AuthorServiceImpl implements AuthorService {
     public boolean editAuthor(Author author) {
         boolean result;
         try {
-            result =  authorDAO.editAuthor(author);
+            result =  this.authorDAO.editAuthor(author);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -37,7 +37,7 @@ public class AuthorServiceImpl implements AuthorService {
     public Author findByAuthorId(int authorId) {
         Author result;
         try {
-            result = authorDAO.findByAuthorId(authorId);
+            result = this.authorDAO.findByAuthorId(authorId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -48,7 +48,7 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> findAll() {
         List<Author> result;
         try {
-            result = authorDAO.findAll();
+            result = this.authorDAO.findAll();
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -59,22 +59,24 @@ public class AuthorServiceImpl implements AuthorService {
     public boolean disableByAuthorId(int authorId) {
         boolean result;
         try {
-            result = authorDAO.disableByAuthorId(authorId);
+            result = this.authorDAO.disableByAuthorId(authorId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
         return result;
     }
 
-//    @Override
-//    public boolean changeStatusById(int id) throws ServiceException {
-//        boolean result = false;
-//        try {
-//            result = authorDAO.changeStatusById(id);
-//        } catch (DAOException e) {
-//            throw new ServiceException(e);
-//        }
-//        return result;
-//    }
+    /*
+    @Override
+    public boolean changeStatusById(int id) throws ServiceException {
+        boolean result = false;
+        try {
+            result = this.authorDAO.changeStatusById(id);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return result;
+    }
+     */
 
 }

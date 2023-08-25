@@ -16,7 +16,7 @@ public class PublisherServiceImpl implements PublisherService {
     public boolean createPublisher(Publisher publisher) {
         boolean result;
         try {
-            result =  publisherDAO.createPublisher(publisher);
+            result =  this.publisherDAO.createPublisher(publisher);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -27,7 +27,7 @@ public class PublisherServiceImpl implements PublisherService {
     public boolean editPublisher(Publisher publisher) {
         boolean result;
         try {
-            result =  publisherDAO.editPublisher(publisher);
+            result =  this.publisherDAO.editPublisher(publisher);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +38,7 @@ public class PublisherServiceImpl implements PublisherService {
     public Publisher findByPublisherId(int publisherId) {
         Publisher result;
         try {
-            result = publisherDAO.findByPublisherId(publisherId);
+            result = this.publisherDAO.findByPublisherId(publisherId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -49,7 +49,7 @@ public class PublisherServiceImpl implements PublisherService {
     public List<Publisher> findAll() {
         List<Publisher> result;
         try {
-            result = publisherDAO.findAll();
+            result = this.publisherDAO.findAll();
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +60,7 @@ public class PublisherServiceImpl implements PublisherService {
     public boolean disableByPublisherId(int publisherId) {
         boolean result;
         try {
-            result = publisherDAO.disableByPublisherId(publisherId);
+            result = this.publisherDAO.disableByPublisherId(publisherId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }

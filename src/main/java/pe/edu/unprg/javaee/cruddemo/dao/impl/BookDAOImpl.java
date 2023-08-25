@@ -104,8 +104,14 @@ public class BookDAOImpl implements BookDAO {
     public List<Book> findAll() throws DAOException {
         List<Book> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
-             CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_ALL_BOOKS);
-             ResultSet rs = cstmt.executeQuery()) {
+             CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_ALL_BOOKS)) {
+            cstmt.setString(1, Constants.NULL_STRING_PARAMETER);
+            cstmt.setString(2, Constants.NULL_STRING_PARAMETER);
+            cstmt.setInt(3, Constants.NOT_INTEGER_PARAMETER);
+            cstmt.setInt(4, Constants.NOT_INTEGER_PARAMETER);
+            cstmt.setInt(5, Constants.NOT_INTEGER_PARAMETER);
+            cstmt.setInt(6, Constants.NOT_INTEGER_PARAMETER);
+             ResultSet rs = cstmt.executeQuery();
             result = new ArrayList<>();
             while (rs.next()) {
                 Book book = new Book();
@@ -136,6 +142,9 @@ public class BookDAOImpl implements BookDAO {
         List<Author> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_ACTIVE_AUTHORS)) {
+            if (filter == null) {
+                filter = Constants.NULL_STRING_PARAMETER;
+            }
             cstmt.setString(1, filter);
             cstmt.setBoolean(2, Constants.ACTIVE_BOOLEAN_PARAMETER);
             ResultSet rs = cstmt.executeQuery();
@@ -159,6 +168,9 @@ public class BookDAOImpl implements BookDAO {
         List<Publisher> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_ACTIVE_PUBLISHERS)) {
+            if (filter == null) {
+                filter = Constants.NULL_STRING_PARAMETER;
+            }
             cstmt.setString(1, filter);
             cstmt.setBoolean(2, Constants.ACTIVE_BOOLEAN_PARAMETER);
             ResultSet rs = cstmt.executeQuery();
@@ -181,6 +193,9 @@ public class BookDAOImpl implements BookDAO {
         List<Genre> result;
         try (Connection conn = DatabaseHandler.getInstance().getConnection();
              CallableStatement cstmt = conn.prepareCall(BookQuery.FIND_ACTIVE_GENRES)) {
+            if (filter == null) {
+                filter = Constants.NULL_STRING_PARAMETER;
+            }
             cstmt.setString(1, filter);
             cstmt.setBoolean(2, Constants.ACTIVE_BOOLEAN_PARAMETER);
             ResultSet rs = cstmt.executeQuery();

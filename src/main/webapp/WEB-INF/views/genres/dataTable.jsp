@@ -3,7 +3,7 @@
     <thead class="thead-dark">
         <tr>
             <th class="text-uppercase" scope="col">Género Literario</th>
-            <th class="text-uppercase" scope="col">Activado?</th>
+            <th class="text-uppercase" scope="col">Estado</th>
             <th class="text-uppercase" scope="col">Acciones</th>
         </tr>
     </thead>
@@ -11,7 +11,7 @@
     <tfoot>
         <tr>
             <th scope="col">Género Literario</th>
-            <th scope="col">Activado?</th>
+            <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
         </tr>
     </tfoot>

@@ -19,7 +19,7 @@ public class BookServiceImpl implements BookService {
     public boolean createBook(Book book) {
         boolean result;
         try {
-            result =  bookDAO.createBook(book);
+            result =  this.bookDAO.createBook(book);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -30,7 +30,7 @@ public class BookServiceImpl implements BookService {
     public boolean editBook(Book book) {
         boolean result;
         try {
-            result =  bookDAO.editBook(book);
+            result =  this.bookDAO.editBook(book);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -41,7 +41,7 @@ public class BookServiceImpl implements BookService {
     public Book findByBookId(int bookId) {
         Book result;
         try {
-            result = bookDAO.findByBookId(bookId);
+            result = this.bookDAO.findByBookId(bookId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -52,7 +52,7 @@ public class BookServiceImpl implements BookService {
     public List<Book> findAll() {
         List<Book> result;
         try {
-            result = bookDAO.findAll();
+            result = this.bookDAO.findAll();
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -63,7 +63,7 @@ public class BookServiceImpl implements BookService {
     public List<Author> findActiveAuthors(String filter) {
         List<Author> result;
         try {
-            result = bookDAO.findActiveAuthors(filter);
+            result = this.bookDAO.findActiveAuthors(filter);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +74,7 @@ public class BookServiceImpl implements BookService {
     public List<Publisher> findActivePublishers(String filter) {
         List<Publisher> result;
         try {
-            result = bookDAO.findActivePublishers(filter);
+            result = this.bookDAO.findActivePublishers(filter);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -85,7 +85,7 @@ public class BookServiceImpl implements BookService {
     public List<Genre> findActiveGenres(String filter) {
         List<Genre> result;
         try {
-            result = bookDAO.findActiveGenres(filter);
+            result = this.bookDAO.findActiveGenres(filter);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
@@ -96,7 +96,7 @@ public class BookServiceImpl implements BookService {
     public boolean disableByBookId(int bookId) {
         boolean result;
         try {
-            result = bookDAO.disableByBookId(bookId);
+            result = this.bookDAO.disableByBookId(bookId);
         } catch (DAOException e) {
             throw new RuntimeException(e);
         }
