@@ -70,8 +70,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" id="btnReset" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" id="btnSave" class="btn btn-primary">Guardar</button>
+                    <button type="reset" class="btn btn-secondary" id="btnReset" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>

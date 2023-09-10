@@ -12,14 +12,14 @@ $(function () {
                 return { filter: params.term };
             },
             processResults: function (response) {
-                let results = $.map(response.result, function (item) {
+                let data = $.map(response.result, function (item) {
                     return {
                         id: item.authorId,
-                        text: displayFullName(item.firstName, item.lastName)
+                        text: showFullNames(item.firstName, item.lastName)
                     };
                 });
                 return {
-                    results: results
+                    results: data
                 };
             },
             cache: true
@@ -42,15 +42,14 @@ $(function () {
                 return { filter: params.term };
             },
             processResults: function (response) {
-                console.log(response.result);
-                let results = $.map(response.result, function (item) {
+                let data = $.map(response.result, function (item) {
                     return {
                         id: item.publisherId,
                         text: item.name
                     };
                 });
                 return {
-                    results: results
+                    results: data
                 };
             },
             cache: true
@@ -73,14 +72,14 @@ $(function () {
                 return { filter: params.term };
             },
             processResults: function (response) {
-                let results = $.map(response.result, function (item) {
+                let data = $.map(response.result, function (item) {
                     return {
                         id: item.genreId,
                         text: item.name
                     };
                 });
                 return {
-                    results: results
+                    results: data
                 };
             },
             cache: true
@@ -98,75 +97,76 @@ $(function () {
         event.preventDefault();
     });
 
-    $("#btnSave").click(function () {
-        $("#addEditForm").validate({
-            rules: {
-                title: { required: true },
-                isbn: { required: true, minlength: 13, maxlength:13, digits: true },
-                yearEdition: { required: true },
-                coverImage: { required: true },
-                author: {required: true },
-                publisher: {required: true },
-                genre: {required: true },
-                numberPages: { required: true },
-                price: { required: true },
-                review: { required: true }
-            },
-            submitHandler: function (form) {
-                let url = contextPath + "/admincrud/libros?action=create";
-                let title = "Registrado!";
-                if (!isNew) {
-                    url = contextPath + "/admincrud/libros?action=update";
-                    title = "Actualizado!";
-                }
-                let formData = $(form).serialize();
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: formData,
-                    dataType: "JSON",
-                    success: function (response) {
-                        if (response.success) {
-                            $(form).trigger("reset");
-                            $("#addEditModal").modal("hide");
-                            $("#tblBooks").DataTable().ajax.reload(null, false);
-                            Swal.fire(title, response.message, response.status);
-                            if (isNew) isNew = false;
-                        }
-                    },
-                    processData: false,
-                    cache: false,
-                });
+    $("#addEditForm").validate({
+        rules: {
+            title: {required: true},
+            isbn: {required: true, minlength: 13, maxlength: 13, digits: true},
+            yearEdition: {required: true},
+            coverImage: {required: true},
+            author: {required: true},
+            publisher: {required: true},
+            genre: {required: true},
+            numberPages: {required: true},
+            price: {required: true},
+            review: {required: true}
+        },
+        submitHandler: function (form) {
+            let url = contextPath + "/admincrud/libros?action=create";
+            let alertTitle = "Registrado!";
+            if (!isNew) {
+                url = contextPath + "/admincrud/libros?action=update";
+                alertTitle = "Actualizado!";
             }
-        });
+            let postData = $(form).serialize();
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: postData,
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        $(form).trigger("reset");
+                        $("#addEditModal").modal("hide");
+                        let table = $("#tblBooks").DataTable();
+                        table.ajax.reload(null, false);
+                        Swal.fire(alertTitle, response.message, response.status);
+                        if (isNew) isNew = false;
+                    }
+                },
+                processData: false,
+                cache: false,
+            });
+        }
     });
 
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = false;
         let modalBody = $("#addEditModal .modal-body");
-        setDisplayNoneToInputs(modalBody, ".form-group #txtBookId");
-        setDisplayNoneToInputs(modalBody, ".form-group .custom-switch");
-        setDisabledAndReadOnlyToInputId(modalBody, ".form-group #txtBookId", true);
+        hideInputElement(modalBody, ".form-group #txtBookId");
+        hideInputElement(modalBody, ".form-group .custom-switch");
+        setPropertiesToInputElementId(modalBody, ".form-group #txtBookId", true);
     });
 
     $("#btnNew").click(function () {
         isNew = true;
         let modalBody = $("#addEditModal .modal-body");
-        setDisplayNoneToInputs(modalBody, ".form-group #txtBookId");
-        setDisplayNoneToInputs(modalBody, ".form-group .custom-switch");
-        setDisabledAndReadOnlyToInputId(modalBody, ".form-group #txtBookId", true);
+        hideInputElement(modalBody, ".form-group #txtBookId");
+        hideInputElement(modalBody, ".form-group .custom-switch");
+        setPropertiesToInputElementId(modalBody, ".form-group #txtBookId", true);
     });
 
 });
 
-function setDisabledAndReadOnlyToInputId(modalBody, inputId, flag) {
+function setPropertiesToInputElementId(modalBody, inputId, flag) {
     modalBody.find(inputId).prop("disabled", flag);
     modalBody.find(inputId).prop("readonly", !flag);
 }
 
-function setDisplayNoneToInputs(modalBody, input) {
-    modalBody.find(input).parent().addClass("d-none");
+function hideInputElement(modalBody, input) {
+    if (!modalBody.find(input).parent().hasClass("d-none")) {
+        modalBody.find(input).parent().addClass("d-none");
+    }
 }
 
 function resetInvalidForm(button, validatedForm) {
@@ -177,23 +177,32 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function displayFullName(firstname, lastname) {
+function showFullNames(firstname, lastname) {
     return firstname.concat(" ", lastname);
 }
 
-function displayISBN(isbn) {
+function toFormatISBN(isbn) {
     let regex = /(\d{3})?(\d{3})?(\d{5})?(\d)?(\d)/;
     return isbn.replace(regex, "$1-$2-$3-$4-$5");
 }
 
-function displayStatus(status) {
-    let classNameBadge = status ? "success" : "danger";
-    let classNameIcon = status ? "check" : "times";
-    let statusText = status ? "ACTIVO" : "INACTIVO";
-    let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
-    elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
-    elementHTML += "</span>";
-    return elementHTML;
+function showStatus(status) {
+    let badge = {
+        false: {
+            class: "danger",
+            icon: "times",
+            text: "INACTIVO"
+        },
+        true: {
+            class: "success",
+            icon: "check",
+            text: "ACTIVO"
+        }
+    };
+    let span = "<span class='badge badge-" + badge[status].class + "'>";
+    span += "<i class='fas fa-" + badge[status].icon + "'></i> <span>" + badge[status].text + "</span>";
+    span += "</span>";
+    return span;
 }
 
 function showModalEditAndViewDetailBook(button, isEditable) {
@@ -202,7 +211,7 @@ function showModalEditAndViewDetailBook(button, isEditable) {
     $.ajax({
         url: url,
         type: "GET",
-        data: { bookId: bookId },
+        data: {bookId: bookId},
         dataType: "JSON",
         success: function (response) {
             if (response.success) {
@@ -210,7 +219,7 @@ function showModalEditAndViewDetailBook(button, isEditable) {
                 if (isEditable) {
                     let modalBody = $("#addEditModal .modal-body");
                     modalBody.find(".form-group.d-none").removeClass("d-none");
-                    setDisabledAndReadOnlyToInputId(modalBody, ".form-group #txtBookId", false);
+                    setPropertiesToInputElementId(modalBody, ".form-group #txtBookId", false);
                     modalBody.find(".form-group #txtBookId").val(foundBook.bookId);
                     modalBody.find(".form-group #txtTitle").val(foundBook.title);
                     modalBody.find(".form-group #txtISBN").val(foundBook.isbn);
@@ -218,7 +227,7 @@ function showModalEditAndViewDetailBook(button, isEditable) {
                     modalBody.find(".form-group #txtNumberPages").val(foundBook.numberPages);
                     modalBody.find(".form-group #cbxAuthors").append($("<option>", {
                         value: foundBook.author.authorId,
-                        text: displayFullName(foundBook.author.firstName, foundBook.author.lastName)
+                        text: showFullNames(foundBook.author.firstName, foundBook.author.lastName)
                     }));
                     modalBody.find(".form-group #cbxPublishers").append($("<option>", {
                         value: foundBook.publisher.publisherId,
@@ -237,22 +246,22 @@ function showModalEditAndViewDetailBook(button, isEditable) {
                 } else {
                     let modalBody = $("#viewDetailModal .modal-body");
                     modalBody.empty();
-                    let elementHTML = "<dl>";
-                    elementHTML += "<dt>ISBN</dt>";
-                    elementHTML += "<dd>" + displayISBN(foundBook.isbn) + "</dd>";
-                    elementHTML += "<dt>Título</dt>";
-                    elementHTML += "<dd>" + foundBook.title + "</dd>";
-                    elementHTML += "<dt>Reseña</dt>";
-                    elementHTML += "<dd>" + foundBook.review + "</dd>";
-                    elementHTML += "<dt>Autor</dt>";
-                    elementHTML += "<dd>" + displayFullName(foundBook.author.firstName, foundBook.author.lastName) + "</dd>";
-                    elementHTML += "<dt>Editorial</dt>";
-                    elementHTML += "<dd>" + foundBook.publisher.name + "</dd>";
-                    elementHTML += "<dt>Género Literario</dt>";
-                    elementHTML += "<dd>" + foundBook.genre.name + "</dd>";
-                    elementHTML += "<dt>" + displayStatus(foundBook.active) + "</dt>";
-                    elementHTML += "</dl>";
-                    modalBody.append(elementHTML);
+                    let container = "<dl>";
+                    container += "<dt>ISBN</dt>";
+                    container += "<dd>" + toFormatISBN(foundBook.isbn) + "</dd>";
+                    container += "<dt>Título</dt>";
+                    container += "<dd>" + foundBook.title + "</dd>";
+                    container += "<dt>Reseña</dt>";
+                    container += "<dd>" + foundBook.review + "</dd>";
+                    container += "<dt>Autor</dt>";
+                    container += "<dd>" + showFullNames(foundBook.author.firstName, foundBook.author.lastName) + "</dd>";
+                    container += "<dt>Editorial</dt>";
+                    container += "<dd>" + foundBook.publisher.name + "</dd>";
+                    container += "<dt>Género Literario</dt>";
+                    container += "<dd>" + foundBook.genre.name + "</dd>";
+                    container += "<dt>" + showStatus(foundBook.active) + "</dt>";
+                    container += "</dl>";
+                    modalBody.append(container);
                     $("#viewDetailModal").modal("show");
                 }
             }
@@ -277,11 +286,12 @@ function disableBook(button) {
             $.ajax({
                 url: url,
                 type: "POST",
-                data: { bookId: bookId },
+                data: {bookId: bookId},
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        $("#tblBooks").DataTable().ajax.reload(null, false);
+                        let table = $("#tblBooks").DataTable();
+                        table.ajax.reload(null, false);
                         Swal.fire("Desactivado!", response.message, response.status);
                     }
                 }
@@ -312,51 +322,53 @@ function findAllBooks() {
         },
         columns: [
             {
-                data: null,
+                data: "isbn",
                 render: function (data, type, row) {
-                    return displayISBN(row.isbn);
+                    return toFormatISBN(data);
                 }
             },
-            { data: "title" },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return displayFullName(row.author.firstName, row.author.lastName);
-                }
-            },
+            {data: "title"},
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.publisher.name;
+                    return showFullNames(row.author.firstName, row.author.lastName);
                 }
             },
             {
-                data: null,
+                data: "publisher.name",
                 render: function (data, type, row) {
-                    return row.genre.name;
+                    return data;
                 }
             },
             {
-                data: null,
-                className: "text-center",
-                render: function(data, type, row) {
-                    return displayStatus(row.active);
+                data: "genre.name",
+                render: function (data, type, row) {
+                    return data;
                 }
             },
             {
-                data: null,
+                data: "active",
                 className: "text-center",
                 render: function (data, type, row) {
-                    let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='showModalEditAndViewDetailBook(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-book-id='" + row.bookId + "'><i class='fas fa-eye'></i></button>";
-                    elementHTML += "<button type='button' onclick='showModalEditAndViewDetailBook(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-book-id='" + row.bookId + "'><i class='fas fa-pen'></i></button>"
-                    elementHTML += "<button type='button' onclick='disableBook(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-book-id='" + row.bookId + "' data-book-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
-                    elementHTML += "</div>"
-                    return elementHTML;
+                    return showStatus(data);
+                }
+            },
+            {
+                data: "data",
+                className: "text-center",
+                render: function (data, type, row) {
+                    let isEditable = true;
+                    let buttons = "<div class='btn-group btn-group-sm'>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailBook(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-book-id='" + data + "'><i class='fas fa-eye'></i></button>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailBook(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-book-id='" + data + "'><i class='fas fa-pen'></i></button>"
+                    buttons += "<button type='button' onclick='disableBook(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-book-id='" + data + "' data-book-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
+                    buttons += "</div>"
+                    return buttons;
                 }
             }
         ]
     });
+
     table.on("draw", function () {
         $("[data-tooltip='tooltip']").tooltip();
     });

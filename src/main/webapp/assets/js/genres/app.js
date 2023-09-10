@@ -7,66 +7,67 @@ $(function () {
         event.preventDefault();
     });
 
-    $("#btnSave").click(function () {
-        $("#addEditForm").validate({
-            rules: {
-                name: { required: true, minlength: 3 }
-            },
-            submitHandler: function (form) {
-                let url = contextPath + "/admincrud/generos?action=create";
-                let title = "Registrado!";
-                if (!isNew) {
-                    url = contextPath + "/admincrud/generos?action=update";
-                    title = "Actualizado!";
-                }
-                let formData = $(form).serialize();
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: formData,
-                    dataType: "JSON",
-                    success: function (response) {
-                        if (response.success) {
-                            $(form).trigger("reset");
-                            $("#addEditModal").modal("hide");
-                            $("#tblGenres").DataTable().ajax.reload(null, false);
-                            Swal.fire(title, response.message, response.status);
-                            if (isNew) isNew = false;
-                        }
-                    },
-                    processData: false,
-                    cache: false,
-                });
+    $("#addEditForm").validate({
+        rules: {
+            name: { required: true, minlength: 3 }
+        },
+        submitHandler: function (form) {
+            let url = contextPath + "/admincrud/generos?action=create";
+            let alertTitle = "Registrado!";
+            if (!isNew) {
+                url = contextPath + "/admincrud/generos?action=update";
+                alertTitle = "Actualizado!";
             }
-        });
+            let postData = $(form).serialize();
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: postData,
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        $(form).trigger("reset");
+                        $("#addEditModal").modal("hide");
+                        let table = $("#tblGenres").DataTable();
+                        table.ajax.reload(null, false);
+                        Swal.fire(alertTitle, response.message, response.status);
+                        if (isNew) isNew = false;
+                    }
+                },
+                processData: false,
+                cache: false,
+            });
+        }
     });
 
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = false;
         let modalBody = $("#addEditModal .modal-body");
-        setDisplayNoneToInputs(modalBody, ".form-group #txtGenreId");
-        setDisplayNoneToInputs(modalBody, ".form-group .custom-switch");
-        setDisabledAndReadOnlyToInputId(modalBody, ".form-group #txtGenreId", true);
+        hideInputElement(modalBody, ".form-group #txtGenreId");
+        hideInputElement(modalBody, ".form-group .custom-switch");
+        setPropertiesToInputElementId(modalBody, ".form-group #txtGenreId", true);
     });
 
     $("#btnNew").click(function () {
         isNew = true;
         let modalBody = $("#addEditModal .modal-body");
-        setDisplayNoneToInputs(modalBody, ".form-group #txtGenreId");
-        setDisplayNoneToInputs(modalBody, ".form-group .custom-switch");
-        setDisabledAndReadOnlyToInputId(modalBody, ".form-group #txtGenreId", true);
+        hideInputElement(modalBody, ".form-group #txtGenreId");
+        hideInputElement(modalBody, ".form-group .custom-switch");
+        setPropertiesToInputElementId(modalBody, ".form-group #txtGenreId", true);
     });
 
 });
 
-function setDisabledAndReadOnlyToInputId(modalBody, inputId, flag) {
+function setPropertiesToInputElementId(modalBody, inputId, flag) {
     modalBody.find(inputId).prop("disabled", flag);
     modalBody.find(inputId).prop("readonly", !flag);
 }
 
-function setDisplayNoneToInputs(modalBody, input) {
-    modalBody.find(input).parent().addClass("d-none");
+function hideInputElement(modalBody, input) {
+    if (!modalBody.find(input).parent().hasClass("d-none")) {
+        modalBody.find(input).parent().addClass("d-none");
+    }
 }
 
 function resetInvalidForm(button, validatedForm) {
@@ -77,14 +78,23 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function displayStatus(status) {
-    let classNameBadge = status ? "success" : "danger";
-    let classNameIcon = status ? "check" : "times";
-    let statusText = status ? "ACTIVO" : "INACTIVO";
-    let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
-    elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
-    elementHTML += "</span>";
-    return elementHTML;
+function showStatus(status) {
+    let badge = {
+        false: {
+            class: "danger",
+            icon: "times",
+            text: "INACTIVO"
+        },
+        true: {
+            class: "success",
+            icon: "check",
+            text: "ACTIVO"
+        }
+    };
+    let span = "<span class='badge badge-" + badge[status].class + "'>";
+    span += "<i class='fas fa-" + badge[status].icon + "'></i> <span>" + badge[status].text + "</span>";
+    span += "</span>";
+    return span;
 }
 
 function showModalEditAndViewDetailGenre(button, isEditable) {
@@ -101,7 +111,7 @@ function showModalEditAndViewDetailGenre(button, isEditable) {
                 if (isEditable) {
                     let modalBody = $("#addEditModal .modal-body");
                     modalBody.find(".form-group.d-none").removeClass("d-none");
-                    setDisabledAndReadOnlyToInputId(modalBody, ".form-group #txtGenreId", false);
+                    setPropertiesToInputElementId(modalBody, ".form-group #txtGenreId", false);
                     modalBody.find(".form-group #txtGenreId").val(foundGenre.genreId);
                     modalBody.find(".form-group #txtGenre").val(foundGenre.name);
                     modalBody.find(".form-group #chkActive").attr("checked", foundGenre.active);
@@ -110,12 +120,12 @@ function showModalEditAndViewDetailGenre(button, isEditable) {
                 } else {
                     let modalBody = $("#viewDetailModal .modal-body");
                     modalBody.empty();
-                    let elementHTML = "<dl>";
-                    elementHTML += "<dt>Género Literario</dt>";
-                    elementHTML += "<dd>" + foundGenre.name + "</dd>";
-                    elementHTML += "<dt>" + displayStatus(foundGenre.active) + "</dt>";
-                    elementHTML += "</dl>";
-                    modalBody.append(elementHTML);
+                    let container = "<dl>";
+                    container += "<dt>Género Literario</dt>";
+                    container += "<dd>" + foundGenre.name + "</dd>";
+                    container += "<dt>" + showStatus(foundGenre.active) + "</dt>";
+                    container += "</dl>";
+                    modalBody.append(container);
                     $("#viewDetailModal").modal("show");
                 }
             }
@@ -144,7 +154,8 @@ function disableGenre(button) {
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        $("#tblGenres").DataTable().ajax.reload(null, false);
+                        let table = $("#tblGenres").DataTable();
+                        table.ajax.reload(null, false);
                         Swal.fire("Desactivado!", response.message, response.status);
                     }
                 }
@@ -167,23 +178,25 @@ function findAllGenres() {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
-                    return displayStatus(row.active);
+                    return showStatus(row.active);
                 }
             },
             {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
-                    let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='showModalEditAndViewDetailGenre(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-genre-id='" + row.genreId + "'><i class='fas fa-eye'></i></button>";
-                    elementHTML += "<button type='button' onclick='showModalEditAndViewDetailGenre(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-genre-id='" + row.genreId + "'><i class='fas fa-pen'></i></button>";
-                    elementHTML += "<button type='button' onclick='disableGenre(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-genre-id='" + row.genreId + "' data-genre-name='" + row.name + "'><i class='fas fa-trash'></i></button>";
-                    elementHTML += "</div>";
-                    return elementHTML;
+                    let isEditable = true;
+                    let buttons = "<div class='btn-group btn-group-sm'>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailGenre(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-genre-id='" + row.genreId + "'><i class='fas fa-eye'></i></button>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailGenre(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-genre-id='" + row.genreId + "'><i class='fas fa-pen'></i></button>";
+                    buttons += "<button type='button' onclick='disableGenre(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-genre-id='" + row.genreId + "' data-genre-name='" + row.name + "'><i class='fas fa-trash'></i></button>";
+                    buttons += "</div>";
+                    return buttons;
                 }
             }
         ]
     });
+
     table.on("draw", function () {
         $("[data-tooltip='tooltip']").tooltip();
     });

@@ -12,8 +12,8 @@
             </div>
             <form id="addEditForm" role="form">
                 <div class="modal-body">
-                    <div class="form-group d-none">
-                        <label for="txtAuthorId">ID Autor</label>
+                    <div class="form-group">
+                        <label for="txtAuthorId">Cód. Autor</label>
                         <input type="text" class="form-control" id="txtAuthorId" name="authorId">
                     </div>
                     <div class="form-group">
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group d-none">
+                    <div class="form-group">
                         <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
                             <input type="checkbox" class="custom-control-input" id="chkActive" name="isActive">
                             <label class="custom-control-label" for="chkActive"></label>
@@ -47,8 +47,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" id="btnReset" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" id="btnSave" class="btn btn-primary">Guardar</button>
+                    <button type="reset"  class="btn btn-secondary" id="btnReset" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>

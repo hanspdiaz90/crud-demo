@@ -7,69 +7,70 @@ $(function () {
         event.preventDefault();
     });
 
-    $("#btnSave").click(function () {
-        $("#addEditForm").validate({
-            rules: {
-                firstName: {required: true, minlength: 3},
-                lastName: {required: true, minlength: 3},
-                city: {required: true, minlength: 3},
-                dob: {required: true}
-            },
-            submitHandler: function (form) {
-                let url = contextPath + "/admincrud/autores?action=create";
-                let title = "Registrado!";
-                if (!isNew) {
-                    url = contextPath + "/admincrud/autores?action=update";
-                    title = "Actualizado!";
-                }
-                let formData = $(form).serialize();
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: formData,
-                    dataType: "JSON",
-                    success: function (response) {
-                        if (response.success) {
-                            $(form).trigger("reset");
-                            $("#addEditModal").modal("hide");
-                            $("#tblAuthors").DataTable().ajax.reload(null, false);
-                            Swal.fire(title, response.message, response.status);
-                            if (isNew) isNew = false;
-                        }
-                    },
-                    processData: false,
-                    cache: false,
-                });
+    $("#addEditForm").validate({
+        rules: {
+            firstName: {required: true, minlength: 3},
+            lastName: {required: true, minlength: 3},
+            city: {required: true, minlength: 3},
+            dob: {required: true}
+        },
+        submitHandler: function (form) {
+            let url = contextPath + "/admincrud/autores?action=create";
+            let alertTitle = "Registrado!";
+            if (!isNew) {
+                url = contextPath + "/admincrud/autores?action=update";
+                alertTitle = "Actualizado!";
             }
-        });
+            let postData = $(form).serialize();
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: postData,
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        $(form).trigger("reset");
+                        $("#addEditModal").modal("hide");
+                        let table = $("#tblAuthors").DataTable();
+                        table.ajax.reload(null, false);
+                        Swal.fire(alertTitle, response.message, response.status);
+                        if (isNew) isNew = false;
+                    }
+                },
+                processData: false,
+                cache: false,
+            });
+        }
     });
 
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = false;
         let modalBody = $("#addEditModal .modal-body");
-        setDisplayNoneToInputs(modalBody, ".form-group #txtAuthorId");
-        setDisplayNoneToInputs(modalBody, ".form-group .custom-switch");
-        setDisabledAndReadOnlyToInputId(modalBody, ".form-group #txtAuthorId", true);
+        hideInputElement(modalBody, ".form-group #txtAuthorId");
+        hideInputElement(modalBody, ".form-group .custom-switch");
+        setPropertiesToInputElementId(modalBody, ".form-group #txtAuthorId", true);
     });
 
     $("#btnNew").click(function () {
         isNew = true;
         let modalBody = $("#addEditModal .modal-body");
-        setDisplayNoneToInputs(modalBody, ".form-group #txtAuthorId");
-        setDisplayNoneToInputs(modalBody, ".form-group .custom-switch");
-        setDisabledAndReadOnlyToInputId(modalBody, ".form-group #txtAuthorId", true);
+        hideInputElement(modalBody, ".form-group #txtAuthorId");
+        hideInputElement(modalBody, ".form-group .custom-switch");
+        setPropertiesToInputElementId(modalBody, ".form-group #txtAuthorId", true);
     });
 
 });
 
-function setDisabledAndReadOnlyToInputId(modalBody, inputId, flag) {
+function setPropertiesToInputElementId(modalBody, inputId, flag) {
     modalBody.find(inputId).prop("disabled", flag);
     modalBody.find(inputId).prop("readonly", !flag);
 }
 
-function setDisplayNoneToInputs(modalBody, input) {
-    modalBody.find(input).parent().addClass("d-none");
+function hideInputElement(modalBody, input) {
+    if (!modalBody.find(input).parent().hasClass("d-none")) {
+        modalBody.find(input).parent().addClass("d-none");
+    }
 }
 
 function resetInvalidForm(button, validatedForm) {
@@ -80,35 +81,45 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-// function displayLocalDate(date, format) {
-//     return moment(date).format(format);
+// function toFormatLocalDate(date) {
+//     return new moment(date + "T00:00:00").format("DD/MM/YYYY");
 // }
 
-function displayLocalDate (date) {
+function toFormatLocalDate (date) {
     let options = {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
     };
-    return new Date(date + "T00:00:00").toLocaleString("es-ES", options);
+    let mseconds = Date.parse(date + "T00:00:00");
+    return new Date(mseconds).toLocaleString("es-ES", options);
 }
 
-function displayFullName(firstname, lastname) {
+function showFullNames(firstname, lastname) {
     return firstname.concat(" ", lastname);
 }
 
-function displayOnlyYear(date) {
+function showOnlyYear(date) {
     return new Date(date).getFullYear();
 }
 
-function displayStatus(status) {
-    let classNameBadge = status ? "success" : "danger";
-    let classNameIcon = status ? "check" : "times";
-    let statusText = status ? "ACTIVO" : "INACTIVO";
-    let elementHTML = "<span class='badge badge-" + classNameBadge + "'>";
-    elementHTML += "<i class='fas fa-" + classNameIcon + "'></i> <span>" + statusText + "</span>";
-    elementHTML += "</span>";
-    return elementHTML;
+function showStatus(status) {
+    let badge = {
+        false: {
+            class: "danger",
+            icon: "times",
+            text: "INACTIVO"
+        },
+        true: {
+            class: "success",
+            icon: "check",
+            text: "ACTIVO"
+        }
+    };
+    let span = "<span class='badge badge-" + badge[status].class + "'>";
+    span += "<i class='fas fa-" + badge[status].icon + "'></i> <span>" + badge[status].text + "</span>";
+    span += "</span>";
+    return span;
 }
 
 function showModalEditAndViewAuthor(button, isEditable) {
@@ -125,27 +136,26 @@ function showModalEditAndViewAuthor(button, isEditable) {
                 if (isEditable) {
                     let modalBody = $("#addEditModal .modal-body");
                     modalBody.find(".form-group.d-none").removeClass("d-none");
-                    setDisabledAndReadOnlyToInputId(modalBody, ".form-group #txtAuthorId", false);
+                    setPropertiesToInputElementId(modalBody, ".form-group #txtAuthorId", false);
                     modalBody.find(".form-group #txtAuthorId").val(foundAuthor.authorId);
                     modalBody.find(".form-group #txtFirstname").val(foundAuthor.firstName);
                     modalBody.find(".form-group #txtLastname").val(foundAuthor.lastName);
                     modalBody.find(".form-group #txtCity").val(foundAuthor.city);
-                    modalBody.find(".form-group #dtDob").val(displayLocalDate(foundAuthor.dob));
-                    // modalBody.find(".form-group #dtDob").val(displayLocalDate(foundAuthor.dob, "DD/MM/YYYY"));
+                    modalBody.find(".form-group #dtDob").val(toFormatLocalDate(foundAuthor.dob));
                     modalBody.find(".form-group #chkActive").attr("checked", foundAuthor.active);
                     $("#addEditModal").modal("show");
                     isNew = false;
                 } else {
                     let modalBody = $("#viewDetailModal .modal-body");
                     modalBody.empty();
-                    let elementHTML = "<dl>";
-                    elementHTML += "<dt>Autor</dt>";
-                    elementHTML += "<dd>" + displayFullName(foundAuthor.firstName, foundAuthor.lastName) + "</dd>";
-                    elementHTML += "<dt>Ciudad, Año de Nacimiento</dt>";
-                    elementHTML += "<dd>" + foundAuthor.city + ", " + displayOnlyYear(foundAuthor.dob) + "</dd>";
-                    elementHTML += "<dt>" + displayStatus(foundAuthor.active) + "</dt>";
-                    elementHTML += "</dl>";
-                    modalBody.append(elementHTML);
+                    let container = "<dl>";
+                    container += "<dt>Autor</dt>";
+                    container += "<dd>" + showFullNames(foundAuthor.firstName, foundAuthor.lastName) + "</dd>";
+                    container += "<dt>Ciudad, Año de Nacimiento</dt>";
+                    container += "<dd>" + foundAuthor.city + ", " + showOnlyYear(foundAuthor.dob) + "</dd>";
+                    container += "<dt>" + showStatus(foundAuthor.active) + "</dt>";
+                    container += "</dl>";
+                    modalBody.append(container);
                     $("#viewDetailModal").modal("show");
                 }
             }
@@ -174,7 +184,8 @@ function disableAuthor(button) {
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        $("#tblAuthors").DataTable().ajax.reload(null, false);
+                        let table = $("#tblAuthors").DataTable();
+                        table.ajax.reload(null, false);
                         Swal.fire("Desactivado!", response.message, response.status);
                     }
                 }
@@ -195,70 +206,40 @@ function findAllAuthors() {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return displayFullName(row.firstName, row.lastName);
+                    return showFullNames(row.firstName, row.lastName);
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return row.city + ", " + displayOnlyYear(row.dob);
+                    return row.city + ", " + showOnlyYear(row.dob);
                 }
             },
             {
-                data: null,
+                data: "active",
                 className: "text-center",
                 render: function (data, type, row) {
-                    return displayStatus(row.active);
+                    return showStatus(data);
                 }
             },
             {
-                data: null,
+                data: "authorId",
                 className: "text-center",
                 render: function (data, type, row) {
-                    let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='showModalEditAndViewAuthor(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + row.authorId + "'><i class='fas fa-eye'></i></button>";
-                    elementHTML += "<button type='button' onclick='showModalEditAndViewAuthor(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + row.authorId + "'><i class='fas fa-pen'></i></button>";
-                    elementHTML += "<button type='button' onclick='disableAuthor(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar' data-author-id='" + row.authorId + "' data-author-fullname='" + displayFullName(row.firstName, row.lastName) + "'><i class='fas fa-trash'></i></button>";
-                    elementHTML += "</div>";
-                    return elementHTML;
+                    let isEditable = true;
+                    let buttons = "<div class='btn-group btn-group-sm'>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewAuthor(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + data + "'><i class='fas fa-eye'></i></button>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewAuthor(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + data + "'><i class='fas fa-pen'></i></button>";
+                    buttons += "<button type='button' onclick='disableAuthor(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar' data-author-id='" + data + "' data-author-fullname='" + showFullNames(row.firstName, row.lastName) + "'><i class='fas fa-trash'></i></button>";
+                    buttons += "</div>";
+                    return buttons;
                 }
             }
         ]
     });
+
     table.on("draw", function () {
         $("[data-tooltip='tooltip']").tooltip();
     });
-}
 
-// function changeStatusAuthor(button) {
-//     let active = $(button).data("authorStatus");
-//     Swal.fire({
-//         title: (active ? "¿Estás seguro que quieres dar de baja al autor?" : "¿Estás seguro que quieres dar de alta al autor?"),
-//         icon: "warning",
-//         showCancelButton: true,
-//         confirmButtonColor: "#3085d6",
-//         cancelButtonColor: "#d33",
-//         confirmButtonText: "Si, realizar operación"
-//     }).then((result) => {
-//         if (result.isConfirmed) {
-//             let url = "/biblioteca/autores?accion=cambiarEstado";
-//             let authorId = $(button).data("authorId");
-//             $.ajax({
-//                 url: url,
-//                 method: "GET",
-//                 data: { id: authorId },
-//                 dataType: "JSON",
-//                 success: function (response) {
-//                     if (response.ok) {
-//                         $("#authorsDataTable").DataTable().ajax.reload(null, false);
-//                         Swal.fire(
-//                             (active ? "Baja" : "Alta"),
-//                             (active ? "El autor fue dado de baja" : "El autor fue dado de alta"),
-//                             "success"
-//                         );
-//                     }
-//                 }
-//             });
-//         }
-//     });
-// }
+}

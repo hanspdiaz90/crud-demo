@@ -100,7 +100,6 @@
                 $("#dateTimeDob").datetimepicker({
                     locale: "es",
                     format: "DD/MM/YYYY"
-                    // defaultDate: moment()
                 });
             });
         </script>

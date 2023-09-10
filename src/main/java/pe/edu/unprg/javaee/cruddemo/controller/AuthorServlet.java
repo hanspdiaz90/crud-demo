@@ -194,30 +194,4 @@ public class AuthorServlet extends HttpServlet {
         }
     }
 
-    /*
-    private void changeAuthorStatusAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        boolean ok = false;
-        String message = null;
-        JsonObject jsonResponse = new JsonObject();
-        try {
-            if (request.getParameter("id") != null) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                boolean success = authorService.changeStatusById(id);
-                if (success) {
-                    ok = true;
-                    message = "La operación se realizó con éxito";
-                }
-            }
-            jsonResponse.addProperty("status", ok ? "success" : "error");
-            jsonResponse.addProperty("message", message);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(jsonResponse.toString());
-        } catch (ServiceException ex) {
-            response.setContentType("text/html");
-            response.getWriter().print(ex.getMessage());
-        }
-    }
-     */
-
 }

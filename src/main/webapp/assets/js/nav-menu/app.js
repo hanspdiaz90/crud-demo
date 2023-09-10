@@ -6,65 +6,63 @@ $(function () {
     findAllParents();
 
     let formBody = $("#addEditForm");
-    setDisabledSelect(formBody, ".form-group #cbxParents", true);
+    setPropertyToSelect(formBody, ".form-group #cbxParents", true);
 
     $("#addEditForm").submit(function (event) {
         event.preventDefault();
     });
 
-    $("#btnSave").click(function () {
-        $("#addEditForm").validate({
-            rules: {
-                title: {required: true, minlength: 3},
-                icon: {required: true, minlength: 10},
-                module: {
-                    selectModule: true
-                }
-            },
-            submitHandler: function (form) {
-                let url = contextPath + "/admincrud/menu-navegacion?action=create";
-                let title = "Registrado!";
-                if (!isNew) {
-                    url = contextPath + "/admincrud/menu-navegacion?action=update";
-                    title = "Actualizado!";
-                }
-                let formData = $(form).serialize();
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: formData,
-                    dataType: "JSON",
-                    success: function (response) {
-                        if (response.success) {
-                            $(form).trigger("reset");
-                            let formBody = $("#addEditForm");
-                            setDisplayNoneToInputs(formBody, ".form-group #txtMenuId");
-                            setDisplayNoneToInputs(formBody, ".form-group .custom-switch");
-                            setDisabledAndReadOnlyToInputId(formBody, ".form-group #txtMenuId", true);
-                            let collapseCard = $("#collapseCard");
-                            setCollapseOnCard(collapseCard, false);
-                            let table = $("#tblNavMenu").DataTable();
-                            table.ajax.reload(null, false);
-                            findAllParents();
-                            Swal.fire(title, response.message, response.status);
-                            if (!isNew) isNew = true;
-                        }
-                    },
-                    processData: false,
-                    cache: false,
-                });
+    $("#addEditForm").validate({
+        rules: {
+            title: {required: true, minlength: 3},
+            icon: {required: true, minlength: 10},
+            module: {
+                selectModule: true
             }
-        });
+        },
+        submitHandler: function (form) {
+            let url = contextPath + "/admincrud/menu-navegacion?action=create";
+            let alertTitle = "Registrado!";
+            if (!isNew) {
+                url = contextPath + "/admincrud/menu-navegacion?action=update";
+                alertTitle = "Actualizado!";
+            }
+            let postData = $(form).serialize();
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: postData,
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        $(form).trigger("reset");
+                        let formBody = $("#addEditForm");
+                        hideInputElement(formBody, ".form-group #txtMenuId");
+                        hideInputElement(formBody, ".form-group .custom-switch");
+                        setPropertiesToInputElementId(formBody, ".form-group #txtMenuId", true);
+                        let collapseCard = $("#collapseCard");
+                        setCollapseOnCard(collapseCard, false);
+                        let table = $("#tblNavMenu").DataTable();
+                        table.ajax.reload(null, false);
+                        findAllParents();
+                        Swal.fire(alertTitle, response.message, response.status);
+                        if (!isNew) isNew = true;
+                    }
+                },
+                processData: false,
+                cache: false,
+            });
+        }
     });
 
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = true;
         let formBody = $("#addEditForm");
-        setDisplayNoneToInputs(formBody, ".form-group #txtMenuId");
-        setDisplayNoneToInputs(formBody, ".form-group .custom-switch");
-        setDisabledAndReadOnlyToInputId(formBody, ".form-group #txtMenuId", true);
-        setDisabledSelect(formBody, ".form-group #cbxParents", true);
+        hideInputElement(formBody, ".form-group #txtMenuId");
+        hideInputElement(formBody, ".form-group .custom-switch");
+        setPropertiesToInputElementId(formBody, ".form-group #txtMenuId", true);
+        setPropertyToSelect(formBody, ".form-group #cbxParents", true);
         let collapseCard = $("#collapseCard");
         setCollapseOnCard(collapseCard, false);
     });
@@ -72,25 +70,27 @@ $(function () {
     $("#isParent").change(function () {
         let formBody = $("#addEditForm");
         if (this.checked) {
-            setDisabledSelect(formBody, ".form-group #cbxParents", false);
+            setPropertyToSelect(formBody, ".form-group #cbxParents", false);
         } else {
-            setDisabledSelect(formBody, ".form-group #cbxParents", true);
+            setPropertyToSelect(formBody, ".form-group #cbxParents", true);
         }
     });
 
 });
 
-function setDisabledSelect(formBody, select, flag) {
+function setPropertyToSelect(formBody, select, flag) {
     formBody.find(select).prop("disabled", flag);
 }
 
-function setDisabledAndReadOnlyToInputId(formBody, inputId, flag) {
+function setPropertiesToInputElementId(formBody, inputId, flag) {
     formBody.find(inputId).prop("disabled", flag);
     formBody.find(inputId).prop("readonly", !flag);
 }
 
-function setDisplayNoneToInputs(formBody, input) {
-    formBody.find(input).parent().addClass("d-none");
+function hideInputElement(formBody, input) {
+    if (!formBody.find(input).parent().hasClass("d-none")) {
+        formBody.find(input).parent().addClass("d-none");
+    }
 }
 
 function setCollapseOnCard(formBody, flag) {
@@ -111,12 +111,12 @@ function resetInvalidForm(button, validatedForm) {
     $(validatedForm).trigger("reset");
 }
 
-function displayIcon(icon) {
-    let elementHTML = "<span><i class='" + icon + "'></i></span>";
-    return elementHTML;
+function showIcon(icon) {
+    let span = "<span><i class='" + icon + "'></i></span>";
+    return span;
 }
 
-function displayStatus(status) {
+function showStatus(status) {
     let badge = {
         false: {
             class: "danger",
@@ -129,10 +129,10 @@ function displayStatus(status) {
             text: "ACTIVO"
         }
     };
-    let elementHTML = "<span class='badge badge-" + badge[status].class + "'>";
-    elementHTML += "<i class='fas fa-" + badge[status].icon + "'></i> <span>" + badge[status].text + "</span>";
-    elementHTML += "</span>";
-    return elementHTML;
+    let span = "<span class='badge badge-" + badge[status].class + "'>";
+    span += "<i class='fas fa-" + badge[status].icon + "'></i> <span>" + badge[status].text + "</span>";
+    span += "</span>";
+    return span;
 }
 
 function showFormEditAndViewDetailMenu(button, isEditable) {
@@ -149,7 +149,7 @@ function showFormEditAndViewDetailMenu(button, isEditable) {
                 if (isEditable) {
                     let formBody = $("#addEditForm");
                     formBody.find(".form-group.d-none").removeClass("d-none");
-                    setDisabledAndReadOnlyToInputId(formBody, ".form-group #txtMenuId", false);
+                    setPropertiesToInputElementId(formBody, ".form-group #txtMenuId", false);
                     formBody.find(".form-group #txtMenuId").val(foundMenu.moduleId);
                     formBody.find(".form-group #txtTitle").val(foundMenu.title);
                     formBody.find(".form-group #txtDescription").val(foundMenu.description);
@@ -165,14 +165,14 @@ function showFormEditAndViewDetailMenu(button, isEditable) {
                 } else {
                     let modalBody = $("#viewDetailModal .modal-body");
                     modalBody.empty();
-                    let elementHTML = "<dl>";
-                    elementHTML += "<dt>Título</dt>";
-                    elementHTML += "<dd>" + foundMenu.title + "</dd>";
-                    elementHTML += "<dt>Descripción</dt>";
-                    elementHTML += "<dd>" + (foundMenu.description ?? "-") + "</dd>";
-                    elementHTML += "<dt>" + displayStatus(foundMenu.active) + "</dt>";
-                    elementHTML += "</dl>";
-                    modalBody.append(elementHTML);
+                    let container = "<dl>";
+                    container += "<dt>Título</dt>";
+                    container += "<dd>" + foundMenu.title + "</dd>";
+                    container += "<dt>Descripción</dt>";
+                    container += "<dd>" + (foundMenu.description ?? "-") + "</dd>";
+                    container += "<dt>" + showStatus(foundMenu.active) + "</dt>";
+                    container += "</dl>";
+                    modalBody.append(container);
                     $("#viewDetailModal").modal("show");
                 }
             }
@@ -197,7 +197,7 @@ function disableMenu(button) {
             $.ajax({
                 url: url,
                 type: "POST",
-                data: {moduleId: menuId},
+                data: { moduleId: menuId },
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
@@ -263,8 +263,8 @@ function findAllMenus() {
         },
         rowId: "menuId",
         columns: [
-            { data: "menuId" },
-            { data: "title" },
+            {data: "menuId"},
+            {data: "title"},
             {
                 data: "module.title",
                 render: function (data, type, row) {
@@ -275,7 +275,7 @@ function findAllMenus() {
                 data: "icon",
                 className: "text-center",
                 render: function (data, type, row) {
-                    return displayIcon(data);
+                    return showIcon(data);
                 }
             },
             {
@@ -293,7 +293,7 @@ function findAllMenus() {
                 data: "active",
                 className: "text-center",
                 render: function (data, type, row) {
-                    return displayStatus(data);
+                    return showStatus(data);
                 }
             },
             {
@@ -303,41 +303,86 @@ function findAllMenus() {
                     let elementHTML = "<div class='btn-group btn-group-sm'>";
                     elementHTML += "<button type='button' onclick='showFormEditAndViewDetailMenu(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-menu-id='" + data + "'><i class='fas fa-eye'></i></button>";
                     elementHTML += "<button type='button' onclick='showFormEditAndViewDetailMenu(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-menu-id='" + data + "'><i class='fas fa-pen'></i></button>"
-                    elementHTML += "<button type='button' onclick='disableMenu(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-menu-id='" + data + "' data-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
+                    elementHTML += "<button type='button' onclick='disableMenu(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar' data-menu-id='" + data + "' data-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
                     elementHTML += "</div>"
                     return elementHTML;
                 }
             }
         ]
     });
+
     table.on("draw", function () {
         $("[data-tooltip='tooltip']").tooltip();
-        let rows = [];
-        let nodes = [];
-        table.rows().iterator("row", function (context, index) {
-            let data = this.row(index).data();
-            let row = this.row(index).node();
-            // let row = $(this.row(index).node());
-            rows.push(data);
-            nodes.push(row);
+
+        /* MÉTODO NRO 01 */
+        let data = table.data().toArray();
+        let nodes = table.rows().nodes().to$();
+
+        data.forEach(function (value, index, array) {
+            let parentText = "";
+            let parentId = value.parentId;
+            if (parentId == 0) {
+                parentText = "-";
+                $(nodes[index]).find("td:eq(5)").text(parentText);
+            } else {
+                let foundValue = array.find(function (otherValue) {
+                    let menuId = otherValue.menuId;
+                    return parentId == menuId;
+                });
+                parentText = foundValue.title;
+                $(nodes[index]).find("td:eq(5)").text(parentText);
+            }
         });
 
-        // let row = $(this.row(index).node())
-        // console.log(nodes[9][0].cells[5].innerText);
-        // nodes[9][0].cells[5].innerText = "HOLA";
-
-        // let row = this.row(index).node();
-        // console.log($(nodes[9]).find("td:eq(5)").text());
-        // $(nodes[9]).find("td:eq(5)").text("HOLA");
-
-        // $.each(rows, function (index, value) {
-        //     let temp = $("#tblNavMenu").DataTable();
-        //     let currentRow = $(temp.rows(index).node());
-        //     console.log(currentRow);
-        //     //onsole.log(currentRow[0].parentId);
-        //     // if (value.parentId === 0) {
-        //     //
-        //     // }
+        /* MÉTODO NRO 02 */
+        // let data = [];
+        // let nodes = [];
+        // table.rows().iterator("row", function (context, index) {
+        //     let row = this.row(index).data();
+        //     let node = this.row(index).node();
+        //     data.push(row);
+        //     nodes.push(node);
         // });
+        // data.forEach(function (value, index, array) {
+        //     let parentText = "";
+        //     let parentId = value.parentId;
+        //     if (parentId == 0) {
+        //         parentText = "-";
+        //         $(nodes[index]).find("td:eq(5)").text(parentText);
+        //     } else {
+        //         let foundValue = array.find(function (otherValue) {
+        //             let menuId = otherValue.menuId;
+        //             return parentId == menuId;
+        //         });
+        //         let parentText = foundValue.title;
+        //         $(nodes[index]).find("td:eq(5)").text(parentText);
+        //     }
+        // });
+
+        /* MÉTODO NRO 03 */
+        // let nodes = [];
+        // table.rows().iterator("row", function (context, index) {
+        //     let node = this.row(index).node();
+        //     nodes.push(node);
+        // });
+        // $.each(nodes, function (i, value) {
+        //     let parentText = "";
+        //     let parentId = $(value).find("td:eq(5)").text();
+        //     if (parentId == 0) {
+        //         parentText = "-";
+        //         $(value).find("td:eq(5)").text(parentText);
+        //     } else {
+        //         $.each(nodes, function (j, otherValue) {
+        //             let menuId = $(otherValue).find("td:eq(0)").text();
+        //             if (parentId == menuId) {
+        //                 parentText = $(otherValue).find("td:eq(1)").text();
+        //                 $(value).find("td:eq(5)").text(parentText);
+        //                 return;
+        //             }
+        //         });
+        //     }
+        // });
+
     });
+
 }
