@@ -9,7 +9,7 @@ $(function () {
 
     $("#addEditForm").validate({
         rules: {
-            name: { required: true, minlength: 3 }
+            name: {required: true, minlength: 3}
         },
         submitHandler: function (form) {
             let url = contextPath + "/admincrud/generos?action=create";
@@ -27,7 +27,10 @@ $(function () {
                 success: function (response) {
                     if (response.success) {
                         $(form).trigger("reset");
-                        $("#addEditModal").modal("hide");
+                        let modal = $("#addEditModal");
+                        let modalHeader = modal.find(".modal-header");
+                        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo género literario");
+                        modal.modal("hide");
                         let table = $("#tblGenres").DataTable();
                         table.ajax.reload(null, false);
                         Swal.fire(alertTitle, response.message, response.status);
@@ -43,25 +46,31 @@ $(function () {
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = false;
-        let modalBody = $("#addEditModal .modal-body");
+        let modal = $("#addEditModal");
+        let modalHeader = modal.find(".modal-header");
+        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo género literario");
+        let modalBody = modal.find(".modal-body");
         hideInputElement(modalBody, ".form-group #txtGenreId");
         hideInputElement(modalBody, ".form-group .custom-switch");
-        setPropertiesToInputElementId(modalBody, ".form-group #txtGenreId", true);
+        blockInputElement(modalBody, ".form-group #txtGenreId", true);
     });
 
     $("#btnNew").click(function () {
         isNew = true;
-        let modalBody = $("#addEditModal .modal-body");
+        let modal = $("#addEditModal");
+        let modalHeader = modal.find(".modal-header");
+        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo género literario");
+        let modalBody = modal.find(".modal-body");
         hideInputElement(modalBody, ".form-group #txtGenreId");
         hideInputElement(modalBody, ".form-group .custom-switch");
-        setPropertiesToInputElementId(modalBody, ".form-group #txtGenreId", true);
+        blockInputElement(modalBody, ".form-group #txtGenreId", true);
     });
 
 });
 
-function setPropertiesToInputElementId(modalBody, inputId, flag) {
-    modalBody.find(inputId).prop("disabled", flag);
-    modalBody.find(inputId).prop("readonly", !flag);
+function blockInputElement(modalBody, inputId, isBlocked) {
+    modalBody.find(inputId).prop("disabled", isBlocked);
+    modalBody.find(inputId).prop("readonly", !isBlocked);
 }
 
 function hideInputElement(modalBody, input) {
@@ -103,22 +112,26 @@ function showModalEditAndViewDetailGenre(button, isEditable) {
     $.ajax({
         url: url,
         type: "GET",
-        data: { genreId: genreId },
+        data: {genreId: genreId},
         dataType: "JSON",
         success: function (response) {
             if (response.success) {
                 let foundGenre = response.result;
                 if (isEditable) {
-                    let modalBody = $("#addEditModal .modal-body");
+                    let modal = $("#addEditModal");
+                    let modalHeader = modal.find(".modal-header");
+                    modalHeader.find(".modal-title").html("<i class='fas fa-edit mr-1'></i> Editar datos del género literario");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.find(".form-group.d-none").removeClass("d-none");
-                    setPropertiesToInputElementId(modalBody, ".form-group #txtGenreId", false);
+                    blockInputElement(modalBody, ".form-group #txtGenreId", false);
                     modalBody.find(".form-group #txtGenreId").val(foundGenre.genreId);
                     modalBody.find(".form-group #txtGenre").val(foundGenre.name);
                     modalBody.find(".form-group #chkActive").attr("checked", foundGenre.active);
-                    $("#addEditModal").modal("show");
+                    modal.modal("show");
                     isNew = false;
                 } else {
-                    let modalBody = $("#viewDetailModal .modal-body");
+                    let modal = $("#viewDetailModal");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.empty();
                     let container = "<dl>";
                     container += "<dt>Género Literario</dt>";
@@ -126,7 +139,7 @@ function showModalEditAndViewDetailGenre(button, isEditable) {
                     container += "<dt>" + showStatus(foundGenre.active) + "</dt>";
                     container += "</dl>";
                     modalBody.append(container);
-                    $("#viewDetailModal").modal("show");
+                    modal.modal("show");
                 }
             }
         }
@@ -150,7 +163,7 @@ function disableGenre(button) {
             $.ajax({
                 url: url,
                 type: "POST",
-                data: { genreId: genreId },
+                data: {genreId: genreId},
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
@@ -173,23 +186,23 @@ function findAllGenres() {
             dataSrc: "result"
         },
         columns: [
-            { data: "name" },
+            {data: "name"},
             {
-                data: null,
+                data: "active",
                 className: "text-center",
                 render: function (data, type, row) {
-                    return showStatus(row.active);
+                    return showStatus(data);
                 }
             },
             {
-                data: null,
+                data: "genreId",
                 className: "text-center",
                 render: function (data, type, row) {
                     let isEditable = true;
                     let buttons = "<div class='btn-group btn-group-sm'>";
-                    buttons += "<button type='button' onclick='showModalEditAndViewDetailGenre(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-genre-id='" + row.genreId + "'><i class='fas fa-eye'></i></button>";
-                    buttons += "<button type='button' onclick='showModalEditAndViewDetailGenre(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-genre-id='" + row.genreId + "'><i class='fas fa-pen'></i></button>";
-                    buttons += "<button type='button' onclick='disableGenre(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-genre-id='" + row.genreId + "' data-genre-name='" + row.name + "'><i class='fas fa-trash'></i></button>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailGenre(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='MÁS DETALLE' data-genre-id='" + data + "'><i class='fas fa-eye'></i></button>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailGenre(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='EDITAR' data-genre-id='" + data + "'><i class='fas fa-pen'></i></button>";
+                    buttons += "<button type='button' onclick='disableGenre(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='DESACTIVAR'  data-genre-id='" + data + "' data-genre-name='" + row.name + "'><i class='fas fa-trash'></i></button>";
                     buttons += "</div>";
                     return buttons;
                 }

@@ -5,7 +5,9 @@
         <!-- Modal Content -->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="addEditModalLabel">Añadir Nuevo Autor</h4>
+                <h5 class="modal-title text-uppercase" id="addEditModalLabel">
+                    <i class="fas fa-file-alt mr-1"></i> Añadir nuevo autor
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -13,7 +15,7 @@
             <form id="addEditForm" role="form">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="txtAuthorId">Cód. Autor</label>
+                        <label for="txtAuthorId">Código</label>
                         <input type="text" class="form-control" id="txtAuthorId" name="authorId">
                     </div>
                     <div class="form-group">
@@ -47,7 +49,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset"  class="btn btn-secondary" id="btnReset" data-dismiss="modal">Cerrar</button>
+                    <button type="reset" class="btn btn-secondary" id="btnReset" data-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>

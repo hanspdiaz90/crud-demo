@@ -30,7 +30,10 @@ $(function () {
                 success: function (response) {
                     if (response.success) {
                         $(form).trigger("reset");
-                        $("#addEditModal").modal("hide");
+                        let modal = $("#addEditModal");
+                        let modalHeader = modal.find(".modal-header");
+                        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo autor");
+                        modal.modal("hide");
                         let table = $("#tblAuthors").DataTable();
                         table.ajax.reload(null, false);
                         Swal.fire(alertTitle, response.message, response.status);
@@ -46,25 +49,31 @@ $(function () {
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = false;
-        let modalBody = $("#addEditModal .modal-body");
+        let modal = $("#addEditModal");
+        let modalHeader = modal.find(".modal-header");
+        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo autor");
+        let modalBody = modal.find(".modal-body");
         hideInputElement(modalBody, ".form-group #txtAuthorId");
         hideInputElement(modalBody, ".form-group .custom-switch");
-        setPropertiesToInputElementId(modalBody, ".form-group #txtAuthorId", true);
+        blockInputElement(modalBody, ".form-group #txtAuthorId", true);
     });
 
     $("#btnNew").click(function () {
         isNew = true;
-        let modalBody = $("#addEditModal .modal-body");
+        let modal = $("#addEditModal");
+        let modalHeader = modal.find(".modal-header");
+        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo autor");
+        let modalBody = modal.find(".modal-body");
         hideInputElement(modalBody, ".form-group #txtAuthorId");
         hideInputElement(modalBody, ".form-group .custom-switch");
-        setPropertiesToInputElementId(modalBody, ".form-group #txtAuthorId", true);
+        blockInputElement(modalBody, ".form-group #txtAuthorId", true);
     });
 
 });
 
-function setPropertiesToInputElementId(modalBody, inputId, flag) {
-    modalBody.find(inputId).prop("disabled", flag);
-    modalBody.find(inputId).prop("readonly", !flag);
+function blockInputElement(modalBody, inputId, isBlocked) {
+    modalBody.find(inputId).prop("disabled", isBlocked);
+    modalBody.find(inputId).prop("readonly", !isBlocked);
 }
 
 function hideInputElement(modalBody, input) {
@@ -85,7 +94,7 @@ function resetInvalidForm(button, validatedForm) {
 //     return new moment(date + "T00:00:00").format("DD/MM/YYYY");
 // }
 
-function toFormatLocalDate (date) {
+function toFormatLocalDate(date) {
     let options = {
         day: '2-digit',
         month: '2-digit',
@@ -134,19 +143,23 @@ function showModalEditAndViewAuthor(button, isEditable) {
             if (response.success) {
                 let foundAuthor = response.result;
                 if (isEditable) {
-                    let modalBody = $("#addEditModal .modal-body");
+                    let modal = $("#addEditModal");
+                    let modalHeader = modal.find(".modal-header");
+                    modalHeader.find(".modal-title").html("<i class='fas fa-edit mr-1'></i> Editar datos del autor");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.find(".form-group.d-none").removeClass("d-none");
-                    setPropertiesToInputElementId(modalBody, ".form-group #txtAuthorId", false);
+                    blockInputElement(modalBody, ".form-group #txtAuthorId", false);
                     modalBody.find(".form-group #txtAuthorId").val(foundAuthor.authorId);
                     modalBody.find(".form-group #txtFirstname").val(foundAuthor.firstName);
                     modalBody.find(".form-group #txtLastname").val(foundAuthor.lastName);
                     modalBody.find(".form-group #txtCity").val(foundAuthor.city);
                     modalBody.find(".form-group #dtDob").val(toFormatLocalDate(foundAuthor.dob));
                     modalBody.find(".form-group #chkActive").attr("checked", foundAuthor.active);
-                    $("#addEditModal").modal("show");
+                    modal.modal("show");
                     isNew = false;
                 } else {
-                    let modalBody = $("#viewDetailModal .modal-body");
+                    let modal = $("#viewDetailModal");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.empty();
                     let container = "<dl>";
                     container += "<dt>Autor</dt>";
@@ -156,7 +169,7 @@ function showModalEditAndViewAuthor(button, isEditable) {
                     container += "<dt>" + showStatus(foundAuthor.active) + "</dt>";
                     container += "</dl>";
                     modalBody.append(container);
-                    $("#viewDetailModal").modal("show");
+                    modal.modal("show");
                 }
             }
         }
@@ -228,9 +241,9 @@ function findAllAuthors() {
                 render: function (data, type, row) {
                     let isEditable = true;
                     let buttons = "<div class='btn-group btn-group-sm'>";
-                    buttons += "<button type='button' onclick='showModalEditAndViewAuthor(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-author-id='" + data + "'><i class='fas fa-eye'></i></button>";
-                    buttons += "<button type='button' onclick='showModalEditAndViewAuthor(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-author-id='" + data + "'><i class='fas fa-pen'></i></button>";
-                    buttons += "<button type='button' onclick='disableAuthor(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar' data-author-id='" + data + "' data-author-fullname='" + showFullNames(row.firstName, row.lastName) + "'><i class='fas fa-trash'></i></button>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewAuthor(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='MÁS DETALLE' data-author-id='" + data + "'><i class='fas fa-eye'></i></button>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewAuthor(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='EDITAR' data-author-id='" + data + "'><i class='fas fa-pen'></i></button>";
+                    buttons += "<button type='button' onclick='disableAuthor(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='DESACTIVAR' data-author-id='" + data + "' data-author-fullname='" + showFullNames(row.firstName, row.lastName) + "'><i class='fas fa-trash'></i></button>";
                     buttons += "</div>";
                     return buttons;
                 }

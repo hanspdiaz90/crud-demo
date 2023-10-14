@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <form id="addEditForm" role="form">
     <div class="form-group d-none">
-        <label for="txtMenuId">ID Menú</label>
+        <label for="txtMenuId">Código</label>
         <input type="text" class="form-control" id="txtMenuId" name="menuId">
     </div>
     <div class="form-row">
@@ -46,7 +46,7 @@
         </div>
     </div>
     <div class="form-group">
-        <button type="reset" id="btnReset" class="btn btn-secondary">Cancelar</button>
-        <button type="submit" id="btnSave" class="btn btn-primary">Guardar</button>
+        <button type="reset" class="btn btn-secondary" id="btnReset">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
     </div>
 </form>

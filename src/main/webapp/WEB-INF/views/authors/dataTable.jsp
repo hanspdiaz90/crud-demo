@@ -5,15 +5,15 @@
             <th class="text-uppercase" scope="col">Autor</th>
             <th class="text-uppercase" scope="col">Ciudad, Año de Nacimiento</th>
             <th class="text-uppercase" scope="col">Estado</th>
-            <th class="text-uppercase" scope="col"></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody></tbody>
     <tfoot>
         <tr>
-            <th scope="col">Autor</th>
-            <th scope="col">Ciudad, Año de Nacimiento</th>
-            <th scope="col">Estado</th>
+            <th class="text-uppercase" scope="col">Autor</th>
+            <th class="text-uppercase" scope="col">Ciudad, Año de Nacimiento</th>
+            <th class="text-uppercase" scope="col">Estado</th>
             <th scope="col"></th>
         </tr>
     </tfoot>

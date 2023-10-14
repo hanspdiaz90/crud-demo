@@ -9,7 +9,7 @@ $(function () {
             dataType: "JSON",
             delay: 250,
             data: function (params) {
-                return { filter: params.term };
+                return {filter: params.term};
             },
             processResults: function (response) {
                 let data = $.map(response.result, function (item) {
@@ -39,7 +39,7 @@ $(function () {
             dataType: "JSON",
             delay: 250,
             data: function (params) {
-                return { filter: params.term };
+                return {filter: params.term};
             },
             processResults: function (response) {
                 let data = $.map(response.result, function (item) {
@@ -69,7 +69,7 @@ $(function () {
             dataType: "JSON",
             delay: 250,
             data: function (params) {
-                return { filter: params.term };
+                return {filter: params.term};
             },
             processResults: function (response) {
                 let data = $.map(response.result, function (item) {
@@ -126,7 +126,10 @@ $(function () {
                 success: function (response) {
                     if (response.success) {
                         $(form).trigger("reset");
-                        $("#addEditModal").modal("hide");
+                        let modal = $("#addEditModal");
+                        let modalHeader = modal.find(".modal-header");
+                        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo libro");
+                        modal.modal("hide");
                         let table = $("#tblBooks").DataTable();
                         table.ajax.reload(null, false);
                         Swal.fire(alertTitle, response.message, response.status);
@@ -142,25 +145,31 @@ $(function () {
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = false;
-        let modalBody = $("#addEditModal .modal-body");
+        let modal = $("#addEditModal");
+        let modalHeader = modal.find(".modal-header");
+        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo libro");
+        let modalBody = modal.find(".modal-body");
         hideInputElement(modalBody, ".form-group #txtBookId");
         hideInputElement(modalBody, ".form-group .custom-switch");
-        setPropertiesToInputElementId(modalBody, ".form-group #txtBookId", true);
+        blockInputElement(modalBody, ".form-group #txtBookId", true);
     });
 
     $("#btnNew").click(function () {
         isNew = true;
-        let modalBody = $("#addEditModal .modal-body");
+        let modal = $("#addEditModal");
+        let modalHeader = modal.find(".modal-header");
+        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo libro");
+        let modalBody = modal.find(".modal-body");
         hideInputElement(modalBody, ".form-group #txtBookId");
         hideInputElement(modalBody, ".form-group .custom-switch");
-        setPropertiesToInputElementId(modalBody, ".form-group #txtBookId", true);
+        blockInputElement(modalBody, ".form-group #txtBookId", true);
     });
 
 });
 
-function setPropertiesToInputElementId(modalBody, inputId, flag) {
-    modalBody.find(inputId).prop("disabled", flag);
-    modalBody.find(inputId).prop("readonly", !flag);
+function blockInputElement(modalBody, inputId, isBlocked) {
+    modalBody.find(inputId).prop("disabled", isBlocked);
+    modalBody.find(inputId).prop("readonly", !isBlocked);
 }
 
 function hideInputElement(modalBody, input) {
@@ -217,9 +226,12 @@ function showModalEditAndViewDetailBook(button, isEditable) {
             if (response.success) {
                 let foundBook = response.result;
                 if (isEditable) {
-                    let modalBody = $("#addEditModal .modal-body");
+                    let modal = $("#addEditModal");
+                    let modalHeader = modal.find(".modal-header");
+                    modalHeader.find(".modal-title").html("<i class='fas fa-edit mr-1'></i> Editar datos del libro");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.find(".form-group.d-none").removeClass("d-none");
-                    setPropertiesToInputElementId(modalBody, ".form-group #txtBookId", false);
+                    blockInputElement(modalBody, ".form-group #txtBookId", false);
                     modalBody.find(".form-group #txtBookId").val(foundBook.bookId);
                     modalBody.find(".form-group #txtTitle").val(foundBook.title);
                     modalBody.find(".form-group #txtISBN").val(foundBook.isbn);
@@ -241,10 +253,11 @@ function showModalEditAndViewDetailBook(button, isEditable) {
                     modalBody.find(".form-group #txtCoverImage").val(foundBook.coverImage);
                     modalBody.find(".form-group #txtReview").val(foundBook.review);
                     modalBody.find(".form-group #chkActive").attr("checked", foundBook.active);
-                    $("#addEditModal").modal("show");
+                    modal.modal("show");
                     isNew = false;
                 } else {
-                    let modalBody = $("#viewDetailModal .modal-body");
+                    let modal = $("#viewDetailModal");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.empty();
                     let container = "<dl>";
                     container += "<dt>ISBN</dt>";
@@ -262,7 +275,7 @@ function showModalEditAndViewDetailBook(button, isEditable) {
                     container += "<dt>" + showStatus(foundBook.active) + "</dt>";
                     container += "</dl>";
                     modalBody.append(container);
-                    $("#viewDetailModal").modal("show");
+                    modal.modal("show");
                 }
             }
         }
@@ -354,14 +367,14 @@ function findAllBooks() {
                 }
             },
             {
-                data: "data",
+                data: "bookId",
                 className: "text-center",
                 render: function (data, type, row) {
                     let isEditable = true;
                     let buttons = "<div class='btn-group btn-group-sm'>";
-                    buttons += "<button type='button' onclick='showModalEditAndViewDetailBook(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-book-id='" + data + "'><i class='fas fa-eye'></i></button>";
-                    buttons += "<button type='button' onclick='showModalEditAndViewDetailBook(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-book-id='" + data + "'><i class='fas fa-pen'></i></button>"
-                    buttons += "<button type='button' onclick='disableBook(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-book-id='" + data + "' data-book-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailBook(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='MÁS DETALLE' data-book-id='" + data + "'><i class='fas fa-eye'></i></button>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailBook(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='EDITAR' data-book-id='" + data + "'><i class='fas fa-pen'></i></button>"
+                    buttons += "<button type='button' onclick='disableBook(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='DESACTIVAR'  data-book-id='" + data + "' data-book-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
                     buttons += "</div>"
                     return buttons;
                 }

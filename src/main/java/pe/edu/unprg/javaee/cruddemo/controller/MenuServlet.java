@@ -36,10 +36,10 @@ public class MenuServlet extends HttpServlet {
                 this.findAllAction(response);
                 break;
             case "findActiveModules":
-                this.findActiveModulesAction(request, response);
+                this.findActiveModulesAction(response);
                 break;
             case "findMenusWithRoute":
-                this.findActiveModulesAction(request, response);
+                this.findActiveModulesAction(response);
                 break;
             default:
                 this.mainAction(request, response);
@@ -136,15 +136,14 @@ public class MenuServlet extends HttpServlet {
     }
 
     private void findByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        /*
-        if (request.getParameter("moduleId") != null) {
-            int moduleId = Integer.parseInt(request.getParameter("moduleId"));
-            Module foundModule = moduleService.findByModuleId(moduleId);
+        if (request.getParameter("menuId") != null) {
+            int moduleId = Integer.parseInt(request.getParameter("menuId"));
+            Menu foundMenu = this.menuService.findByMenuId(moduleId);
             JsonObject json = new JsonObject();
             JsonElement result = null;
-            if (foundModule != null) {
-                Type moduleType = new TypeToken<Module>(){}.getType();
-                result = this.gson.toJsonTree(foundModule, moduleType);
+            if (foundMenu != null) {
+                Type menuType = new TypeToken<Menu>(){}.getType();
+                result = this.gson.toJsonTree(foundMenu, menuType);
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
@@ -154,7 +153,6 @@ public class MenuServlet extends HttpServlet {
             json.add("result", result);
             JSONResponse.writeFromServlet(response, json);
         }
-         */
     }
 
     private void findAllAction(HttpServletResponse response) throws IOException {
@@ -175,7 +173,7 @@ public class MenuServlet extends HttpServlet {
         JSONResponse.writeFromServlet(response, json);
     }
 
-    private void findActiveModulesAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void findActiveModulesAction(HttpServletResponse response) throws IOException {
         JsonObject json = new JsonObject();
         JsonArray data = null;
         List<Module> activeModules = this.menuService.findActiveModules();
@@ -194,14 +192,13 @@ public class MenuServlet extends HttpServlet {
     }
 
     private void disableByIdAction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        /*
-        if (request.getParameter("moduleId") != null) {
-            int moduleId = Integer.parseInt(request.getParameter("moduleId"));
-            boolean disabled = moduleService.disableByModuleId(moduleId);
+        if (request.getParameter("menuId") != null) {
+            int moduleId = Integer.parseInt(request.getParameter("menuId"));
+            boolean disabled = this.menuService.disableByMenuId(moduleId);
             JsonObject json = new JsonObject();
             String message = null;
             if (disabled) {
-                message = "El módulo ha sido desactivado con éxito";
+                message = "El menú ha sido desactivado con éxito";
                 json.addProperty("success", true);
                 json.addProperty("status", "success");
             } else {
@@ -211,7 +208,6 @@ public class MenuServlet extends HttpServlet {
             json.addProperty("message", message);
             JSONResponse.writeFromServlet(response, json);
         }
-         */
     }
 
 }

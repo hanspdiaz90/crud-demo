@@ -6,7 +6,7 @@ $(function () {
     findAllParents();
 
     let formBody = $("#addEditForm");
-    setPropertyToSelect(formBody, ".form-group #cbxParents", true);
+    activateSelection(formBody, ".form-group #cbxParents", true);
 
     $("#addEditForm").submit(function (event) {
         event.preventDefault();
@@ -36,12 +36,12 @@ $(function () {
                 success: function (response) {
                     if (response.success) {
                         $(form).trigger("reset");
-                        let formBody = $("#addEditForm");
+                        //let formBody = $("#addEditForm");
                         hideInputElement(formBody, ".form-group #txtMenuId");
                         hideInputElement(formBody, ".form-group .custom-switch");
-                        setPropertiesToInputElementId(formBody, ".form-group #txtMenuId", true);
-                        let collapseCard = $("#collapseCard");
-                        setCollapseOnCard(collapseCard, false);
+                        blockInputElement(formBody, ".form-group #txtMenuId", true);
+                        let card = $("#collapseCard");
+                        collapseCard(card, false);
                         let table = $("#tblNavMenu").DataTable();
                         table.ajax.reload(null, false);
                         findAllParents();
@@ -58,33 +58,33 @@ $(function () {
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = true;
-        let formBody = $("#addEditForm");
+        //let formBody = $("#addEditForm");
         hideInputElement(formBody, ".form-group #txtMenuId");
         hideInputElement(formBody, ".form-group .custom-switch");
-        setPropertiesToInputElementId(formBody, ".form-group #txtMenuId", true);
-        setPropertyToSelect(formBody, ".form-group #cbxParents", true);
+        blockInputElement(formBody, ".form-group #txtMenuId", true);
+        activateSelection(formBody, ".form-group #cbxParents", true);
         let collapseCard = $("#collapseCard");
-        setCollapseOnCard(collapseCard, false);
+        collapseCard(collapseCard, false);
     });
 
     $("#isParent").change(function () {
-        let formBody = $("#addEditForm");
+        //let formBody = $("#addEditForm");
         if (this.checked) {
-            setPropertyToSelect(formBody, ".form-group #cbxParents", false);
+            activateSelection(formBody, ".form-group #cbxParents", false);
         } else {
-            setPropertyToSelect(formBody, ".form-group #cbxParents", true);
+            activateSelection(formBody, ".form-group #cbxParents", true);
         }
     });
 
 });
 
-function setPropertyToSelect(formBody, select, flag) {
+function activateSelection(formBody, select, flag) {
     formBody.find(select).prop("disabled", flag);
 }
 
-function setPropertiesToInputElementId(formBody, inputId, flag) {
-    formBody.find(inputId).prop("disabled", flag);
-    formBody.find(inputId).prop("readonly", !flag);
+function blockInputElement(formBody, inputId, isBlocked) {
+    formBody.find(inputId).prop("disabled", isBlocked);
+    formBody.find(inputId).prop("readonly", !isBlocked);
 }
 
 function hideInputElement(formBody, input) {
@@ -93,8 +93,8 @@ function hideInputElement(formBody, input) {
     }
 }
 
-function setCollapseOnCard(formBody, flag) {
-    if (flag) {
+function collapseCard(formBody, isCollapsed) {
+    if (isCollapsed) {
         formBody.find("button .fas").toggleClass("fa-plus fa-minus");
     } else {
         formBody.find("button .fas").toggleClass("fa-minus fa-plus");
@@ -149,31 +149,33 @@ function showFormEditAndViewDetailMenu(button, isEditable) {
                 if (isEditable) {
                     let formBody = $("#addEditForm");
                     formBody.find(".form-group.d-none").removeClass("d-none");
-                    setPropertiesToInputElementId(formBody, ".form-group #txtMenuId", false);
-                    formBody.find(".form-group #txtMenuId").val(foundMenu.moduleId);
+                    blockInputElement(formBody, ".form-group #txtMenuId", false);
+                    formBody.find(".form-group #txtMenuId").val(foundMenu.menuId);
                     formBody.find(".form-group #txtTitle").val(foundMenu.title);
-                    formBody.find(".form-group #txtDescription").val(foundMenu.description);
+                    formBody.find(".form-group #txtIcon").val(foundMenu.icon);
+                    formBody.find(".form-group #txtRoute").val(foundMenu.route);
                     formBody.find(".form-group #chkActive").attr("checked", foundMenu.active);
-                    let collapseCard = $("#collapseCard");
-                    let exists = collapseCard.hasClass("collapsed-card");
-                    if (exists) {
-                        setCollapseOnCard(collapseCard, true);
+                    let card = $("#collapseCard");
+                    let hasClass = card.hasClass("collapsed-card");
+                    if (hasClass) {
+                        collapseCard(card, true);
                     }
                     formBody.find(".form-group #txtTitle").focus();
                     formBody.find(".form-group #txtTitle").select();
                     isNew = false;
                 } else {
-                    let modalBody = $("#viewDetailModal .modal-body");
+                    let modal = $("#viewDetailModal");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.empty();
                     let container = "<dl>";
                     container += "<dt>Título</dt>";
                     container += "<dd>" + foundMenu.title + "</dd>";
-                    container += "<dt>Descripción</dt>";
-                    container += "<dd>" + (foundMenu.description ?? "-") + "</dd>";
+                    container += "<dt>Ruta</dt>";
+                    container += "<dd>" + (foundMenu.route ?? "-") + "</dd>";
                     container += "<dt>" + showStatus(foundMenu.active) + "</dt>";
                     container += "</dl>";
                     modalBody.append(container);
-                    $("#viewDetailModal").modal("show");
+                    modalBody.modal("show");
                 }
             }
         }
@@ -197,7 +199,7 @@ function disableMenu(button) {
             $.ajax({
                 url: url,
                 type: "POST",
-                data: { moduleId: menuId },
+                data: {menuId: menuId},
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
@@ -300,12 +302,13 @@ function findAllMenus() {
                 data: "menuId",
                 className: "text-center",
                 render: function (data, type, row) {
-                    let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailMenu(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-menu-id='" + data + "'><i class='fas fa-eye'></i></button>";
-                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailMenu(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-menu-id='" + data + "'><i class='fas fa-pen'></i></button>"
-                    elementHTML += "<button type='button' onclick='disableMenu(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar' data-menu-id='" + data + "' data-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
-                    elementHTML += "</div>"
-                    return elementHTML;
+                    let isEditable = true;
+                    let buttons = "<div class='btn-group btn-group-sm'>";
+                    buttons += "<button type='button' onclick='showFormEditAndViewDetailMenu(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-menu-id='" + data + "'><i class='fas fa-eye'></i></button>";
+                    buttons += "<button type='button' onclick='showFormEditAndViewDetailMenu(this, " + isEditable + ")' class='btn btn-warning' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-menu-id='" + data + "'><i class='fas fa-pen'></i></button>"
+                    buttons += "<button type='button' onclick='disableMenu(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar' data-menu-id='" + data + "' data-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
+                    buttons += "</div>"
+                    return buttons;
                 }
             }
         ]
@@ -315,26 +318,69 @@ function findAllMenus() {
         $("[data-tooltip='tooltip']").tooltip();
 
         /* MÉTODO NRO 01 */
-        let data = table.data().toArray();
         let nodes = table.rows().nodes().to$();
-
-        data.forEach(function (value, index, array) {
+        $.each(nodes, function (i, element) {
             let parentText = "";
-            let parentId = value.parentId;
+            let parentId = $(element).find("td:eq(5)").text();
             if (parentId == 0) {
                 parentText = "-";
-                $(nodes[index]).find("td:eq(5)").text(parentText);
+                $(element).find("td:eq(5)").text(parentText);
             } else {
-                let foundValue = array.find(function (otherValue) {
-                    let menuId = otherValue.menuId;
-                    return parentId == menuId;
+                $.each(nodes, function (j, anotherElement) {
+                    let menuId = $(anotherElement).find("td:eq(0)").text();
+                    if (parentId == menuId) {
+                        parentText = $(anotherElement).find("td:eq(1)").text();
+                        $(element).find("td:eq(5)").text(parentText);
+                        return;
+                    }
                 });
-                parentText = foundValue.title;
-                $(nodes[index]).find("td:eq(5)").text(parentText);
             }
         });
 
         /* MÉTODO NRO 02 */
+        // let nodes = [];
+        // table.rows().iterator("row", function (context, index) {
+        //     let node = this.row(index).node();
+        //     nodes.push(node);
+        // });
+        // $.each(nodes, function (i, element) {
+        //     let parentText = "";
+        //     let parentId = $(element).find("td:eq(5)").text();
+        //     if (parentId == 0) {
+        //         parentText = "-";
+        //         $(element).find("td:eq(5)").text(parentText);
+        //     } else {
+        //         $.each(nodes, function (j, anotherElement) {
+        //             let menuId = $(anotherElement).find("td:eq(0)").text();
+        //             if (parentId == menuId) {
+        //                 parentText = $(anotherElement).find("td:eq(1)").text();
+        //                 $(element).find("td:eq(5)").text(parentText);
+        //                 return;
+        //             }
+        //         });
+        //     }
+        // });
+
+        /* MÉTODO NRO 03 */
+        // let data = table.data().toArray();
+        // let nodes = table.rows().nodes().to$();
+        // data.forEach(function (value, index, array) {
+        //     let parentText;
+        //     let parentId = value.parentId;
+        //     if (parentId == 0) {
+        //         parentText = "-";
+        //         $(nodes[index]).find("td:eq(5)").text(parentText);
+        //     } else {
+        //         let foundValue = array.find(function (anotherValue) {
+        //             let menuId = anotherValue.menuId;
+        //             return parentId == menuId;
+        //         });
+        //         parentText = foundValue.title;
+        //         $(nodes[index]).find("td:eq(5)").text(parentText);
+        //     }
+        // });
+
+        /* MÉTODO NRO 03 */
         // let data = [];
         // let nodes = [];
         // table.rows().iterator("row", function (context, index) {
@@ -350,36 +396,12 @@ function findAllMenus() {
         //         parentText = "-";
         //         $(nodes[index]).find("td:eq(5)").text(parentText);
         //     } else {
-        //         let foundValue = array.find(function (otherValue) {
-        //             let menuId = otherValue.menuId;
+        //         let foundValue = array.find(function (anotherValue) {
+        //             let menuId = anotherValue.menuId;
         //             return parentId == menuId;
         //         });
         //         let parentText = foundValue.title;
         //         $(nodes[index]).find("td:eq(5)").text(parentText);
-        //     }
-        // });
-
-        /* MÉTODO NRO 03 */
-        // let nodes = [];
-        // table.rows().iterator("row", function (context, index) {
-        //     let node = this.row(index).node();
-        //     nodes.push(node);
-        // });
-        // $.each(nodes, function (i, value) {
-        //     let parentText = "";
-        //     let parentId = $(value).find("td:eq(5)").text();
-        //     if (parentId == 0) {
-        //         parentText = "-";
-        //         $(value).find("td:eq(5)").text(parentText);
-        //     } else {
-        //         $.each(nodes, function (j, otherValue) {
-        //             let menuId = $(otherValue).find("td:eq(0)").text();
-        //             if (parentId == menuId) {
-        //                 parentText = $(otherValue).find("td:eq(1)").text();
-        //                 $(value).find("td:eq(5)").text(parentText);
-        //                 return;
-        //             }
-        //         });
         //     }
         // });
 

@@ -4,14 +4,14 @@
         <tr>
             <th class="text-uppercase" scope="col">Módulo</th>
             <th class="text-uppercase" scope="col">Estado</th>
-            <th class="text-uppercase" scope="col"></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody></tbody>
     <tfoot>
         <tr>
-            <th scope="col">Módulo</th>
-            <th scope="col">Estado</th>
+            <th class="text-uppercase" scope="col">Módulo</th>
+            <th class="text-uppercase" scope="col">Estado</th>
             <th scope="col"></th>
         </tr>
     </tfoot>

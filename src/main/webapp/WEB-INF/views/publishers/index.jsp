@@ -22,12 +22,9 @@
     </jsp:attribute>
     <jsp:attribute name="breadcrumb">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Editoriales</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+            <div class="row">
+                <div class="col-12">
+                    <ol class="breadcrumb float-sm-left">
                         <li class="breadcrumb-item"><a href="${contextPath}/admincrud/dashboard">Inicio</a></li>
                         <li class="breadcrumb-item active">Editoriales</li>
                     </ol>
@@ -45,12 +42,12 @@
                         <!-- Card Header -->
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h3 class="card-title">
-                                    <i class="fas fa-clipboard-list"></i> ${cardTitle}
+                                <h3 class="card-title text-uppercase">
+                                    <i class="fas fa-th-list mr-1"></i> ${cardTitle}
                                 </h3>
                                 <button type="button" class="btn btn-primary btn-sm"
                                         data-toggle="modal" data-target="#addEditModal"
-                                        data-tooltip="tooltip" data-placement="left" title="Añadir nueva editorial" id="btnNew">
+                                        data-tooltip="tooltip" data-placement="left" title="AÑADIR" id="btnNew">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>

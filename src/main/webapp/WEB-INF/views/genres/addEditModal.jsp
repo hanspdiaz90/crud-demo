@@ -5,7 +5,9 @@
         <!-- Modal Content -->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="addEditModalLabel">Añadir Nuevo Género Literario</h4>
+                <h5 class="modal-title text-uppercase" id="addEditModalLabel">
+                    <i class="fas fa-file-alt mr-1"></i> Añadir nuevo género literario
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -13,8 +15,8 @@
             <form id="addEditForm" role="form">
                 <div class="modal-body">
                     <div class="form-group d-none">
-                        <label for="txtGenreId">ID Género</label>
-                        <input type="text" class="form-control" id="txtGenreId" name="genreId" readonly>
+                        <label for="txtGenreId">Código</label>
+                        <input type="text" class="form-control" id="txtGenreId" name="genreId">
                     </div>
                     <div class="form-group">
                         <label for="txtGenre">Género Literario (*)</label>
@@ -28,8 +30,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" id="btnReset" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" id="btnSave" class="btn btn-primary">Guardar</button>
+                    <button type="reset" class="btn btn-secondary" id="btnReset" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>

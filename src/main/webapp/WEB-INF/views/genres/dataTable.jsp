@@ -4,15 +4,15 @@
         <tr>
             <th class="text-uppercase" scope="col">Género Literario</th>
             <th class="text-uppercase" scope="col">Estado</th>
-            <th class="text-uppercase" scope="col">Acciones</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody></tbody>
     <tfoot>
         <tr>
-            <th scope="col">Género Literario</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Acciones</th>
+            <th class="text-uppercase" scope="col">Género Literario</th>
+            <th class="text-uppercase" scope="col">Estado</th>
+            <th scope="col"></th>
         </tr>
     </tfoot>
 </table>

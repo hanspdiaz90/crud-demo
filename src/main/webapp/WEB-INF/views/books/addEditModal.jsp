@@ -5,7 +5,9 @@
         <!-- Modal Content -->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="addEditModalLabel">Añadir Nuevo Libro</h4>
+                <h5 class="modal-title text-uppercase" id="addEditModalLabel">
+                    <i class="fas fa-file-alt mr-1"></i> Añadir nuevo libro
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -13,7 +15,7 @@
             <form id="addEditForm" role="form">
                 <div class="modal-body" style="max-height: calc(100vh - 200px); overflow-y: auto;">
                     <div class="form-group d-none">
-                        <label for="txtBookId">ID Libro</label>
+                        <label for="txtBookId">Código</label>
                         <input type="text" class="form-control" id="txtBookId" name="bookId">
                     </div>
                     <div class="form-group">

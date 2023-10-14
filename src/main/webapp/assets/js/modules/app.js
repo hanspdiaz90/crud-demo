@@ -7,75 +7,80 @@ $(function () {
         event.preventDefault();
     });
 
-    $("#btnSave").click(function () {
-        $("#addEditForm").validate({
-            rules: {
-                title: {required: true, minlength: 3}
-            },
-            submitHandler: function (form) {
-                let url = contextPath + "/admincrud/modulos?action=create";
-                let title = "Registrado!";
-                if (!isNew) {
-                    url = contextPath + "/admincrud/modulos?action=update";
-                    title = "Actualizado!";
-                }
-                let formData = $(form).serialize();
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: formData,
-                    dataType: "JSON",
-                    success: function (response) {
-                        if (response.success) {
-                            $(form).trigger("reset");
-                            let formBody = $("#addEditForm");
-                            setDisplayNoneToInputs(formBody, ".form-group #txtModuleId");
-                            setDisplayNoneToInputs(formBody, ".form-group .custom-switch");
-                            setDisabledAndReadOnlyToInputId(formBody, ".form-group #txtModuleId", true);
-                            let collapseCard = $("#collapseCard");
-                            setCollapseOnCard(collapseCard, false);
-                            $("#tblModules").DataTable().ajax.reload(null, false);
-                            Swal.fire(title, response.message, response.status);
-                            if (!isNew) isNew = true;
-                        }
-                    },
-                    processData: false,
-                    cache: false,
-                });
+    $("#addEditForm").validate({
+        rules: {
+            title: {required: true, minlength: 3}
+        },
+        submitHandler: function (form) {
+            let url = contextPath + "/admincrud/modulos?action=create";
+            let alertTitle = "Registrado!";
+            if (!isNew) {
+                url = contextPath + "/admincrud/modulos?action=update";
+                alertTitle = "Actualizado!";
             }
-        });
+            let postData = $(form).serialize();
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: postData,
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        $(form).trigger("reset");
+                        let card = $("#collapseCard");
+                        let cardHeader = card.find(".card-header");
+                        cardHeader.find(".card-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo módulo");
+                        let formBody = $("#addEditForm");
+                        hideInputElement(formBody, ".form-group #txtModuleId");
+                        hideInputElement(formBody, ".form-group .custom-switch");
+                        blockInputElement(formBody, ".form-group #txtModuleId", true);
+                        collapseCard(card, false);
+                        let table = $("#tblModules").DataTable();
+                        table.ajax.reload(null, false);
+                        Swal.fire(alertTitle, response.message, response.status);
+                        if (!isNew) isNew = true;
+                    }
+                },
+                processData: false,
+                cache: false,
+            });
+        }
     });
 
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = true;
+        let card = $("#collapseCard");
+        let cardHeader = card.find(".card-header");
+        cardHeader.find(".card-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nuevo módulo");
         let formBody = $("#addEditForm");
-        setDisplayNoneToInputs(formBody, ".form-group #txtModuleId");
-        setDisplayNoneToInputs(formBody, ".form-group .custom-switch");
-        setDisabledAndReadOnlyToInputId(formBody, ".form-group #txtModuleId", true);
-        let collapseCard = $("#collapseCard");
-        setCollapseOnCard(collapseCard, false);
+        hideInputElement(formBody, ".form-group #txtModuleId");
+        hideInputElement(formBody, ".form-group .custom-switch");
+        blockInputElement(formBody, ".form-group #txtModuleId", true);
+        collapseCard(card, false);
     });
 
 });
 
-function setDisabledAndReadOnlyToInputId(formBody, inputId, flag) {
-    formBody.find(inputId).prop("disabled", flag);
-    formBody.find(inputId).prop("readonly", !flag);
+function blockInputElement(formBody, inputId, isBlocked) {
+    formBody.find(inputId).prop("disabled", isBlocked);
+    formBody.find(inputId).prop("readonly", !isBlocked);
 }
 
-function setDisplayNoneToInputs(formBody, input) {
-    formBody.find(input).parent().addClass("d-none");
-}
-
-function setCollapseOnCard(formBody, flag) {
-    if (flag) {
-        formBody.find("button .fas").toggleClass("fa-plus fa-minus");
-    } else {
-        formBody.find("button .fas").toggleClass("fa-minus fa-plus");
+function hideInputElement(formBody, input) {
+    if (!formBody.find(input).parent().hasClass("d-none")) {
+        formBody.find(input).parent().addClass("d-none");
     }
-    formBody.find(".card-body").slideToggle("slow");
-    formBody.toggleClass("collapsed-card");
+}
+
+function collapseCard(card, isCollapsed) {
+    if (isCollapsed) {
+        card.find("button .fas").toggleClass("fa-plus fa-minus");
+    } else {
+        card.find("button .fas").toggleClass("fa-minus fa-plus");
+    }
+    card.find(".card-body").slideToggle("slow");
+    card.toggleClass("collapsed-card");
 }
 
 function resetInvalidForm(button, validatedForm) {
@@ -117,33 +122,36 @@ function showFormEditAndViewDetailModule(button, isEditable) {
             if (response.success) {
                 let foundModule = response.result;
                 if (isEditable) {
+                    let card = $("#collapseCard");
+                    let cardHeader = card.find(".card-header");
+                    cardHeader.find(".card-title").html("<i class='fas fa-edit mr-1'></i> Editar datos del módulo");
                     let formBody = $("#addEditForm");
                     formBody.find(".form-group.d-none").removeClass("d-none");
-                    setDisabledAndReadOnlyToInputId(formBody, ".form-group #txtModuleId", false);
+                    blockInputElement(formBody, ".form-group #txtModuleId", false);
                     formBody.find(".form-group #txtModuleId").val(foundModule.moduleId);
                     formBody.find(".form-group #txtTitle").val(foundModule.title);
                     formBody.find(".form-group #txtDescription").val(foundModule.description);
                     formBody.find(".form-group #chkActive").attr("checked", foundModule.active);
-                    let collapseCard = $("#collapseCard");
-                    let exists = collapseCard.hasClass("collapsed-card");
-                    if (exists) {
-                        setCollapseOnCard(collapseCard, true);
+                    let hasClass = card.hasClass("collapsed-card");
+                    if (hasClass) {
+                        collapseCard(card, true);
                     }
                     formBody.find(".form-group #txtTitle").focus();
                     formBody.find(".form-group #txtTitle").select();
                     isNew = false;
                 } else {
-                    let modalBody = $("#viewDetailModal .modal-body");
+                    let modal = $("#viewDetailModal");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.empty();
-                    let elementHTML = "<dl>";
-                    elementHTML += "<dt>Título</dt>";
-                    elementHTML += "<dd>" + foundModule.title + "</dd>";
-                    elementHTML += "<dt>Descripción</dt>";
-                    elementHTML += "<dd>" + (foundModule.description ?? "-") + "</dd>";
-                    elementHTML += "<dt>" + displayStatus(foundModule.active) + "</dt>";
-                    elementHTML += "</dl>";
-                    modalBody.append(elementHTML);
-                    $("#viewDetailModal").modal("show");
+                    let container = "<dl>";
+                    container += "<dt>Título</dt>";
+                    container += "<dd>" + foundModule.title + "</dd>";
+                    container += "<dt>Descripción</dt>";
+                    container += "<dd>" + (foundModule.description ?? "-") + "</dd>";
+                    container += "<dt>" + displayStatus(foundModule.active) + "</dt>";
+                    container += "</dl>";
+                    modalBody.append(container);
+                    modal.modal("show");
                 }
             }
         }
@@ -171,7 +179,8 @@ function disableModule(button) {
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        $("#tblModules").DataTable().ajax.reload(null, false);
+                        let table = $("#tblModules").DataTable();
+                        table.ajax.reload(null, false);
                         Swal.fire("Desactivado!", response.message, response.status);
                     }
                 }
@@ -189,7 +198,7 @@ function findAllModules() {
             dataSrc: "result"
         },
         columns: [
-            { data: "title" },
+            {data: "title"},
             {
                 data: "active",
                 className: "text-center",
@@ -201,17 +210,20 @@ function findAllModules() {
                 data: "moduleId",
                 className: "text-center",
                 render: function (data, type, row) {
-                    let elementHTML = "<div class='btn-group btn-group-sm'>";
-                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailModule(this, false)' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-module-id='" + data + "'><i class='fas fa-eye'></i></button>";
-                    elementHTML += "<button type='button' onclick='showFormEditAndViewDetailModule(this, true)' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-module-id='" + data + "'><i class='fas fa-pen'></i></button>"
-                    elementHTML += "<button type='button' onclick='disableModule(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-module-id='" + data + "' data-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
-                    elementHTML += "</div>"
-                    return elementHTML;
+                    let isEditable = true;
+                    let buttons = "<div class='btn-group btn-group-sm'>";
+                    buttons += "<button type='button' onclick='showFormEditAndViewDetailModule(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-module-id='" + data + "'><i class='fas fa-eye'></i></button>";
+                    buttons += "<button type='button' onclick='showFormEditAndViewDetailModule(this, " + isEditable + ")' class='btn btn-warning' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-module-id='" + data + "'><i class='fas fa-pen'></i></button>"
+                    buttons += "<button type='button' onclick='disableModule(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-module-id='" + data + "' data-title='" + row.title + "'><i class='fas fa-trash'></i></button>"
+                    buttons += "</div>"
+                    return buttons;
                 }
             }
         ]
     });
+
     table.on("draw", function () {
         $("[data-tooltip='tooltip']").tooltip();
     });
+
 }

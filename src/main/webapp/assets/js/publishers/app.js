@@ -9,11 +9,11 @@ $(function () {
 
     $("#addEditForm").validate({
         rules: {
-            name: { required: true, minlength: 5 },
-            email: { required: true, email: true  },
-            address: { required: true },
-            phone: { digits: true },
-            cellphone: { digits: true }
+            name: {required: true, minlength: 5},
+            email: {required: true, email: true},
+            address: {required: true},
+            phone: {digits: true},
+            cellphone: {digits: true}
         },
         submitHandler: function (form) {
             let url = contextPath + "/admincrud/editoriales?action=create";
@@ -31,7 +31,10 @@ $(function () {
                 success: function (response) {
                     if (response.success) {
                         $(form).trigger("reset");
-                        $("#addEditModal").modal("hide");
+                        let modal = $("#addEditModal");
+                        let modalHeader = modal.find(".modal-header");
+                        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nueva editorial");
+                        modal.modal("hide");
                         let table = $("#tblPublishers").DataTable();
                         table.ajax.reload(null, false);
                         Swal.fire(alertTitle, response.message, response.status);
@@ -47,25 +50,31 @@ $(function () {
     $("#btnReset").click(function () {
         resetInvalidForm(this, "#addEditForm");
         isNew = false;
-        let modalBody = $("#addEditModal .modal-body");
+        let modal = $("#addEditModal");
+        let modalHeader = modal.find(".modal-header");
+        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nueva editorial");
+        let modalBody = modal.find(".modal-body");
         hideInputElement(modalBody, ".form-group #txtPublisherId");
         hideInputElement(modalBody, ".form-group .custom-switch");
-        setPropertiesToInputElementId(modalBody, ".form-group #txtPublisherId", true);
+        blockInputElement(modalBody, ".form-group #txtPublisherId", true);
     });
 
     $("#btnNew").click(function () {
         isNew = true;
-        let modalBody = $("#addEditModal .modal-body");
+        let modal = $("#addEditModal");
+        let modalHeader = modal.find(".modal-header");
+        modalHeader.find(".modal-title").html("<i class='fas fa-file-alt mr-1'></i> Añadir nueva editorial");
+        let modalBody = modal.find(".modal-body");
         hideInputElement(modalBody, ".form-group #txtPublisherId");
         hideInputElement(modalBody, ".form-group .custom-switch");
-        setPropertiesToInputElementId(modalBody, ".form-group #txtPublisherId", true);
+        blockInputElement(modalBody, ".form-group #txtPublisherId", true);
     });
 
 });
 
-function setPropertiesToInputElementId(modalBody, inputId, flag) {
-    modalBody.find(inputId).prop("disabled", flag);
-    modalBody.find(inputId).prop("readonly", !flag);
+function blockInputElement(modalBody, inputId, isBlocked) {
+    modalBody.find(inputId).prop("disabled", isBlocked);
+    modalBody.find(inputId).prop("readonly", !isBlocked);
 }
 
 function hideInputElement(modalBody, input) {
@@ -117,15 +126,18 @@ function showModalEditAndViewDetailPublisher(button, isEditable) {
     $.ajax({
         url: url,
         type: "GET",
-        data: { publisherId: publisherId },
+        data: {publisherId: publisherId},
         dataType: "JSON",
         success: function (response) {
             if (response.success) {
                 let foundPublisher = response.result;
                 if (isEditable) {
-                    let modalBody = $("#addEditModal .modal-body");
+                    let modal = $("#addEditModal");
+                    let modalHeader = modal.find(".modal-header");
+                    modalHeader.find(".modal-title").html("<i class='fas fa-edit mr-1'></i> Editar datos del editorial");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.find(".form-group.d-none").removeClass("d-none");
-                    setPropertiesToInputElementId(modalBody, ".form-group #txtPublisherId", false);
+                    blockInputElement(modalBody, ".form-group #txtPublisherId", false);
                     modalBody.find(".form-group #txtPublisherId").val(foundPublisher.publisherId);
                     modalBody.find(".form-group #txtName").val(foundPublisher.name);
                     modalBody.find(".form-group #txtEmail").val(foundPublisher.email);
@@ -134,10 +146,11 @@ function showModalEditAndViewDetailPublisher(button, isEditable) {
                     modalBody.find(".form-group #txtCellphone").val(foundPublisher.cellphone);
                     modalBody.find(".form-group #txtWebSite").val(foundPublisher.webSite);
                     modalBody.find(".form-group #chkActive").attr("checked", foundPublisher.active);
-                    $("#addEditModal").modal("show");
+                    modal.modal("show");
                     isNew = false;
                 } else {
-                    let modalBody = $("#viewDetailModal .modal-body");
+                    let modal = $("#viewDetailModal");
+                    let modalBody = modal.find(".modal-body");
                     modalBody.empty();
                     let container = "<dl>";
                     container += "<dt>Editorial</dt>";
@@ -155,7 +168,7 @@ function showModalEditAndViewDetailPublisher(button, isEditable) {
                     container += "<dt>" + showStatus(foundPublisher.active) + "</dt>";
                     container += "</dl>";
                     modalBody.append(container);
-                    $("#viewDetailModal").modal("show");
+                    modal.modal("show");
                 }
             }
         }
@@ -179,7 +192,7 @@ function disablePublisher(button) {
             $.ajax({
                 url: url,
                 type: "POST",
-                data: { publisherId: publisherId },
+                data: {publisherId: publisherId},
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
@@ -203,8 +216,8 @@ function findAllPublishers() {
             dataSrc: "result"
         },
         columns: [
-            { data: "name" },
-            { data: "email" },
+            {data: "name"},
+            {data: "email"},
             {
                 data: "phone",
                 className: "text-center",
@@ -222,7 +235,7 @@ function findAllPublishers() {
             {
                 data: "active",
                 className: "text-center",
-                render: function(data, type, row) {
+                render: function (data, type, row) {
                     return showStatus(data);
                 }
             },
@@ -232,9 +245,9 @@ function findAllPublishers() {
                 render: function (data, type, row) {
                     let isEditable = true;
                     let buttons = "<div class='btn-group btn-group-sm'>";
-                    buttons += "<button type='button' onclick='showModalEditAndViewDetailPublisher(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='Más información' data-publisher-id='" + data + "'><i class='fas fa-eye'></i></button>";
-                    buttons += "<button type='button' onclick='showModalEditAndViewDetailPublisher(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='Editar' data-publisher-id='" + data + "'><i class='fas fa-pen'></i></button>"
-                    buttons += "<button type='button' onclick='disablePublisher(this)' " +  (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='Desactivar'  data-publisher-id='" + data + "' data-publisher-name='" + row.name + "'><i class='fas fa-trash'></i></button>"
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailPublisher(this, " + !isEditable + ")' class='btn btn-info' data-toggle='modal' data-target='#viewDetailModal' data-tooltip='tooltip' data-placement='left' title='MÁS DETALLE' data-publisher-id='" + data + "'><i class='fas fa-eye'></i></button>";
+                    buttons += "<button type='button' onclick='showModalEditAndViewDetailPublisher(this, " + isEditable + ")' class='btn btn-warning' data-toggle='modal' data-target='#addEditModal' data-tooltip='tooltip' data-placement='bottom' title='EDITAR' data-publisher-id='" + data + "'><i class='fas fa-pen'></i></button>"
+                    buttons += "<button type='button' onclick='disablePublisher(this)' " + (!row.active ? 'disabled' : '') + " class='btn btn-danger' data-tooltip='tooltip' data-placement='top' title='DESACTIVAR'  data-publisher-id='" + data + "' data-publisher-name='" + row.name + "'><i class='fas fa-trash'></i></button>"
                     buttons += "</div>"
                     return buttons;
                 }
