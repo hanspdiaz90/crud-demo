@@ -43,8 +43,11 @@
                                 <i class="fas fa-file-alt mr-1"></i> ${formTitle}
                             </h3>
                             <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-plus"></i>
+                                <button type="button" class="btn btn-tool"
+                                        data-card-widget="collapse"
+                                        data-expand-icon="fa-angle-down"
+                                        data-collapse-icon="fa-angle-up">
+                                    <i class="fas fa-angle-down"></i>
                                 </button>
                             </div>
                         </div>
@@ -97,6 +100,15 @@
         <!-- CustomJS -->
         <script src="${contextPath}/assets/js/default-datatable.js"></script>
         <script src="${contextPath}/assets/js/default-validation-bs4.js"></script>
+        <script>
+            // $(function () {
+            //     $(".btn-tool").CardWidget({
+            //         collapseTrigger: ".btn-tool",
+            //         collapseIcon: "fas fa-angle-down",
+            //         expandIcon: "fas fa-angle-up",
+            //     });
+            // });
+        </script>
         <script src="${contextPath}/assets/js/nav-menu/recursive-menu.js"></script>
         <script src="${contextPath}/assets/js/modules/app.js"></script>
     </jsp:attribute>

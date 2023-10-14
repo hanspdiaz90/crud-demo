@@ -75,9 +75,9 @@ function hideInputElement(formBody, input) {
 
 function collapseCard(card, isCollapsed) {
     if (isCollapsed) {
-        card.find("button .fas").toggleClass("fa-plus fa-minus");
+        card.find("button .fas").toggleClass("fa-angle-down fa-angle-up");
     } else {
-        card.find("button .fas").toggleClass("fa-minus fa-plus");
+        card.find("button .fas").toggleClass("fa-angle-up fa-angle-down");
     }
     card.find(".card-body").slideToggle("slow");
     card.toggleClass("collapsed-card");
